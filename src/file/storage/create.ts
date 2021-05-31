@@ -12,7 +12,7 @@ import * as mime from 'mime'
 import { isImageMime } from '../util/is-image-mime'
 import { join } from '../util/path'
 
-const { writeFile, stat } = promises
+const { writeFile } = promises
 const { parse } = posix
 
 const noop = () => { }

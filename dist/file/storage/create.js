@@ -9,7 +9,7 @@ const files_1 = require("@mojule/files");
 const mime = require("mime");
 const is_image_mime_1 = require("../util/is-image-mime");
 const path_2 = require("../util/path");
-const { writeFile, stat } = fs_1.promises;
+const { writeFile } = fs_1.promises;
 const { parse } = path_1.posix;
 const noop = () => { };
 const FileCreateStorageFactory = (db, diskFileDeps, imageFileDeps, zipFileDeps) => {
