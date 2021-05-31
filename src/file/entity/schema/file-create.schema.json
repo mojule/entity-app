@@ -1,0 +1,13 @@
+{
+  "$id": "#/file-create",
+  "title": "Upload File",
+  "type": "object",
+  "properties": {
+    "file": {
+      "title": "Upload File",
+      "type": "string",
+      "format": "file"
+    },
+    "tags": { "$ref": "#/tags" }
+  }
+}

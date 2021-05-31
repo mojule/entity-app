@@ -1,0 +1,10 @@
+{
+  "$id": "#/file",
+  "title": "File",
+  "type": "object",
+  "properties": {
+    "name": { "$ref": "#/name" },
+    "tags": { "$ref": "#/tags" },
+    "meta": { "$ref": "#/file-metadata" }
+  }
+}

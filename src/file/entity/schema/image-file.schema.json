@@ -1,0 +1,10 @@
+{
+  "$id": "#/image-file",
+  "title": "Image File",
+  "type": "object",
+  "properties": {
+    "name": { "$ref": "#/name" },
+    "tags": { "$ref": "#/tags" },
+    "meta": { "$ref": "#/image-file-metadata" }
+  }
+}
