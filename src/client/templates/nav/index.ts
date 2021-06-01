@@ -1,5 +1,5 @@
 import { Link } from './types'
-import { nav, ul, li, a, span } from '../../utils/h'
+import { nav, ul, li, a, span } from '../../../dom/h'
 
 export const link = ( { content, uri: href }: Link ) =>
   href === undefined ? span( content ) : a( { href }, content )

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decorateFormIcons = void 0;
-const h_1 = require("../utils/h");
+const h_1 = require("../../dom/h");
 const decorateFormIcons = (form) => {
     const buttons = Array.from(form.querySelectorAll('button[data-action]'));
     buttons.forEach(button => {

@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.entityCard = exports.createActionLi = exports.entityCards = void 0;
 const cards_1 = require("./cards");
-const h_1 = require("../../utils/h");
-const css_1 = require("../../utils/h/css");
+const h_1 = require("../../../dom/h");
+const util_1 = require("../../../dom/util");
 const entityCards = (model) => {
     const { title, createEntityPath, entityCardModels } = model;
     const addEntityCard = h_1.li(h_1.a({
@@ -40,7 +40,7 @@ const entityCard = (model) => {
     return card;
 };
 exports.entityCard = entityCard;
-const entityCardsStyle = css_1.css `
+const entityCardsStyle = util_1.css `
   .entity-cards .entity label {
     position: absolute;
     top: 0;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dedupeFieldsets = void 0;
-const unwrap_1 = require("../utils/unwrap");
+const util_1 = require("../../dom/util");
 const dedupeFieldsets = (form) => {
     const fieldsets = Array.from(form.querySelectorAll('fieldset'));
     fieldsets.forEach(fieldset => {
@@ -16,7 +16,7 @@ const dedupeFieldsets = (form) => {
             if (parentLegend === undefined)
                 return;
             if (parentLegend.innerHTML === legend.innerHTML) {
-                unwrap_1.unwrap(fieldset);
+                util_1.unwrap(fieldset);
                 legend.remove();
             }
         }

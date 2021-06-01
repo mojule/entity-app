@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPagination = void 0;
+const h_1 = require("../../../dom/h");
+const util_1 = require("../../../dom/util");
 const nav_1 = require("../../templates/nav");
-const h_1 = require("../../utils/h");
-const decorate_1 = require("../../utils/decorate");
-const css_1 = require("../../utils/h/css");
-const style = css_1.css `
+const style = util_1.css `
   .pagination {
     background: #fff;
     display: grid;
@@ -70,7 +69,7 @@ const createPagination = ({ path, total, start, count }) => {
     });
     const show = h_1.div({
         class: 'pagination_show'
-    }, css_1.css `
+    }, util_1.css `
       .pagination_show {
         background: #fff;
       }
@@ -123,7 +122,7 @@ const createPagination = ({ path, total, start, count }) => {
     if (nextGroup.length) {
         currentGroup.push({ content: '…' });
     }
-    const pagination = h_1.div({ class: 'pagination' }, style, decorate_1.decorateAttributes({ class: 'pagination_prev' }, nav_1.linksNav(...prevGroup)), decorate_1.decorateAttributes({ class: 'pagination_current' }, nav_1.linksNav(...currentGroup)), decorate_1.decorateAttributes({ class: 'pagination_next' }, nav_1.linksNav(...nextGroup.reverse())));
+    const pagination = h_1.div({ class: 'pagination' }, style, util_1.decorateAttributes({ class: 'pagination_prev' }, nav_1.linksNav(...prevGroup)), util_1.decorateAttributes({ class: 'pagination_current' }, nav_1.linksNav(...currentGroup)), util_1.decorateAttributes({ class: 'pagination_next' }, nav_1.linksNav(...nextGroup.reverse())));
     return { show, pagination };
 };
 exports.createPagination = createPagination;

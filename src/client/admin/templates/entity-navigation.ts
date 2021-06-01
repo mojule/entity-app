@@ -2,18 +2,17 @@ import { Link } from '../../templates/nav/types'
 import { linksNav } from '../../templates/nav'
 import { EntitySchemaMap } from '../../../schema/types'
 import { kebabCase, startCase } from '../../../util/lodash'
-import { div, span, fragment, h1 } from '../../utils/h'
 import { headerEls } from './targeted-els'
 import { defaultHeaderContent } from './header-content'
 import { EntityCategories } from '../../../entity/types'
-import { NodeOrString } from '../../../dom/types'
-import { css } from '../../utils/h/css'
+import { div, h1, span } from '../../../dom/h'
+import { css } from '../../../dom/util'
 
 export const entityNavigation = <
   TEntityMap, TEntityCategories extends EntityCategories<TEntityMap>
 >(
   entityCategories: TEntityCategories,
-  headerContent: NodeOrString = defaultHeaderContent,
+  headerContent: Node | string = defaultHeaderContent,
   entitySchema?: EntitySchemaMap<TEntityMap>,
   entityCategory?: keyof TEntityCategories & string
 ) => {
@@ -40,7 +39,7 @@ export const entityNavigation = <
 }
 
 export const primaryEntityNavigation = <TEntityMap>(
-  headerContent: NodeOrString,
+  headerContent: Node | string,
   entityCategories: EntityCategories<TEntityMap>
 ) =>
   div(
@@ -122,7 +121,7 @@ export const defaultCreateEntityHeader = <
   TEntityMap, TEntityCategories extends EntityCategories<TEntityMap>
 >(
   entityCategories: TEntityCategories,
-  headerContent: NodeOrString = defaultHeaderContent,
+  headerContent: Node | string = defaultHeaderContent,
   title: string,
   entitySchema?: EntitySchemaMap<TEntityMap>,
   entityCategory?: keyof TEntityCategories & string

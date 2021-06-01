@@ -5,13 +5,13 @@ const header_content_1 = require("../../templates/header-content");
 const lodash_1 = require("../../../../util/lodash");
 const schema_form_1 = require("../../../forms/schema-form");
 const entity_navigation_1 = require("../../templates/entity-navigation");
-const h_1 = require("../../../utils/h");
 const targeted_els_1 = require("../../templates/targeted-els");
 const header_title_1 = require("../../../css/header-title");
 const entity_form_1 = require("../../../css/entity-form");
 const error_1 = require("../../../templates/error");
 const get_data_1 = require("../../../forms/get-data");
 const resolver_1 = require("../../../../schema/resolve/resolver");
+const h_1 = require("../../../../dom/h");
 const createEntityCreateRoute = (db, entityCategories, entityCreateSchemas, commonSchemas = {}, headerContent = header_content_1.defaultHeaderContent, onCreateSubmit = exports.createDefaultOnCreateSubmit(db)) => {
     const route = {
         method: 'get',

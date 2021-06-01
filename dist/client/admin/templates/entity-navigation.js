@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultCreateEntityHeader = exports.secondaryEntityNavigation = exports.primaryEntityNavigation = exports.entityNavigation = void 0;
 const nav_1 = require("../../templates/nav");
 const lodash_1 = require("../../../util/lodash");
-const h_1 = require("../../utils/h");
 const targeted_els_1 = require("./targeted-els");
 const header_content_1 = require("./header-content");
-const css_1 = require("../../utils/h/css");
+const h_1 = require("../../../dom/h");
+const util_1 = require("../../../dom/util");
 const entityNavigation = (entityCategories, headerContent = header_content_1.defaultHeaderContent, entitySchema, entityCategory) => {
     const nodes = [];
     nodes.push(exports.primaryEntityNavigation(headerContent, entityCategories));
@@ -19,7 +19,7 @@ const entityNavigation = (entityCategories, headerContent = header_content_1.def
 exports.entityNavigation = entityNavigation;
 const primaryEntityNavigation = (headerContent, entityCategories) => h_1.div({
     class: 'navigation--primary'
-}, css_1.css `
+}, util_1.css `
       .navigation--primary {
         font-size: 1.4rem;
         border-bottom: 1px dotted #ddd;
@@ -57,7 +57,7 @@ const secondaryEntityNavigation = (entitySchema, entityCategorySlug, keys) => {
     });
     const nav = h_1.div({
         class: 'navigation--secondary'
-    }, css_1.css `
+    }, util_1.css `
       .navigation--secondary {
         font-size: 1.3rem;
       }

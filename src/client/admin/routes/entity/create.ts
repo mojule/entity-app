@@ -4,7 +4,6 @@ import { camelCase, startCase, kebabCase } from '../../../../util/lodash'
 import { EntitySchemaMap, SchemaMap } from '../../../../schema/types'
 import { createSchemaForm } from '../../../forms/schema-form'
 import { entityNavigation } from '../../templates/entity-navigation'
-import { h1, fragment } from '../../../utils/h'
 import { headerEls } from '../../templates/targeted-els'
 import { headerTitleStyle } from '../../../css/header-title'
 import { entityFormStyle } from '../../../css/entity-form'
@@ -15,6 +14,7 @@ import { getData } from '../../../forms/get-data'
 import { schemaResolver } from '../../../../schema/resolve/resolver'
 import { EntityCategories } from '../../../../entity/types'
 import { OnCreateSubmit } from '../../types'
+import { fragment, h1 } from '../../../../dom/h'
 
 export const createEntityCreateRoute = <TEntityMap>(
   db: EntityDb<TEntityMap>,

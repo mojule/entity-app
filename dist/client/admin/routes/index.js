@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSecondaryRoute = exports.createRootRoute = void 0;
 const entity_navigation_1 = require("../templates/entity-navigation");
 const header_content_1 = require("../templates/header-content");
-const h_1 = require("../../utils/h");
+const h_1 = require("../../../dom/h");
 const error_1 = require("../../templates/error");
 const createRootRoute = (entityCategories) => {
     const route = {

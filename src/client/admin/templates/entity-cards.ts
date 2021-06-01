@@ -2,9 +2,9 @@ import { cards } from './cards'
 
 import {
   li, a, span, div, input, label, nav, ul
-} from '../../utils/h'
+} from '../../../dom/h'
 
-import { css } from '../../utils/h/css'
+import { css } from '../../../dom/util'
 
 export interface EntityCardsModel {
   title: string

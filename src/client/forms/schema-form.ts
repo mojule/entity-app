@@ -1,9 +1,9 @@
 import { ClientFormTemplates, SchemaToFormElements } from '@mojule/schema-forms'
 import { IdSchema } from '../../schema/types'
-import { button, form } from '../utils/h'
 import { dedupeFieldsets } from './dedupe-fieldsets'
 import { decorateFormIcons } from './decorate-form-icons'
 import { startCase } from '../../util/lodash'
+import { button, form } from '../../dom/h'
 
 const templates = ClientFormTemplates( document, Event )
 

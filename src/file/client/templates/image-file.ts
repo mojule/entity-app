@@ -1,6 +1,6 @@
 import { ImageFileEntity } from '../../entity'
-import { div, h1, p, img } from '../../../client/utils/h'
-import { css } from '../../../client/utils/h/css'
+import { div, h1, p, img } from '../../../dom/h'
+import { css } from '../../../dom/util'
 
 export const imageFile = ( model: ImageFileEntity ) => {
   const { meta, name } = model

@@ -9,7 +9,6 @@ const lodash_1 = require("../../util/lodash");
 const log_iisnode_1 = require("@mojule/log-iisnode");
 const dom_1 = require("../dom");
 const serialize_1 = require("../dom/serialize");
-const dom_2 = require("../dom");
 const { join } = path_1.posix;
 const { readFile, writeFile } = fs_1.promises;
 const createWebsiteRoute = async (templates, staticPath, cachePath, resolveModels, resolvePostDom, disableCache = false) => {
@@ -55,7 +54,7 @@ const createWebsiteRoute = async (templates, staticPath, cachePath, resolveModel
     };
     const generateHtml = async (req, res) => {
         const start = process.hrtime();
-        const toDom = DomComponents(dom_2.document, templates);
+        const toDom = DomComponents(document, templates);
         const requestedPath = join(staticPath, '.' + req.path);
         let indexPath = join(requestedPath, 'index.html');
         let currentRoute = '';
@@ -69,7 +68,7 @@ const createWebsiteRoute = async (templates, staticPath, cachePath, resolveModel
         }
         if (await files_1.exists(indexPath)) {
             const componentHtml = await readFile(indexPath, 'utf8');
-            const componentDom = dom_1.fragment(componentHtml);
+            const componentDom = dom_1.parseFragment(componentHtml);
             const routedEl = componentDom.querySelector('[route]');
             if (routedEl) {
                 routedEl.setAttribute('route', currentRoute);

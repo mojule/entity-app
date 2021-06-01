@@ -2,7 +2,7 @@ import { ClientRoute } from './types'
 import { EntitySchemaMap } from '../../../schema/types'
 import { entityNavigation } from '../templates/entity-navigation'
 import { defaultHeaderContent } from '../templates/header-content'
-import { fragment } from '../../utils/h'
+import { fragment } from '../../../dom/h'
 import { EntityCategories } from '../../../entity/types'
 import { error } from '../../templates/error'
 

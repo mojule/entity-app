@@ -1,4 +1,4 @@
-import { decorateData } from '../../utils/decorate'
+import { decorateData } from '../../../dom/util'
 
 export const headerEls = ( ...els: HTMLElement[] ) =>
   decorateData(

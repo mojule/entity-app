@@ -1,4 +1,4 @@
-import { unwrap } from '../utils/unwrap'
+import { unwrap } from '../../dom/util'
 
 export const dedupeFieldsets = ( form: HTMLFormElement ) => {
   const fieldsets = Array.from( form.querySelectorAll( 'fieldset' ) )

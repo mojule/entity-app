@@ -1,5 +1,5 @@
-import { ol } from '../../utils/h'
-import { css } from '../../utils/h/css'
+import { ol } from '../../../dom/h'
+import { css } from '../../../dom/util'
 
 export const cards = (
   ...children: HTMLLIElement[]

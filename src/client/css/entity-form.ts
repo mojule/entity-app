@@ -1,4 +1,4 @@
-import { css } from '../utils/h/css'
+import { css } from '../../dom/util'
 
 export const entityFormStyle = css`
   .entity-form {

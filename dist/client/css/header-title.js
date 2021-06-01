@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.headerTitleStyle = void 0;
-const css_1 = require("../utils/h/css");
-exports.headerTitleStyle = css_1.css `
+const util_1 = require("../../dom/util");
+exports.headerTitleStyle = util_1.css `
   .header-title {
     background: #fafafa;
     color: #444;

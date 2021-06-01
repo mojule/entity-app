@@ -1,4 +1,4 @@
-import { span } from '../utils/h'
+import { span } from '../../dom/h'
 
 export const decorateFormIcons = ( form: HTMLFormElement ) => {
   const buttons = Array.from<HTMLButtonElement>(

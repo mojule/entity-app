@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.iconDecorator = void 0;
-const h_1 = require("../utils/h");
+const h_1 = require("../../dom/h");
 const iconDecorator = (classMap) => {
     const icons = [
         ...document.querySelectorAll('[data-icon], [data-icon-label]')

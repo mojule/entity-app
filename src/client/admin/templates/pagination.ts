@@ -1,8 +1,8 @@
+import { div } from '../../../dom/h'
+import { css, decorateAttributes } from '../../../dom/util'
 import { linksNav } from '../../templates/nav'
 import { Link } from '../../templates/nav/types'
-import { div } from '../../utils/h'
-import { decorateAttributes } from '../../utils/decorate'
-import { css } from '../../utils/h/css'
+
 
 const style = css`
   .pagination {

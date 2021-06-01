@@ -1,4 +1,4 @@
-import { fragment, h1, p, pre } from '../../utils/h'
+import { fragment, h1, p, pre } from '../../../dom/h'
 
 export const error = ( model: Error ) =>
   fragment(

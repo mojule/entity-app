@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createEntityListRoute = void 0;
 const ref_1 = require("../../../../db/ref");
-const h_1 = require("../../../utils/h");
+const h_1 = require("../../../../dom/h");
 const error_1 = require("../../../templates/error");
 const targeted_els_1 = require("../../templates/targeted-els");
 const pagination_1 = require("../../templates/pagination");

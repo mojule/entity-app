@@ -1,3 +1,3 @@
-import { h1, fragment } from '../../utils/h'
+import { h1 } from '../../../dom/h'
 
 export const defaultHeaderContent = h1( 'Entity Admin' )

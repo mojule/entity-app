@@ -1,4 +1,4 @@
-import { i } from '../utils/h'
+import { i } from '../../dom/h'
 
 export const iconDecorator = <T extends IconClassMap>( classMap: T ) => {
   const icons = <HTMLElement[]>[

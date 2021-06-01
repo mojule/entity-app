@@ -8,10 +8,9 @@ import { promises } from 'fs'
 import { readdirDeep, exists } from '@mojule/files'
 import { kebabCase } from '../../util/lodash'
 import { log } from '@mojule/log-iisnode'
-import { fragment } from '../dom'
+import { parseFragment } from '../dom'
 import { serializeHtml } from '../dom/serialize'
 import { Route } from './types'
-import { document } from '../dom'
 
 const { join } = posix
 const { readFile, writeFile } = promises
@@ -96,7 +95,7 @@ export const createWebsiteRoute = async (
 
     if ( await exists( indexPath ) ) {
       const componentHtml = await readFile( indexPath, 'utf8' )
-      const componentDom = fragment( componentHtml )
+      const componentDom = parseFragment( componentHtml )
 
       const routedEl = componentDom.querySelector( '[route]' )
       if ( routedEl ) {

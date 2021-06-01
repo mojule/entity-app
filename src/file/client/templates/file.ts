@@ -1,6 +1,6 @@
 import { FileEntity } from '../../entity'
-import { div, h1, p } from '../../../client/utils/h'
-import { css } from '../../../client/utils/h/css'
+import { div, h1, p } from '../../../dom/h'
+import { css } from '../../../dom/util'
 
 export const file = ( model: FileEntity ) => {
   const { meta, name } = model

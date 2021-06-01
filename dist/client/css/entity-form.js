@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.entityFormStyle = void 0;
-const css_1 = require("../utils/h/css");
-exports.entityFormStyle = css_1.css `
+const util_1 = require("../../dom/util");
+exports.entityFormStyle = util_1.css `
   .entity-form {
     background: #fff;
     border-radius: 1rem;
