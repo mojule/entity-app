@@ -18,7 +18,7 @@ export const createFileHandlers = (
       try {
         const defaultTags: string[] = []
         const { tags = defaultTags } = req.body
-        const { file } = req
+        const file = req[ 'file' ] as any
 
         const fileWithoutBuffer = Object.assign(
           {},

@@ -13,7 +13,7 @@ const createFileHandlers = (createDiskFile) => {
             try {
                 const defaultTags = [];
                 const { tags = defaultTags } = req.body;
-                const { file } = req;
+                const file = req['file'];
                 const fileWithoutBuffer = Object.assign({}, file, { buffer: undefined });
                 log_iisnode_1.log.info({ file: fileWithoutBuffer, tags });
                 const fileData = Object.assign(file, { tags });
