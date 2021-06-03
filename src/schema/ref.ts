@@ -1,5 +1,9 @@
 import { kebabCase, startCase } from '../util/lodash'
-import { IdSchema, DbRefSchema, EntitySchemaMap, SchemaMap, DbRefSchemaProperties } from './types'
+
+import { 
+  IdSchema, DbRefSchema, EntitySchemaMap, SchemaMap, DbRefSchemaProperties 
+} from './types'
+
 import { eachKeyValueMap } from '../util/each'
 
 export const refFactory = ( uri: string ) => {

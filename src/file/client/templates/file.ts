@@ -1,6 +1,5 @@
 import { FileEntity } from '../../entity'
-import { div, h1, p } from '../../../dom/h'
-import { css } from '../../../dom/util'
+import { div, h1, p, css } from '@mojule/dom'
 
 export const file = ( model: FileEntity ) => {
   const { meta, name } = model

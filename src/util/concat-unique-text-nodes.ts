@@ -1,6 +1,6 @@
 import * as CleanCSS from 'clean-css'
 import { log } from '@mojule/log-iisnode'
-import { CreateTag } from './types'
+import { CreateTag } from '@mojule/dom'
 
 const cleanCss = new CleanCSS()
 

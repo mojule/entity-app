@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSecurityForgotRoutes = void 0;
 const bcrypt = require("bcryptjs");
-const bodyParser = require("body-parser");
 const log_iisnode_1 = require("@mojule/log-iisnode");
 const uuid_1 = require("uuid");
 const delay_handler_1 = require("../../util/delay-handler");
 const delay_promise_1 = require("../../util/delay-promise");
 const password_strength_1 = require("../password-strength");
-const postHandler = bodyParser.urlencoded({ extended: false });
+const express_1 = require("express");
+const postHandler = express_1.default.urlencoded({ extended: false });
 const createSecurityForgotRoutes = async (db, options) => {
     const { changePasswordHandlers = [], notifyUserPasswordChange, notifyUserPasswordReset } = options;
     // routes - forgot - post email, reset - post new password

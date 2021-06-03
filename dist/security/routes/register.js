@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSecurityRegisterRoutes = void 0;
-const bodyParser = require("body-parser");
 const log_iisnode_1 = require("@mojule/log-iisnode");
 const uuid_1 = require("uuid");
 const delay_handler_1 = require("../../util/delay-handler");
 const password_strength_1 = require("../password-strength");
 const user_1 = require("../user");
 const delay_promise_1 = require("../../util/delay-promise");
-const postHandler = bodyParser.urlencoded({ extended: false });
+const express_1 = require("express");
+const postHandler = express_1.default.urlencoded({ extended: false });
 const createSecurityRegisterRoutes = async (db, options) => {
     const { registerHandlers = [], notifyUserVerifyEmail } = options;
     const register = {

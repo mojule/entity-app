@@ -1,4 +1,3 @@
-import * as bodyParser from 'body-parser'
 import { log } from '@mojule/log-iisnode'
 import { Request, Response } from 'express-serve-static-core'
 import { v4 } from 'uuid'
@@ -12,8 +11,9 @@ import { testPassword } from '../password-strength'
 import { createUserEntity } from '../user'
 import { PendingUserEntity } from '../entity/user'
 import { delayPromise } from '../../util/delay-promise'
+import express from 'express'
 
-const postHandler = bodyParser.urlencoded( { extended: false } )
+const postHandler = express.urlencoded( { extended: false } )
 
 export const createSecurityRegisterRoutes = async <EntityMap extends SecurityEntityMap>( 
   db: EntityDb<EntityMap>,

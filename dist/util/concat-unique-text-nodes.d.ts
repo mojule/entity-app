@@ -1,4 +1,4 @@
-import { CreateTag } from './types';
+import { CreateTag } from '@mojule/dom';
 export declare const concatUniqueTextNodes: (...elements: HTMLElement[]) => string;
 export declare type CatableElement = HTMLScriptElement | HTMLStyleElement;
 export declare type CatableElements = CatableElement[];

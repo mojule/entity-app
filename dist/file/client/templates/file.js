@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.file = void 0;
-const h_1 = require("../../../dom/h");
-const util_1 = require("../../../dom/util");
+const dom_1 = require("@mojule/dom");
 const file = (model) => {
     const { meta, name } = model;
     const { size } = meta;
-    const node = h_1.div({ class: 'file-entity' }, util_1.css `
+    const node = dom_1.div({ class: 'file-entity' }, dom_1.css `
       .file-entity {
         display: flex;
         flex-direction: column;
@@ -22,7 +21,7 @@ const file = (model) => {
       .file-entity p {
         font-size: 0.8rem;
       }
-    `, h_1.h1({ title: name }, name), h_1.p(`${size.toLocaleString()} bytes`));
+    `, dom_1.h1({ title: name }, name), dom_1.p(`${size.toLocaleString()} bytes`));
     return node;
 };
 exports.file = file;

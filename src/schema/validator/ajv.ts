@@ -30,7 +30,6 @@ export const ajvValidator = <TEntityMap>(
     const schema = entitySchemas[ key ]
     const refSchema = createRef( key )
 
-
     keyToIdMap.set( key, schema.$id )
 
     ajv.addSchema( schema, schema.$id )

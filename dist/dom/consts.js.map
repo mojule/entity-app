@@ -1,1 +1,0 @@
-{"version":3,"file":"consts.js","sourceRoot":"","sources":["../../src/dom/consts.ts"],"names":[],"mappings":";;;AAAa,QAAA,KAAK,GAAG,4BAA4B,CAAA;AAEpC,QAAA,gBAAgB,GAAG,4BAA4B,CAAA;AAE/C,QAAA,YAAY,GAAG;IAC1B,WAAW,EAAE,WAAW,EAAE,aAAa,EAAE,aAAa,EAAE,MAAM;CACtD,CAAA"}

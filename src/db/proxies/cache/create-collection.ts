@@ -3,10 +3,9 @@ import { DbCachedCollection } from './types'
 
 import {
   DbCollection, DbItem, DbIds, DbCreate, DbLoad, DbSave, DbSaveMany, DbRemove,
-  DbRemoveMany,
-  DbFind,
-  DbFindOne
+  DbRemoveMany, DbFind, DbFindOne
 } from '../../types'
+
 import { defaultFindOne, defaultFind } from '../../default-query'
 import { defaultLoadPaged } from '../../default-load-paged'
 

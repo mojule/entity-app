@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcryptjs'
-import * as bodyParser from 'body-parser'
 import { log } from '@mojule/log-iisnode'
 import { v4 } from 'uuid'
 import { Request } from 'express-serve-static-core'
@@ -12,8 +11,9 @@ import { delayPromise } from '../../util/delay-promise'
 import { UserEntity } from '../entity/user'
 import { testPassword } from '../password-strength'
 import { ForgotPasswordOptions } from './types'
+import express from 'express'
 
-const postHandler = bodyParser.urlencoded( { extended: false } )
+const postHandler = express.urlencoded( { extended: false } )
 
 export const createSecurityForgotRoutes = async <EntityMap extends SecurityEntityMap>(
   db: EntityDb<EntityMap>,

@@ -1,6 +1,5 @@
 import { ImageFileEntity } from '../../entity'
-import { div, h1, p, img } from '../../../dom/h'
-import { css } from '../../../dom/util'
+import { div, h1, p, img, css } from '@mojule/dom'
 
 export const imageFile = ( model: ImageFileEntity ) => {
   const { meta, name } = model
