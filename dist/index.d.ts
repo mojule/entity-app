@@ -1,3 +1,4 @@
+export * from './concat-unique-text-nodes';
 export * from './db';
 export * from './db/default-drop';
 export * from './db/default-load-paged';
