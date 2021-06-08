@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core'
 import { DbCollection, EntitySchemaDb } from '../../db/types'
 import * as express from 'express'
-import { kebabCase } from '../../util/lodash'
+import { kebabCase } from '@mojule/util'
 import { errorHandler } from './error-handler'
 import { defaultPostPath, defaultPostResult } from './store-routes'
 

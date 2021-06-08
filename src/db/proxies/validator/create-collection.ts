@@ -1,6 +1,6 @@
 import { ValidateOptions, ValidateEntity } from './types'
 import { DbCollection } from '../../types'
-import { eachAsync } from '../../../util/each'
+import { eachAsync } from '@mojule/util'
 import { dbItemToEntity } from '../..'
 import { defaultLoadPaged } from '../../default-load-paged'
 import { log } from '@mojule/log-iisnode'

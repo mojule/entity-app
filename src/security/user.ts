@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcryptjs'
-import { UserData, UserEntity } from './entity/user'
+import { UserData, UserEntity } from '..'
 import { Role } from './types'
 
 export const createUserEntity = async ( data: UserData, password: string ) => {

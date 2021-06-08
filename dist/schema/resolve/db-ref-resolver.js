@@ -2,12 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbRefResolver = void 0;
 const traverse = require("@entity-schema/json-schema-traverse");
-const each_1 = require("../../util/each");
+const util_1 = require("@mojule/util");
 const ref_1 = require("../ref");
-const lodash_1 = require("../../util/lodash");
-const clone_1 = require("../../util/clone");
-const dbRefResolver = async (key, schema, db) => {
-    schema = clone_1.clone(schema);
+const dbRefResolver = async (_key, schema, db) => {
+    schema = util_1.clone(schema);
     const dbRefSchemas = [];
     const cb = (schema) => {
         if (schema.$id === undefined)
@@ -18,10 +16,10 @@ const dbRefResolver = async (key, schema, db) => {
         }
     };
     traverse(schema, { cb });
-    await each_1.eachAsync(dbRefSchemas, async (dbRefSchema) => {
+    await util_1.eachAsync(dbRefSchemas, async (dbRefSchema) => {
         const { _collection } = dbRefSchema.properties;
         const [slug] = _collection.enum;
-        const entityKey = lodash_1.camelCase(slug);
+        const entityKey = util_1.camelCase(slug);
         const collection = db.collections[entityKey];
         if (!collection)
             throw Error(`Expected ${entityKey} in db.collections`);

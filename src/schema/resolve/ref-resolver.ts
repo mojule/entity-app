@@ -1,8 +1,8 @@
-import { SchemaMap } from '../types'
-import { eachObjectMap } from '../../util/each'
+import { eachObjectMap, clone } from '@mojule/util'
 import traverse = require( '@entity-schema/json-schema-traverse' )
 import { TraverseCallback } from '@entity-schema/json-schema-traverse/dist/types'
-import { clone } from '../../util/clone'
+
+import { SchemaMap } from '../types'
 import { JSONSchema7 } from 'json-schema'
 
 export const refResolver = <TSchemaMap extends SchemaMap>(

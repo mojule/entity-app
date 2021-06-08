@@ -21,10 +21,10 @@ __exportStar(require("./routes/schema-routes"), exports);
 __exportStar(require("./routes/store-routes"), exports);
 __exportStar(require("./routes/types"), exports);
 __exportStar(require("./routes/website-routes"), exports);
-__exportStar(require("../schema/validator/ajv"), exports);
-__exportStar(require("../file/server/post-route"), exports);
-__exportStar(require("../file/storage/create"), exports);
-__exportStar(require("../file/storage/disk-file-to-create-data"), exports);
-__exportStar(require("../file/storage/remove-files"), exports);
-__exportStar(require("../file/storage/types"), exports);
+__exportStar(require("./ajv-validator"), exports);
+__exportStar(require("./routes/file/post-route"), exports);
+__exportStar(require("./file/create"), exports);
+__exportStar(require("./file/disk-file-to-create-data"), exports);
+__exportStar(require("./file/remove-files"), exports);
+__exportStar(require("./file/types"), exports);
 //# sourceMappingURL=index.js.map

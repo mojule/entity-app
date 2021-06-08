@@ -1,6 +1,6 @@
 import { Application } from 'express'
 import { Route } from './types'
-import { createRolesHandler } from '../../security/roles-handler'
+import { createRolesHandler } from '../security/roles-handler'
 import { PassportStatic } from 'passport'
 import { Logger } from '@mojule/log-formatter/src/types'
 

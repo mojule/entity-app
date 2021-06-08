@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultPostPath = exports.defaultPostResult = exports.defaultGetResult = exports.defaultGetPath = exports.createCollectionRoutes = exports.createStoreRoutes = void 0;
 const post_route_1 = require("./post-route");
 const get_route_1 = require("./get-route");
-const each_1 = require("../../util/each");
+const util_1 = require("@mojule/util");
 const each_entity_key_1 = require("../../entity/each-entity-key");
 const ref_1 = require("../../db/ref");
 const log_iisnode_1 = require("@mojule/log-iisnode");
@@ -80,7 +80,7 @@ const createCollectionRoutes = (collectionKey, store, readOnly) => {
         }
     };
     const routes = [];
-    each_1.eachKeyValueMap(storeRouteData, (config, action) => {
+    util_1.eachKeyValueMap(storeRouteData, (config, action) => {
         if (config === undefined)
             throw Error(`The route config at ${action} was undefined`);
         const { getPath, getResult, type } = config;

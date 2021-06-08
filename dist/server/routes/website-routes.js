@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createWebsiteRoute = void 0;
 const DomComponents = require("@mojule/dom-components");
+const files_1 = require("@mojule/files");
+const util_1 = require("@mojule/util");
 const path_1 = require("path");
 const fs_1 = require("fs");
-const files_1 = require("@mojule/files");
-const lodash_1 = require("../../util/lodash");
 const log_iisnode_1 = require("@mojule/log-iisnode");
 const dom_1 = require("../dom");
 const serialize_1 = require("../dom/serialize");
 const { join } = path_1.posix;
 const { readFile, writeFile } = fs_1.promises;
 const createWebsiteRoute = async (templates, staticPath, cachePath, resolveModels, resolvePostDom, disableCache = false) => {
-    const getCacheName = (path) => join(cachePath, lodash_1.kebabCase(path) + '.html');
+    const getCacheName = (path) => join(cachePath, util_1.kebabCase(path) + '.html');
     const handler = async (req, res, next) => {
         try {
             log_iisnode_1.log.time('Website Route');

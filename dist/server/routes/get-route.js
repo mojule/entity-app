@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRoute = void 0;
-const lodash_1 = require("../../util/lodash");
+const util_1 = require("@mojule/util");
 const error_handler_1 = require("./error-handler");
 const store_routes_1 = require("./store-routes");
 const schema_routes_1 = require("./schema-routes");
 const getRoute = (collectionKey, store, action, type, getPath = store_routes_1.defaultGetPath, getResult = store_routes_1.defaultGetResult, omitId = false) => {
     const method = 'get';
-    const collectionSlug = lodash_1.kebabCase(String(collectionKey));
-    const actionSlug = lodash_1.kebabCase(String(action));
+    const collectionSlug = util_1.kebabCase(String(collectionKey));
+    const actionSlug = util_1.kebabCase(String(action));
     const path = getPath(collectionSlug, actionSlug, omitId);
     const schemaHandler = schema_routes_1.createEntitySchemaRouteHandler(store, collectionKey, type);
     const handler = async (req, res) => {

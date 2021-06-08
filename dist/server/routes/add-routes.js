@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRoutes = void 0;
-const roles_handler_1 = require("../../security/roles-handler");
+const roles_handler_1 = require("../security/roles-handler");
 const addRoutes = (app, passport, routes, log) => {
     routes.forEach(route => {
         const { method, path, handlers, roles } = route;

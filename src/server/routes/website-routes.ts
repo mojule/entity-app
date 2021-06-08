@@ -3,10 +3,11 @@ import {
 } from 'express-serve-static-core'
 
 import * as DomComponents from '@mojule/dom-components'
+import { readdirDeep, exists } from '@mojule/files'
+import { kebabCase } from '@mojule/util'
+
 import { posix } from 'path'
 import { promises } from 'fs'
-import { readdirDeep, exists } from '@mojule/files'
-import { kebabCase } from '../../util/lodash'
 import { log } from '@mojule/log-iisnode'
 import { parseFragment } from '../dom'
 import { serializeHtml } from '../dom/serialize'

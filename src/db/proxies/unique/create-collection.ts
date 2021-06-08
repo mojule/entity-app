@@ -1,8 +1,6 @@
 import {
-  DbCollection, DbCreate, DbCreateMany, DbSave, DbSaveMany, DbFindOne, DbFind
+  DbCollection, DbCreate, DbCreateMany, DbSave, DbSaveMany, DbFind
 } from '../../types'
-
-import { clone } from '../../../util/clone'
 
 export const createUniqueFieldsCollection =
   async <K extends keyof TEntityMap, TEntityMap>(

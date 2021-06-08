@@ -1,15 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createEntitySchemaRouteHandler = exports.createSchemaRoutes = void 0;
-const each_1 = require("../../util/each");
-const lodash_1 = require("../../util/lodash");
+const util_1 = require("@mojule/util");
 const schema_security_1 = require("../../security/schema-security");
 const log_iisnode_1 = require("@mojule/log-iisnode");
 const createSchemaRoutes = (schemaMap) => {
     const routes = [];
-    each_1.eachKeyValueMap(schemaMap, (schema, collectionKey) => {
+    util_1.eachKeyValueMap(schemaMap, (schema, collectionKey) => {
         const method = 'get';
-        const path = `/schema/${lodash_1.kebabCase(collectionKey)}`;
+        const path = `/schema/${util_1.kebabCase(collectionKey)}`;
         const handler = (_req, res) => res.json(schema);
         const handlers = [handler];
         const meta = { collectionKey };
@@ -34,7 +33,7 @@ const createEntitySchemaRouteHandler = (store, collectionKey, type) => {
             currentRoles.push(...user['roles']);
         }
         const schemaMap = await store.getAllSchema();
-        const schemaId = `#/${lodash_1.kebabCase(collectionKey)}`;
+        const schemaId = `#/${util_1.kebabCase(collectionKey)}`;
         const schema = schemaMap[schemaId];
         if (schema === undefined) {
             const err = Error(`No schema found with $id ${schemaId}`);

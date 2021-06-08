@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createValidatedCollection = void 0;
-const each_1 = require("../../../util/each");
+const util_1 = require("@mojule/util");
 const __1 = require("../..");
 const default_load_paged_1 = require("../../default-load-paged");
 const log_iisnode_1 = require("@mojule/log-iisnode");
@@ -21,7 +21,7 @@ const createValidatedCollection = async (collection, key, validator, { onCreate,
             return await collection.create(entity);
         };
         createMany = async (entities) => {
-            await each_1.eachAsync(entities, validate);
+            await util_1.eachAsync(entities, validate);
             return await collection.createMany(entities);
         };
     }
@@ -35,13 +35,13 @@ const createValidatedCollection = async (collection, key, validator, { onCreate,
         loadMany = async (ids) => {
             const dbEntities = await collection.loadMany(ids);
             const entities = dbEntities.map(__1.dbItemToEntity);
-            await each_1.eachAsync(entities, validate);
+            await util_1.eachAsync(entities, validate);
             return dbEntities;
         };
         find = async (criteria) => {
             const dbEntities = await collection.find(criteria);
             const entities = dbEntities.map(__1.dbItemToEntity);
-            await each_1.eachAsync(entities, validate);
+            await util_1.eachAsync(entities, validate);
             return dbEntities;
         };
         findOne = async (criteria) => {
@@ -61,7 +61,7 @@ const createValidatedCollection = async (collection, key, validator, { onCreate,
         };
         saveMany = async (documents) => {
             const entities = documents.map(__1.dbItemToEntity);
-            await each_1.eachAsync(entities, validate);
+            await util_1.eachAsync(entities, validate);
             return collection.saveMany(documents);
         };
     }

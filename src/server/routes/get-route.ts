@@ -1,15 +1,13 @@
 import { RequestHandler } from 'express-serve-static-core'
 import { DbCollection, EntitySchemaDb } from '../../db/types'
-import { kebabCase } from '../../util/lodash'
+import { kebabCase } from '@mojule/util'
 import { errorHandler } from './error-handler'
 import { defaultGetPath, defaultGetResult } from './store-routes'
 
 import {
   StoreRouteMeta, StoreRoute, GetPath, GetResult, ActionType
 } from './types'
-import { canAccessSchema } from '../../security/schema-security'
-import { Role } from '../../security/types'
-import { log } from '@mojule/log-iisnode'
+
 import { createEntitySchemaRouteHandler } from './schema-routes'
 
 export const getRoute = <TEntityMap>(

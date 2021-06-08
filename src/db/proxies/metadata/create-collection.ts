@@ -2,7 +2,7 @@ import {
   DbCollection, DbCreate, DbCreateMany, DbSave, DbSaveMany
 } from '../../types'
 
-import { clone } from '../../../util/clone'
+import { clone } from '@mojule/util'
 
 export const createMetadataCollection =
   async <K extends keyof TEntityMap, TEntityMap>(

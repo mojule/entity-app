@@ -1,6 +1,6 @@
 {
   "name": "@mojule/entity-app",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "Manage data entities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -40,6 +40,7 @@
     "@mojule/log-iisnode": "^0.2.5",
     "@mojule/schema-forms": "^0.3.0",
     "@mojule/spa-router": "^0.1.1",
+    "@mojule/util": "^0.1.1",
     "ajv": "^8.5.0",
     "ajv-formats": "^2.1.0",
     "bcryptjs": "^2.4.3",

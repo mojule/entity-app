@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRefSchemaMap = exports.isDbRefSchema = exports.refFactory = void 0;
-const lodash_1 = require("../util/lodash");
-const each_1 = require("../util/each");
+const util_1 = require("@mojule/util");
 const refFactory = (uri) => {
     uri = uri.endsWith('/') ? uri : uri + '/';
     const ref = (name) => {
-        const slug = lodash_1.kebabCase(name);
+        const slug = util_1.kebabCase(name);
         const $id = `${uri}${slug}-ref`;
-        const title = lodash_1.startCase(name);
+        const title = util_1.startCase(name);
         const type = 'object';
         const properties = {
             '_id': {
@@ -46,7 +45,7 @@ const isDbRefSchema = (schema) => {
 exports.isDbRefSchema = isDbRefSchema;
 const createRefSchemaMap = (entitySchemas, createRef) => {
     const refSchemas = {};
-    each_1.eachKeyValueMap(entitySchemas, (_schema, key) => {
+    util_1.eachKeyValueMap(entitySchemas, (_schema, key) => {
         const refSchema = createRef(key);
         const refKey = `${key}Ref`;
         refSchemas[refKey] = refSchema;

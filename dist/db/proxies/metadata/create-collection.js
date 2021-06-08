@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultExtendSave = exports.defaultExtendCreate = exports.createMetadataCollection = void 0;
-const clone_1 = require("../../../util/clone");
+const util_1 = require("@mojule/util");
 const createMetadataCollection = async (collection, _key, extendCreate = exports.defaultExtendCreate, extendSave = exports.defaultExtendSave) => {
     const { create: originalCreate, createMany: originalCreateMany, save: originalSave, saveMany: originalSaveMany } = collection;
     const create = async (entity) => originalCreate(extendCreate(entity));
@@ -21,7 +21,7 @@ const createMetadataCollection = async (collection, _key, extendCreate = exports
 };
 exports.createMetadataCollection = createMetadataCollection;
 const defaultExtendCreate = (entity, now = new Date().toJSON()) => {
-    entity = clone_1.clone(entity);
+    entity = util_1.clone(entity);
     entity['_v'] = 0;
     entity['_created'] = now;
     entity['_updated'] = now;
@@ -29,7 +29,7 @@ const defaultExtendCreate = (entity, now = new Date().toJSON()) => {
 };
 exports.defaultExtendCreate = defaultExtendCreate;
 const defaultExtendSave = (entity, now = new Date().toJSON()) => {
-    entity = clone_1.clone(entity);
+    entity = util_1.clone(entity);
     if (typeof entity['_v'] === 'number') {
         entity['_v']++;
     }

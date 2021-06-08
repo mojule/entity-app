@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.refResolver = void 0;
-const each_1 = require("../../util/each");
+const util_1 = require("@mojule/util");
 const traverse = require("@entity-schema/json-schema-traverse");
-const clone_1 = require("../../util/clone");
 const refResolver = (schemas, key) => {
     const idToKeyMap = new Map();
-    each_1.eachObjectMap(schemas, (schema, key) => {
+    util_1.eachObjectMap(schemas, (schema, key) => {
         const { $id } = schema;
         idToKeyMap.set($id, key);
     });
-    const schema = clone_1.clone(schemas[key]);
+    const schema = util_1.clone(schemas[key]);
     const cb = (schema) => {
         if (schema.$ref) {
             const refId = schema.$ref;

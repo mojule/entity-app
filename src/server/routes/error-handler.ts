@@ -1,5 +1,5 @@
 import { Response } from 'express-serve-static-core'
-import { errorToObj } from '../../util/error'
+import { errorToObj } from '@mojule/util'
 
 export const errorHandler = ( res: Response, err: any = {} ) => {
   const status = typeof err.status === 'number' ? err.status : 500

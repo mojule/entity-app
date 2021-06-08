@@ -1,6 +1,6 @@
-import { KeyValueMap } from '../util/types';
+import { KeyValueMap } from '@mojule/util';
 import { JSONSchema7 } from 'json-schema';
-import { SchemaRoles } from '../security/entity/types';
+import { SchemaRoles } from '../entity/security/types';
 export declare type EntitySchemaMap<TEntityMap> = KeyValueMap<TEntityMap, IdSchema>;
 export declare type SchemaMap = Record<string, IdSchema>;
 export interface IdSchema extends JSONSchema7 {

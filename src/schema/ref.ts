@@ -1,10 +1,8 @@
-import { kebabCase, startCase } from '../util/lodash'
+import { kebabCase, startCase, eachKeyValueMap } from '@mojule/util'
 
 import { 
   IdSchema, DbRefSchema, EntitySchemaMap, SchemaMap, DbRefSchemaProperties 
 } from './types'
-
-import { eachKeyValueMap } from '../util/each'
 
 export const refFactory = ( uri: string ) => {
   uri = uri.endsWith( '/' ) ? uri : uri + '/'

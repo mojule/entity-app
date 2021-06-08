@@ -3,13 +3,11 @@ import { EntityDb } from '../../db/types'
 import traverse = require( '@entity-schema/json-schema-traverse' )
 import { TraverseCallback } from '@entity-schema/json-schema-traverse/dist/types'
 import { JSONSchema7 } from 'json-schema'
-import { eachAsync } from '../../util/each'
+import { eachAsync, clone, camelCase } from '@mojule/util'
 import { isDbRefSchema } from '../ref'
-import { camelCase } from '../../util/lodash'
-import { clone } from '../../util/clone'
 
 export const dbRefResolver = async <TEntityMap, TKey extends keyof TEntityMap>(
-  key: TKey,
+  _key: TKey,
   schema: EntitySchemaMap<TEntityMap>[ TKey ],
   db: EntityDb<TEntityMap>
 ) => {
