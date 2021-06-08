@@ -1,8 +1,8 @@
 "use strict";
+// TODO move to @mojule/dom and remove dep from package
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.concatAndMoveCss = exports.concatAndMove = exports.concatUniqueTextNodes = void 0;
 const CleanCSS = require("clean-css");
-const log_iisnode_1 = require("@mojule/log-iisnode");
 const cleanCss = new CleanCSS();
 const concatUniqueTextNodes = (...elements) => {
     const textSet = new Set();
@@ -22,10 +22,10 @@ const concatAndMoveCss = (wrapper, target, ...elements) => {
     let css = exports.concatUniqueTextNodes(...elements);
     elements.forEach(el => el.remove());
     if (css) {
-        const start = process.hrtime();
+        //const start = process.hrtime()
         const minified = cleanCss.minify(css);
-        const end = process.hrtime(start);
-        log_iisnode_1.log.debug(`css minify time: ${end[0] * 1e3 + end[1] / 1e6}ms`);
+        //const end = process.hrtime( start )
+        //log.debug( `css minify time: ${ end[ 0 ] * 1e3 + end[ 1 ] / 1e6 }ms` )
         target.appendChild(wrapper(minified.styles));
     }
 };

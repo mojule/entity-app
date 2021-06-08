@@ -91,3 +91,5 @@ export interface CreateDb<TEntityMap, TOptions = any> {
   ( name: string, keys: EntityKeys<TEntityMap>, options?: TOptions ):
     Promise<EntityDb<TEntityMap>>
 }
+
+export type ActionType = 'create' | 'update' | 'read' | 'delete'

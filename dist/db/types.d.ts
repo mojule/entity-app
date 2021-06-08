@@ -70,3 +70,4 @@ export interface DbRef<TEntityMap> extends DbItem {
 export interface CreateDb<TEntityMap, TOptions = any> {
     (name: string, keys: EntityKeys<TEntityMap>, options?: TOptions): Promise<EntityDb<TEntityMap>>;
 }
+export declare type ActionType = 'create' | 'update' | 'read' | 'delete';

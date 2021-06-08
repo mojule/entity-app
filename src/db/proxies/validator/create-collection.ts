@@ -3,7 +3,6 @@ import { DbCollection } from '../../types'
 import { eachAsync } from '@mojule/util'
 import { dbItemToEntity } from '../..'
 import { defaultLoadPaged } from '../../default-load-paged'
-import { log } from '@mojule/log-iisnode'
 
 export const createValidatedCollection =
   async <K extends keyof TEntityMap, TEntityMap>(
@@ -21,14 +20,7 @@ export const createValidatedCollection =
     const validate = async ( entity: TEntityMap[ K ] ) => {
       const err = await validator( key, entity )
 
-      if ( err ){
-        log.error(
-          `Store validation failed for ${ key }`,                
-          err
-        )
-
-        throw err
-      }
+      if ( err ) throw err
     }
 
     if ( onCreate ) {

@@ -4,16 +4,13 @@ exports.createValidatedCollection = void 0;
 const util_1 = require("@mojule/util");
 const __1 = require("../..");
 const default_load_paged_1 = require("../../default-load-paged");
-const log_iisnode_1 = require("@mojule/log-iisnode");
 const createValidatedCollection = async (collection, key, validator, { onCreate, onLoad, onSave }) => {
     const { ids, remove, removeMany } = collection;
     let { create, createMany, load, loadMany, save, saveMany, find, findOne } = collection;
     const validate = async (entity) => {
         const err = await validator(key, entity);
-        if (err) {
-            log_iisnode_1.log.error(`Store validation failed for ${key}`, err);
+        if (err)
             throw err;
-        }
     };
     if (onCreate) {
         create = async (entity) => {

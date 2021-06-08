@@ -1,5 +1,6 @@
+// TODO move to @mojule/dom and remove dep from package
+
 import * as CleanCSS from 'clean-css'
-import { log } from '@mojule/log-iisnode'
 import { CreateTag } from '@mojule/dom'
 
 const cleanCss = new CleanCSS()
@@ -30,10 +31,10 @@ export const concatAndMoveCss = ( wrapper: CatableWrapper, target: HTMLElement, 
   elements.forEach( el => el.remove() )
 
   if ( css ) {
-    const start = process.hrtime()
+    //const start = process.hrtime()
     const minified = cleanCss.minify( css )
-    const end = process.hrtime( start )
-    log.debug( `css minify time: ${ end[ 0 ] * 1e3 + end[ 1 ] / 1e6 }ms` )
+    //const end = process.hrtime( start )
+    //log.debug( `css minify time: ${ end[ 0 ] * 1e3 + end[ 1 ] / 1e6 }ms` )
 
     target.appendChild( wrapper( minified.styles ) )
   }
