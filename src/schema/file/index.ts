@@ -1,13 +1,13 @@
-import * as fileSchema from './file.schema.json'
-import * as fileCreateSchema from './file-create.schema.json'
-import * as imageFileSchema from './image-file.schema.json'
-import * as zipFileSchema from './zip-file.schema.json'
+import { fileSchema } from './file-schema'
+import { fileCreateSchema } from './file-create-schema'
+import { imageFileSchema } from './image-file-schema'
+import { zipFileSchema } from './zip-file-schema'
 import { IdSchema, SchemaMap } from '../types'
 
-export const fileEntitySchema: SchemaMap = {
-  file: fileSchema as IdSchema,
-  imageFile: imageFileSchema as IdSchema,
-  zipFile: zipFileSchema as IdSchema
+export const fileEntitySchema = {
+  file: fileSchema,
+  imageFile: imageFileSchema,
+  zipFile: zipFileSchema
 }
 
 const fileCreate = Object.assign(

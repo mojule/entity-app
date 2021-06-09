@@ -1,6 +1,6 @@
 import { FileEntity, ImageFileEntity, ZipFileEntity } from '.';
-export interface FileEntityMap {
+export declare type FileEntityMap = {
     file: FileEntity;
     imageFile: ImageFileEntity;
     zipFile: ZipFileEntity;
-}
+};

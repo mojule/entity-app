@@ -1,6 +1,0 @@
-{
-  "$id": "#/name",
-  "title": "Name",
-  "type": "string",
-  "minLength": 1
-}

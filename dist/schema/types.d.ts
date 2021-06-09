@@ -2,11 +2,16 @@ import { KeyValueMap } from '@mojule/util';
 import { JSONSchema7 } from 'json-schema';
 import { SchemaRoles } from '../entity/security/types';
 export declare type EntitySchemaMap<TEntityMap> = KeyValueMap<TEntityMap, IdSchema>;
-export declare type SchemaMap = Record<string, IdSchema>;
+export declare type SchemaMap = Record<string, IdSchema | ReadonlyIdSchema>;
+export declare type ReadonlySchema = Readonly<JSONSchema7>;
 export interface IdSchema extends JSONSchema7 {
     $id: string;
     _esRoles?: SchemaRoles;
 }
+export declare type ReadonlyIdSchema = ReadonlySchema & Readonly<{
+    $id: string;
+    _esRoles?: SchemaRoles;
+}>;
 export interface PatternSchema extends IdSchema {
     type: 'string';
     pattern: string;

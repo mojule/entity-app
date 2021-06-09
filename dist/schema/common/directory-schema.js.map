@@ -1,0 +1,1 @@
+{"version":3,"file":"directory-schema.js","sourceRoot":"","sources":["../../../src/schema/common/directory-schema.ts"],"names":[],"mappings":";;;AAAa,QAAA,eAAe,GAAG;IAC7B,KAAK,EAAE,aAAa;IACpB,OAAO,EAAE,WAAW;IACpB,aAAa,EAAE,6CAA6C;IAC5D,MAAM,EAAE,QAAQ;IAChB,SAAS,EAAE,iEAAiE;CACpE,CAAA"}

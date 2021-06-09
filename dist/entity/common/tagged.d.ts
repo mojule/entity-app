@@ -1,3 +1,3 @@
-export interface TaggedEntity {
+export declare type TaggedEntity = {
     tags?: string[];
-}
+};

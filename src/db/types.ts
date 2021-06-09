@@ -79,12 +79,16 @@ export type DbCollections<TEntityMap> = {
   [ key in keyof TEntityMap ]: DbCollection<TEntityMap[ key ]>
 }
 
-export interface DbItem {
+export type DbItem = {
   _id: string
 }
 
-export interface DbRef<TEntityMap> extends DbItem {
+export type DbRef<TEntityMap> = DbItem & {
   _collection: keyof TEntityMap
+}
+
+export type DbRefFor<TEntityMap, K extends keyof TEntityMap> = DbRef<TEntityMap> & {
+  _collection: K
 }
 
 export interface CreateDb<TEntityMap, TOptions = any> {

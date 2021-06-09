@@ -1,3 +1,3 @@
-export interface NamedEntity {
+export type NamedEntity = {
   name: string
 }

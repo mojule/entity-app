@@ -1,2 +1,130 @@
-import { SchemaMap } from '../types';
-export declare const securitySchema: SchemaMap;
+import * as resetPasswordSchema from './reset-password-schema';
+export declare const securitySchema: {
+    apiKey: {
+        readonly $id: "#/api-key";
+        readonly title: "API Key";
+        readonly description: "Key for accessing the API";
+        readonly type: "object";
+        readonly properties: {
+            readonly name: {
+                readonly title: "Name";
+                readonly description: "Name of this API Key";
+                readonly type: "string";
+            };
+            readonly user: {
+                readonly type: "object";
+                readonly properties: {
+                    readonly _id: {
+                        readonly title: "ID";
+                        readonly type: "string";
+                    };
+                    readonly _collection: {
+                        readonly title: "Collection";
+                        readonly type: "string";
+                        readonly enum: readonly ["user"];
+                    };
+                };
+                readonly additionalProperties: false;
+                readonly required: readonly ["_id", "_collection"];
+            };
+            readonly secret: {
+                readonly title: "Secret";
+                readonly description: "The API Key Secret";
+                readonly type: "string";
+                readonly default: "";
+                readonly readOnly: true;
+            };
+            readonly tags: {
+                readonly $id: "#/tags";
+                readonly title: "Tags";
+                readonly type: "array";
+                readonly items: {
+                    readonly title: "Tag";
+                    readonly type: "string";
+                    readonly pattern: "^[\\w\\-]{1,40}$";
+                };
+                readonly uniqueItems: true;
+            };
+        };
+        readonly required: readonly ["name", "user", "secret"];
+    } & {
+        _esRoles: import("../..").RoleMap;
+    };
+    user: {
+        readonly $id: "#/user";
+        readonly title: "User";
+        readonly description: "Person with access to the system";
+        readonly type: "object";
+        readonly properties: {
+            readonly name: {
+                readonly title: "Name";
+                readonly description: "The user's name";
+                readonly type: "string";
+            };
+            readonly email: {
+                readonly title: "Email";
+                readonly description: "The user's email address";
+                readonly type: "string";
+                readonly format: "email";
+            };
+            readonly password: {
+                readonly title: "Password";
+                readonly description: "The user's password";
+                readonly type: "string";
+                readonly format: "password";
+            };
+            readonly roles: {
+                readonly title: "Roles";
+                readonly description: "The user's roles";
+                readonly type: "array";
+                readonly items: {
+                    readonly title: "Role";
+                    readonly description: "Name of this role";
+                    readonly type: "string";
+                };
+            };
+        };
+        readonly required: readonly ["name", "email", "password", "roles"];
+    } & {
+        _esRoles: import("../..").RoleMap;
+    };
+    pendingUser: {
+        readonly $id: "#/user";
+        readonly title: "User";
+        readonly description: "Person with access to the system";
+        readonly type: "object";
+        readonly properties: {
+            readonly name: {
+                readonly title: "Name";
+                readonly description: "The user's name";
+                readonly type: "string";
+            };
+            readonly email: {
+                readonly title: "Email";
+                readonly description: "The user's email address";
+                readonly type: "string";
+                readonly format: "email";
+            };
+            readonly password: {
+                readonly title: "Password";
+                readonly description: "The user's password";
+                readonly type: "string";
+                readonly format: "password";
+            };
+            readonly roles: {
+                readonly title: "Roles";
+                readonly description: "The user's roles";
+                readonly type: "array";
+                readonly items: {
+                    readonly title: "Role";
+                    readonly description: "Name of this role";
+                    readonly type: "string";
+                };
+            };
+        };
+        readonly required: readonly ["name", "email", "password", "roles"];
+    } & {
+        _esRoles: import("../..").RoleMap;
+    };
+    resetPassword: typeof resetPasswordSchema;
+};

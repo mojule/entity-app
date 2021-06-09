@@ -1,9 +1,7 @@
-import * as fileMetadataSchema from './file-metadata.schema.json'
-import * as imageFileMetadataSchema from './image-file-metadata.schema.json'
+import { fileMetadataSchema } from './file-metadata-schema'
+import { imageFileMetadataSchema } from './image-file-metadata-schema'
 
-import { SchemaMap, IdSchema } from '../../types'
-
-export const fileCommonSchema: SchemaMap = {
-  fileMetadata: fileMetadataSchema as IdSchema,
-  imageFileMetadata: imageFileMetadataSchema as IdSchema,
+export const fileCommonSchema = {
+  fileMetadata: fileMetadataSchema,
+  imageFileMetadata: imageFileMetadataSchema,
 }

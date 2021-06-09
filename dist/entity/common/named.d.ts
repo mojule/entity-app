@@ -1,3 +1,3 @@
-export interface NamedEntity {
+export declare type NamedEntity = {
     name: string;
-}
+};
