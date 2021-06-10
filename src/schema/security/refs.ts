@@ -1,16 +1,16 @@
+import { refSharedProperties, refSharedSchema } from '../common/ref-schema-generic'
+
 export const userRefSchema = {
-  type: 'object',
+  $id: '#/user-ref',
+  title: 'User',
+  ...refSharedSchema,
   properties: {
-    '_id': {
-      title: 'ID',
-      type: 'string'
-    },
-    '_collection': {
-      title: 'Collection',
+    ...refSharedProperties,
+    
+    _collection: {
+      title: 'User',
       type: 'string',
       enum: [ 'user' ]
-    }
-  },
-  additionalProperties: false,
-  required: [ '_id', '_collection' ]
+    }   
+  }
 } as const

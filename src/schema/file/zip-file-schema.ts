@@ -1,3 +1,5 @@
+import { DbRefFor } from '../../db/types'
+import { FileEntityMap } from '../../entity/file/types'
 import { nameSchema } from '../common/name-schema'
 import { pathSchema } from '../common/path-schema'
 import { tagsSchema } from '../common/tags-schema'

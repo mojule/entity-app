@@ -1,50 +1,46 @@
+import { refSharedSchema, refSharedProperties } from '../common/ref-schema-generic'
+
 export const fileRefSchema = {
-  type: 'object',
+  $id: '#/file-ref',
+  title: 'File Reference',
+  ...refSharedSchema,
   properties: {
-    '_id': {
-      title: 'ID',
-      type: 'string'
-    },
-    '_collection': {
-      title: 'Collection',
+    ...refSharedProperties,
+    
+    _collection: {
+      title: 'File',
       type: 'string',
       enum: [ 'file' ]
-    }
-  },
-  additionalProperties: false,
-  required: [ '_id', '_collection' ]
+    }   
+  }
 } as const
 
 export const imageFileRefSchema = {
-  type: 'object',
+  $id: '#/image-file-ref',
+  title: 'Image File Reference',
+  ...refSharedSchema,
   properties: {
-    '_id': {
-      title: 'ID',
-      type: 'string'
-    },
-    '_collection': {
-      title: 'Collection',
+    ...refSharedProperties,
+    
+    _collection: {
+      title: 'Image File',
       type: 'string',
       enum: [ 'imageFile' ]
-    }
-  },
-  additionalProperties: false,
-  required: [ '_id', '_collection' ]
+    }   
+  }
 } as const
 
 export const zipFileRefSchema = {
-  type: 'object',
+  $id: '#/zip-file-ref',
+  title: 'Zip File Reference',
+  ...refSharedSchema,
   properties: {
-    '_id': {
-      title: 'ID',
-      type: 'string'
-    },
-    '_collection': {
-      title: 'Collection',
+    ...refSharedProperties,
+    
+    _collection: {
+      title: 'Zip File',
       type: 'string',
       enum: [ 'zipFile' ]
-    }
-  },
-  additionalProperties: false,
-  required: [ '_id', '_collection' ]
+    }   
+  }
 } as const
