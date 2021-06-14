@@ -1,10 +1,7 @@
-export interface FileMetadata {
-  path: string
-  mimetype: string
-  size: number
-}
+import { FromSchema } from 'json-schema-to-ts'
+import { fileMetadataSchema } from '../../schema/file/common/file-metadata-schema'
+import { imageFileMetadataSchema } from '../../schema/file/common/image-file-metadata-schema'
 
-export interface ImageFileMetadata extends FileMetadata {
-  width: number
-  height: number
-}
+export type FileMetadata = FromSchema<typeof fileMetadataSchema>
+
+export type ImageFileMetadata = FromSchema<typeof imageFileMetadataSchema>

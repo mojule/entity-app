@@ -1,0 +1,1 @@
+{"version":3,"file":"tags-schema.js","sourceRoot":"","sources":["../../../src/schema/common/tags-schema.ts"],"names":[],"mappings":";;;AAAa,QAAA,UAAU,GAAG;IACxB,KAAK,EAAE,QAAQ;IACf,OAAO,EAAE,MAAM;IACf,MAAM,EAAE,OAAO;IACf,OAAO,EAAE;QACP,OAAO,EAAE,KAAK;QACd,MAAM,EAAE,QAAQ;QAChB,SAAS,EAAE,kBAAkB;KAC9B;IACD,aAAa,EAAE,IAAI;CACX,CAAA"}

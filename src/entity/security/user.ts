@@ -1,17 +1,11 @@
-import { NamedEntity } from '../../entity/common/named'
 import { DbRef } from '../../db/types'
 import { SecurityEntityMap } from './types'
-import { Role } from '../../security/types'
+import { FromSchema } from 'json-schema-to-ts'
+import { pendingUserSchema, userSchema } from '../../schema/security/user-schema'
 
-export interface UserEntity extends NamedEntity {
-  email: string
-  password: string
-  roles: Role[]
-}
+export type UserEntity = FromSchema<typeof userSchema>
 
-export interface PendingUserEntity extends UserEntity {
-  secret: string
-}
+export type PendingUserEntity = FromSchema<typeof pendingUserSchema>
 
 export interface UserData {
   _id?: string

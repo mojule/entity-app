@@ -1,26 +1,68 @@
-import * as apiKeySchema from './api-key.json'
-import * as userSchema from './user.json'
-import * as resetPasswordSchema from './reset-password.json'
+import { apiKeyRoles, apiKeySchema } from './api-key-schema'
+import { pendingUserSchema, userPropertyRoles, userRoles, userSchema } from './user-schema'
+import * as resetPasswordSchema from './reset-password-schema'
 import { clone } from '@mojule/util'
-import { IdSchema, SchemaMap } from '../types'
+import { addRolesToSchema } from '../../security/roles'
 
-const pendingUserSchema = clone(userSchema)
+// no straightforward way to extend schema at the moment - figure this out
+// later
 
-pendingUserSchema.$id = '#/pending-user'
-pendingUserSchema.title = 'Pending User'
-pendingUserSchema.required.push( 'secret' )
+// TODO - readOnly is nonstandard find where used and figure out better way
+// and default doesn't work either - why??? it should be able to be string[]?
+Object.assign( 
+  userSchema.properties.roles, 
+  { 
+    readOnly: true,    
+    default: [ "user" ] 
+  } 
+)
 
-pendingUserSchema.properties['secret'] = {
-  title: 'Secret',
-  description: 'The Pending User Secret',
-  type: 'string',
-  default: '',
-  readOnly: true
+Object.assign( 
+  pendingUserSchema.properties.roles, 
+  { 
+    readOnly: true,    
+    default: [ "user" ] 
+  } 
+)
+
+Object.assign( 
+  pendingUserSchema.properties.secret, 
+  { 
+    readOnly: true,    
+    default: ''
+  } 
+)
+
+
+
+// const pendingUserSchema = clone(userSchema)
+
+// Object.assign(
+//   pendingUserSchema,
+//   {
+//     $id: '#/pending-user',
+//     title: 'Pending User',
+//     required: [ ...pendingUserSchema.required, 'secret' ]
+//   }
+// )
+
+// Object.assign(
+//   pendingUserSchema.properties,
+//   {
+//     secret: {
+//       title: 'Secret',
+//       description: 'The Pending User Secret',
+//       type: 'string',
+//       default: '',
+//       readOnly: true    
+//     }    
+//   }
+// )
+
+export const securitySchema = {
+  apiKey: addRolesToSchema( apiKeySchema, apiKeyRoles ),
+  user: addRolesToSchema( userSchema, userRoles, userPropertyRoles ),
+  pendingUser: addRolesToSchema( pendingUserSchema, userRoles, userPropertyRoles ),
+  resetPassword: resetPasswordSchema
 }
 
-export const securitySchema: SchemaMap = {
-  apiKey: apiKeySchema as IdSchema,
-  user: userSchema as IdSchema,
-  pendingUser: pendingUserSchema as IdSchema,
-  resetPassword: resetPasswordSchema as IdSchema
-}

@@ -7,7 +7,7 @@ export declare const testPassword: (password: string) => {
     isPhrase: boolean;
     results: TestResult;
     messages: TestMessage;
-    compulsory: ("number" | "symbol" | "repeat" | "minLength" | "maxLength" | "lowercase" | "uppercase")[];
-    optional: ("number" | "symbol" | "repeat" | "minLength" | "maxLength" | "lowercase" | "uppercase")[];
+    compulsory: ("number" | "symbol" | "repeat" | "maxLength" | "minLength" | "lowercase" | "uppercase")[];
+    optional: ("number" | "symbol" | "repeat" | "maxLength" | "minLength" | "lowercase" | "uppercase")[];
 };
 export {};

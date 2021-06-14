@@ -4,12 +4,19 @@ import { SchemaRoles } from '../entity/security/types'
 
 export type EntitySchemaMap<TEntityMap> = KeyValueMap<TEntityMap,IdSchema>
 
-export type SchemaMap = Record<string,IdSchema>
+export type SchemaMap = Record<string,IdSchema | ReadonlyIdSchema>
+
+export type ReadonlySchema = Readonly<JSONSchema7>
 
 export interface IdSchema extends JSONSchema7 {
   $id: string
   _esRoles?: SchemaRoles
 }
+
+export type ReadonlyIdSchema = ReadonlySchema & Readonly<{
+  $id: string
+  _esRoles?: SchemaRoles
+}>
 
 export interface PatternSchema extends IdSchema {
   type: 'string'

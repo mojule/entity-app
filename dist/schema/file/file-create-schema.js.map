@@ -1,0 +1,1 @@
+{"version":3,"file":"file-create-schema.js","sourceRoot":"","sources":["../../../src/schema/file/file-create-schema.ts"],"names":[],"mappings":";;;AAAA,uDAAkD;AAErC,QAAA,gBAAgB,GAAG;IAC9B,KAAK,EAAE,eAAe;IACtB,OAAO,EAAE,aAAa;IACtB,MAAM,EAAE,QAAQ;IAChB,YAAY,EAAE;QACZ,MAAM,EAAE;YACN,OAAO,EAAE,aAAa;YACtB,MAAM,EAAE,QAAQ;YAChB,QAAQ,EAAE,MAAM;SACjB;QACD,MAAM,EAAE,wBAAU;KACnB;CACO,CAAA"}

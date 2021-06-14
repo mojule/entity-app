@@ -61,12 +61,15 @@ export interface EntitySchemaDb<TEntityMap> extends EntityDb<TEntityMap> {
 export declare type DbCollections<TEntityMap> = {
     [key in keyof TEntityMap]: DbCollection<TEntityMap[key]>;
 };
-export interface DbItem {
+export declare type DbItem = {
     _id: string;
-}
-export interface DbRef<TEntityMap> extends DbItem {
+};
+export declare type DbRef<TEntityMap> = DbItem & {
     _collection: keyof TEntityMap;
-}
+};
+export declare type DbRefFor<TEntityMap, K extends keyof TEntityMap> = DbRef<TEntityMap> & {
+    _collection: K;
+};
 export interface CreateDb<TEntityMap, TOptions = any> {
     (name: string, keys: EntityKeys<TEntityMap>, options?: TOptions): Promise<EntityDb<TEntityMap>>;
 }

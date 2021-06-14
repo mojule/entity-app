@@ -1,31 +1,8 @@
-import { FileMetadata, ImageFileMetadata } from './metadata'
-import { NamedEntity } from '../../entity/common/named'
-import { TaggedEntity } from '../../entity/common/tagged'
-import { DbRef } from '../../db/types'
-import { FileEntityMap } from './types'
+import { FromSchema } from 'json-schema-to-ts'
+import { fileSchema } from '../../schema/file/file-schema'
+import { zipFileSchema } from '../../schema/file/zip-file-schema'
+import { imageFileSchema } from '../../schema/file/image-file-schema'
 
-export interface FileEntity extends NamedEntity, TaggedEntity {
-  meta: FileMetadata
-}
-
-export interface ImageFileEntity extends FileEntity {
-  meta: ImageFileMetadata
-}
-
-export interface ZipFileEntity extends FileEntity {
-  paths: string[]
-  files: FileRef[]
-  images: ImageFileRef[]
-}
-
-export interface FileRef extends DbRef<FileEntityMap> {
-  _collection: 'file'
-}
-
-export interface ImageFileRef extends DbRef<FileEntityMap> {
-  _collection: 'imageFile'
-}
-
-export interface ZipFileRef extends DbRef<FileEntityMap> {
-  _collection: 'zipFile'
-}
+export type FileEntity = FromSchema<typeof fileSchema> 
+export type ImageFileEntity = FromSchema<typeof imageFileSchema> 
+export type ZipFileEntity = FromSchema<typeof zipFileSchema> 

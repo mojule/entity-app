@@ -25,6 +25,7 @@
     "bcryptjs": "^2.4.3",
     "clean-css": "^5.1.2",
     "json-schema": "^0.3.0",
+    "json-schema-to-ts": "^1.6.4",
     "mingo": "^4.1.2"
   },
   "devDependencies": {
