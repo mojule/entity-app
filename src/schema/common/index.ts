@@ -16,3 +16,8 @@ export const commonSchema: Record<string,IdSchema> = {
   path: pathSchema,
   tags: tagsSchema
 }
+
+export { 
+  byteSizeSchema, directorySchema, filenameSchema, mediaTypeSchema, nameSchema, 
+  pathSchema, tagsSchema 
+}
