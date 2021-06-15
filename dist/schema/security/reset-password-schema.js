@@ -23,6 +23,7 @@ exports.resetPasswordSchema = {
         }
     },
     "required": [
+        "name",
         "user",
         "secret"
     ]

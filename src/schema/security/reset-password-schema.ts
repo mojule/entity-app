@@ -21,6 +21,7 @@ export const resetPasswordSchema = {
     }
   },
   "required": [
+    "name",
     "user",
     "secret"
   ]
