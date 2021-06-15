@@ -1,8 +1,5 @@
 import { kebabCase, startCase, eachKeyValueMap } from '@mojule/util'
-
-import { 
-  DbRefSchema, EntitySchemaMap, SchemaMap, DbRefSchemaProperties, EntitySchema 
-} from './types'
+import { DbRefSchema, DbRefSchemaProperties, EntitySchemaMap } from './types'
 
 export const refFactory = ( uri: string ) => {
   uri = uri.endsWith( '/' ) ? uri : uri + '/'

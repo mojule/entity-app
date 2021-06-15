@@ -1,8 +1,9 @@
 import { KeyValueMap } from '@mojule/util';
 import { JSONSchema } from 'json-schema-to-ts';
+import { DeepReadonly } from 'json-schema-to-ts/lib/utils';
 import { SchemaRoles } from '../entity/security/types';
 export declare type EntitySchema = JSONSchema;
-export declare type MaybeReadonly<T> = T | Readonly<T>;
+export declare type MaybeReadonly<T> = T | DeepReadonly<T>;
 export declare type IdSchemaBase = {
     $id: string;
     _esRoles?: SchemaRoles;
@@ -22,7 +23,7 @@ export declare type DbRefSchemaBase = {
     properties: DbRefSchemaProperties;
     required: ['_id', '_collection'];
 };
-export declare type DbRefSchema = MaybeReadonly<DbRefSchemaBase>;
+export declare type DbRefSchema = IdSchema & MaybeReadonly<DbRefSchemaBase>;
 export declare type DbRefSchemaProperties = {
     _id: {
         title: 'ID';
@@ -33,5 +34,4 @@ export declare type DbRefSchemaProperties = {
         type: 'string';
         enum: [string];
     };
-    [key: string]: EntitySchema;
 };
