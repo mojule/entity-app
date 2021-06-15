@@ -1,7 +1,0 @@
-{
-    "$id": "#/byte-size",
-    "title": "Size",
-    "description": "Size in bytes",
-    "type": "integer",
-    "minimum": 0
-}

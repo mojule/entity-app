@@ -1,6 +1,6 @@
 {
   "name": "@mojule/entity-app",
-  "version": "0.3.7",
+  "version": "0.3.9",
   "description": "Manage data entities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,52 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.zipFileRefSchema = exports.imageFileRefSchema = exports.fileRefSchema = void 0;
-exports.fileRefSchema = {
-    type: 'object',
-    properties: {
-        '_id': {
-            title: 'ID',
-            type: 'string'
-        },
-        '_collection': {
-            title: 'Collection',
+const ref_schema_generic_1 = require("../common/ref-schema-generic");
+exports.fileRefSchema = Object.assign(Object.assign({ $id: '#/file-ref', title: 'File Reference' }, ref_schema_generic_1.refSharedSchema), { properties: Object.assign(Object.assign({}, ref_schema_generic_1.refSharedProperties), { _collection: {
+            title: 'File',
             type: 'string',
             enum: ['file']
-        }
-    },
-    additionalProperties: false,
-    required: ['_id', '_collection']
-};
-exports.imageFileRefSchema = {
-    type: 'object',
-    properties: {
-        '_id': {
-            title: 'ID',
-            type: 'string'
-        },
-        '_collection': {
-            title: 'Collection',
+        } }) });
+exports.imageFileRefSchema = Object.assign(Object.assign({ $id: '#/image-file-ref', title: 'Image File Reference' }, ref_schema_generic_1.refSharedSchema), { properties: Object.assign(Object.assign({}, ref_schema_generic_1.refSharedProperties), { _collection: {
+            title: 'Image File',
             type: 'string',
             enum: ['imageFile']
-        }
-    },
-    additionalProperties: false,
-    required: ['_id', '_collection']
-};
-exports.zipFileRefSchema = {
-    type: 'object',
-    properties: {
-        '_id': {
-            title: 'ID',
-            type: 'string'
-        },
-        '_collection': {
-            title: 'Collection',
+        } }) });
+exports.zipFileRefSchema = Object.assign(Object.assign({ $id: '#/zip-file-ref', title: 'Zip File Reference' }, ref_schema_generic_1.refSharedSchema), { properties: Object.assign(Object.assign({}, ref_schema_generic_1.refSharedProperties), { _collection: {
+            title: 'Zip File',
             type: 'string',
             enum: ['zipFile']
-        }
-    },
-    additionalProperties: false,
-    required: ['_id', '_collection']
-};
+        } }) });
 //# sourceMappingURL=refs.js.map

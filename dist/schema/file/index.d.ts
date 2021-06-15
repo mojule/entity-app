@@ -176,20 +176,22 @@ export declare const fileEntitySchema: {
                 readonly description: "Files in ZIP";
                 readonly type: "array";
                 readonly items: {
-                    readonly type: "object";
                     readonly properties: {
+                        readonly _collection: {
+                            readonly title: "File";
+                            readonly type: "string";
+                            readonly enum: readonly ["file"];
+                        };
                         readonly _id: {
                             readonly title: "ID";
                             readonly type: "string";
                         };
-                        readonly _collection: {
-                            readonly title: "Collection";
-                            readonly type: "string";
-                            readonly enum: readonly ["file"];
-                        };
                     };
+                    readonly type: "object";
                     readonly additionalProperties: false;
                     readonly required: readonly ["_id", "_collection"];
+                    readonly $id: "#/file-ref";
+                    readonly title: "File Reference";
                 };
             };
             readonly images: {
@@ -197,20 +199,22 @@ export declare const fileEntitySchema: {
                 readonly description: "Images in ZIP";
                 readonly type: "array";
                 readonly items: {
-                    readonly type: "object";
                     readonly properties: {
+                        readonly _collection: {
+                            readonly title: "Image File";
+                            readonly type: "string";
+                            readonly enum: readonly ["imageFile"];
+                        };
                         readonly _id: {
                             readonly title: "ID";
                             readonly type: "string";
                         };
-                        readonly _collection: {
-                            readonly title: "Collection";
-                            readonly type: "string";
-                            readonly enum: readonly ["imageFile"];
-                        };
                     };
+                    readonly type: "object";
                     readonly additionalProperties: false;
                     readonly required: readonly ["_id", "_collection"];
+                    readonly $id: "#/image-file-ref";
+                    readonly title: "Image File Reference";
                 };
             };
         };

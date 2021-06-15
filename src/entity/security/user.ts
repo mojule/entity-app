@@ -1,4 +1,4 @@
-import { DbRef } from '../../db/types'
+import { DbRefFor } from '../../db/types'
 import { SecurityEntityMap } from './types'
 import { FromSchema } from 'json-schema-to-ts'
 import { pendingUserSchema, userSchema } from '../../schema/security/user-schema'
@@ -14,6 +14,4 @@ export interface UserData {
   roles: string[]
 }
 
-export interface UserRef extends DbRef<SecurityEntityMap> {
-  _collection: 'user'
-}
+export type UserRef = DbRefFor<SecurityEntityMap,'user'>

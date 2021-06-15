@@ -12,3 +12,4 @@ export interface SecurityEntityMap {
 }
 
 export type SchemaRoles = Record<ActionType,Role[]>
+

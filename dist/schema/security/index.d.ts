@@ -12,20 +12,22 @@ export declare const securitySchema: {
                 readonly type: "string";
             };
             readonly user: {
-                readonly type: "object";
                 readonly properties: {
+                    readonly _collection: {
+                        readonly title: "User";
+                        readonly type: "string";
+                        readonly enum: readonly ["user"];
+                    };
                     readonly _id: {
                         readonly title: "ID";
                         readonly type: "string";
                     };
-                    readonly _collection: {
-                        readonly title: "Collection";
-                        readonly type: "string";
-                        readonly enum: readonly ["user"];
-                    };
                 };
+                readonly type: "object";
                 readonly additionalProperties: false;
                 readonly required: readonly ["_id", "_collection"];
+                readonly $id: "#/user-ref";
+                readonly title: "User";
             };
             readonly secret: {
                 readonly title: "Secret";
@@ -89,11 +91,16 @@ export declare const securitySchema: {
         _esRoles: import("../..").RoleMap;
     };
     pendingUser: {
-        readonly $id: "#/user";
-        readonly title: "User";
-        readonly description: "Person with access to the system";
+        readonly $id: "#/pending-user";
+        readonly title: "Pending User";
+        readonly description: "Person awaiting access to the system";
         readonly type: "object";
         readonly properties: {
+            readonly secret: {
+                readonly title: "Secret";
+                readonly description: "The Pending User Secret";
+                readonly type: "string";
+            };
             readonly name: {
                 readonly title: "Name";
                 readonly description: "The user's name";
@@ -122,7 +129,7 @@ export declare const securitySchema: {
                 };
             };
         };
-        readonly required: readonly ["name", "email", "password", "roles"];
+        readonly required: readonly ["name", "email", "password", "roles", "secret"];
     } & {
         _esRoles: import("../..").RoleMap;
     };
