@@ -7,7 +7,7 @@ exports.refSharedSchema = {
     required: ['_id', '_collection']
 };
 exports.refSharedProperties = {
-    '_id': {
+    _id: {
         title: 'ID',
         type: 'string'
     }

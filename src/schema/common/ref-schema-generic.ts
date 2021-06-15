@@ -5,7 +5,7 @@ export const refSharedSchema = {
 } as const
 
 export const refSharedProperties = {
-  '_id': {
+  _id: {
     title: 'ID',
     type: 'string'
   }

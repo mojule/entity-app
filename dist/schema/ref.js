@@ -30,6 +30,10 @@ const refFactory = (uri) => {
 };
 exports.refFactory = refFactory;
 const isDbRefSchema = (schema) => {
+    if (typeof schema !== 'object')
+        return false;
+    if (typeof schema['$id'] !== 'string')
+        return false;
     if (typeof schema['title'] !== 'string')
         return false;
     if (schema['type'] !== 'object')

@@ -1,6 +1,6 @@
-import { JSONSchema7 } from 'json-schema'
-import { PatternSchema } from './types'
+import { EntitySchema, PatternSchema } from './types'
 
 export const isPatternSchema =
-  ( schema: JSONSchema7 ): schema is PatternSchema =>
-    schema.type === 'string' && typeof schema.pattern === 'string'
+  ( schema: EntitySchema ): schema is PatternSchema =>
+    typeof schema === 'object' && schema.type === 'string' && 
+    typeof schema.pattern === 'string'

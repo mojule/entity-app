@@ -1,36 +1,40 @@
 import { KeyValueMap } from '@mojule/util'
-import { JSONSchema7 } from 'json-schema'
+import { JSONSchema } from 'json-schema-to-ts'
 import { SchemaRoles } from '../entity/security/types'
 
-export type EntitySchemaMap<TEntityMap> = KeyValueMap<TEntityMap,IdSchema>
+export type EntitySchema = JSONSchema
 
-export type SchemaMap = Record<string,IdSchema | ReadonlyIdSchema>
+export type MaybeReadonly<T> = T | Readonly<T>
 
-export type ReadonlySchema = Readonly<JSONSchema7>
-
-export interface IdSchema extends JSONSchema7 {
+export type IdSchemaBase = {
   $id: string
   _esRoles?: SchemaRoles
 }
 
-export type ReadonlyIdSchema = ReadonlySchema & Readonly<{
-  $id: string
-  _esRoles?: SchemaRoles
-}>
+export type IdSchema = EntitySchema & MaybeReadonly<IdSchemaBase>
 
-export interface PatternSchema extends IdSchema {
+export type EntitySchemaMap<TEntityMap> = KeyValueMap<TEntityMap,IdSchema>
+
+export type SchemaMap = Record<string,IdSchema>
+
+export type PatternSchemaBase = {
   type: 'string'
   pattern: string
 }
 
-export interface DbRefSchema extends IdSchema {
-  title: string,
-  type: 'object',
-  properties: DbRefSchemaProperties,
+export type PatternSchema = IdSchema & MaybeReadonly<PatternSchemaBase>
+
+export type DbRefSchemaBase = {
+  $id: string
+  title: string
+  type: 'object'
+  properties: DbRefSchemaProperties
   required: [ '_id', '_collection' ]
 }
 
-export interface DbRefSchemaProperties {
+export type DbRefSchema = MaybeReadonly<DbRefSchemaBase>
+
+export type DbRefSchemaProperties = {
   _id: {
     title: 'ID',
     type: 'string'
@@ -40,5 +44,5 @@ export interface DbRefSchemaProperties {
     type: 'string',
     enum: [ string ]
   },
-  [ key: string ]: JSONSchema7
+  [ key: string ]: EntitySchema
 }

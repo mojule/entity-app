@@ -1,108 +1,108 @@
 import { RoleMap } from '../../security/types'
 
 const userSharedSchemaProperties = {
-  "name": {
-    "title": "Name",
-    "description": "The user's name",
-    "type": "string"
+  name: {
+    title: 'Name',
+    description: 'The user\'s name',
+    type: 'string'
   },
-  "email": {
-    "title": "Email",
-    "description": "The user's email address",
-    "type": "string",
-    "format": "email"
+  email: {
+    title: 'Email',
+    description: 'The user\'s email address',
+    type: 'string',
+    format: 'email'
   },
-  "password": {
-    "title": "Password",
-    "description": "The user's password",
-    "type": "string",
-    "format": "password"
+  password: {
+    title: 'Password',
+    description: 'The user\'s password',
+    type: 'string',
+    format: 'password'
   },
-  "roles": {
-    "title": "Roles",
-    "description": "The user's roles",
-    "type": "array",
-    "items": {
-      "title": "Role",
-      "description": "Name of this role",
-      "type": "string"
+  roles: {
+    title: 'Roles',
+    description: 'The user\'s roles',
+    type: 'array',
+    items: {
+      title: 'Role',
+      description: 'Name of this role',
+      type: 'string'
     }
   }
 } as const
 
 const userSharedRequired = [
-  "name", "email", "password", "roles"
+  'name', 'email', 'password', 'roles'
 ] as const
 
 export const userSchema = {
-  "$id": "#/user",
-  "title": "User",
-  "description": "Person with access to the system",
-  "type": "object",
-  "properties": { ...userSharedSchemaProperties },
-  "required": userSharedRequired
+  $id: '#/user',
+  title: 'User',
+  description: 'Person with access to the system',
+  type: 'object',
+  properties: { ...userSharedSchemaProperties },
+  required: userSharedRequired
 } as const
 
 export const pendingUserSchema = {
-  "$id": "#/pending-user",
-  "title": "Pending User",
-  "description": "Person awaiting access to the system",
-  "type": "object",
-  "properties": {
+  $id: '#/pending-user',
+  title: 'Pending User',
+  description: 'Person awaiting access to the system',
+  type: 'object',
+  properties: {
     ...userSharedSchemaProperties,
-    "secret": {
-      "title": "Secret",
-      "description": "The Pending User Secret",
-      "type": "string"
+    secret: {
+      title: 'Secret',
+      description: 'The Pending User Secret',
+      type: 'string'
     }       
   },
-  "required": [ ...userSharedRequired, 'secret' ]
+  required: [ ...userSharedRequired, 'secret' ]
 } as const
 
 export const userRoles: RoleMap = {
-  "create": [
-    "admin"
+  create: [
+    'admin'
   ],
-  "read": [
-    "admin"
+  read: [
+    'admin'
   ],
-  "update": [
-    "admin"
+  update: [
+    'admin'
   ],
-  "delete": [
-    "admin"
+  delete: [
+    'admin'
   ]
 }
 
 export const userPropertyRoles: Record<string, RoleMap> = {
   password: {
-    "create": [
-      "admin",
-      "public"
+    create: [
+      'admin',
+      'public'
     ],
-    "read": [
-      "admin"
+    read: [
+      'admin'
     ],
-    "update": [
-      "admin",
-      "currentUser"
+    update: [
+      'admin',
+      'currentUser'
     ],
-    "delete": [
-      "admin"
+    delete: [
+      'admin'
     ]
   },
   roles: {
-    "create": [
-      "admin"
+    create: [
+      'admin'
     ],
-    "read": [
-      "admin"
+    read: [
+      'admin'
     ],
-    "update": [
-      "admin"
+    update: [
+      'admin'
     ],
-    "delete": [
-      "admin"
+    delete: [
+      'admin'
     ]
   }
 }

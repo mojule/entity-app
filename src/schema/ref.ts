@@ -1,7 +1,7 @@
 import { kebabCase, startCase, eachKeyValueMap } from '@mojule/util'
 
 import { 
-  IdSchema, DbRefSchema, EntitySchemaMap, SchemaMap, DbRefSchemaProperties 
+  DbRefSchema, EntitySchemaMap, SchemaMap, DbRefSchemaProperties, EntitySchema 
 } from './types'
 
 export const refFactory = ( uri: string ) => {
@@ -37,7 +37,9 @@ export const refFactory = ( uri: string ) => {
   return ref
 }
 
-export const isDbRefSchema = ( schema: IdSchema ): schema is DbRefSchema => {
+export const isDbRefSchema = ( schema: any  ): schema is DbRefSchema => {
+  if( typeof schema !== 'object' ) return false
+  if( typeof schema[ '$id' ] !== 'string' ) return false
   if ( typeof schema[ 'title' ] !== 'string' ) return false
   if ( schema[ 'type' ] !== 'object' ) return false
   if ( !schema[ 'properties' ] ) return false
@@ -51,7 +53,7 @@ export const createRefSchemaMap = <TEntityMap>(
   entitySchemas: EntitySchemaMap<TEntityMap>,
   createRef: ( name: string ) => DbRefSchema
 ) => {
-  const refSchemas: SchemaMap = {}
+  const refSchemas: Record<string,DbRefSchema> = {}
 
   eachKeyValueMap( entitySchemas, ( _schema, key ) => {
     const refSchema = createRef( key )

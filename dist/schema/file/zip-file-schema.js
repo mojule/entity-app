@@ -7,32 +7,32 @@ const tags_schema_1 = require("../common/tags-schema");
 const file_metadata_schema_1 = require("./common/file-metadata-schema");
 const refs_1 = require("./refs");
 exports.zipFileSchema = {
-    "$id": "#/zip-file",
-    "title": "ZIP File",
-    "type": "object",
-    "properties": {
-        "name": name_schema_1.nameSchema,
-        "tags": tags_schema_1.tagsSchema,
-        "meta": file_metadata_schema_1.fileMetadataSchema,
-        "paths": {
-            "title": "Paths",
-            "description": "Paths in ZIP",
-            "type": "array",
-            "items": path_schema_1.pathSchema
+    $id: '#/zip-file',
+    title: 'ZIP File',
+    type: 'object',
+    properties: {
+        name: name_schema_1.nameSchema,
+        tags: tags_schema_1.tagsSchema,
+        meta: file_metadata_schema_1.fileMetadataSchema,
+        paths: {
+            title: 'Paths',
+            description: 'Paths in ZIP',
+            type: 'array',
+            items: path_schema_1.pathSchema
         },
-        "files": {
-            "title": "Files",
-            "description": "Files in ZIP",
-            "type": "array",
-            "items": refs_1.fileRefSchema
+        files: {
+            title: 'Files',
+            description: 'Files in ZIP',
+            type: 'array',
+            items: refs_1.fileRefSchema
         },
-        "images": {
-            "title": "Images",
-            "description": "Images in ZIP",
-            "type": "array",
-            "items": refs_1.imageFileRefSchema
+        images: {
+            title: 'Images',
+            description: 'Images in ZIP',
+            type: 'array',
+            items: refs_1.imageFileRefSchema
         }
     },
-    "required": ["name", "meta", "paths", "files", "images"]
+    required: ['name', 'meta', 'paths', 'files', 'images']
 };
 //# sourceMappingURL=zip-file-schema.js.map

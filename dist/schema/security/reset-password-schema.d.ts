@@ -31,8 +31,6 @@ export declare const resetPasswordSchema: {
             readonly title: "Secret";
             readonly description: "Secret for forgot password";
             readonly type: "string";
-            readonly default: "";
-            readonly readOnly: true;
         };
     };
     readonly required: readonly ["name", "user", "secret"];

@@ -2,9 +2,10 @@ import { fileSchema } from './file-schema'
 import { fileCreateSchema } from './file-create-schema'
 import { imageFileSchema } from './image-file-schema'
 import { zipFileSchema } from './zip-file-schema'
-import { IdSchema, SchemaMap } from '../types'
+import { EntitySchemaMap, IdSchema } from '../types'
+import { FileEntityMap } from '../../entity/file/types'
 
-export const fileEntitySchema = {
+export const fileEntitySchema: EntitySchemaMap<FileEntityMap> = {
   file: fileSchema,
   imageFile: imageFileSchema,
   zipFile: zipFileSchema
@@ -22,7 +23,7 @@ const zipFileCreate = Object.assign(
   {}, fileCreateSchema, { title: zipFileSchema.title }
 ) as IdSchema
 
-export const fileEntityCreateSchema: SchemaMap = {
+export const fileEntityCreateSchema: EntitySchemaMap<FileEntityMap> = {
   file: fileCreate,
   imageFile: imageFileCreate,
   zipFile: zipFileCreate

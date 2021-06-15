@@ -1,1 +1,1 @@
-{"version":3,"file":"byte-size-schema.js","sourceRoot":"","sources":["../../../src/schema/common/byte-size-schema.ts"],"names":[],"mappings":";;;AAAa,QAAA,cAAc,GAAG;IAC5B,KAAK,EAAE,aAAa;IACpB,OAAO,EAAE,MAAM;IACf,aAAa,EAAE,eAAe;IAC9B,MAAM,EAAE,SAAS;IACjB,SAAS,EAAE,CAAC;CACJ,CAAA"}
+{"version":3,"file":"byte-size-schema.js","sourceRoot":"","sources":["../../../src/schema/common/byte-size-schema.ts"],"names":[],"mappings":";;;AAAa,QAAA,cAAc,GAAG;IAC5B,GAAG,EAAE,aAAa;IAClB,KAAK,EAAE,MAAM;IACb,WAAW,EAAE,eAAe;IAC5B,IAAI,EAAE,SAAS;IACf,OAAO,EAAE,CAAC;CACF,CAAA"}
