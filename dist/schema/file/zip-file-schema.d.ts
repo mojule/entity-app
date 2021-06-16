@@ -63,47 +63,13 @@ export declare const zipFileSchema: {
             readonly title: "Files";
             readonly description: "Files in ZIP";
             readonly type: "array";
-            readonly items: {
-                readonly properties: {
-                    readonly _collection: {
-                        readonly title: "File";
-                        readonly type: "string";
-                        readonly enum: readonly ["file"];
-                    };
-                    readonly _id: {
-                        readonly title: "ID";
-                        readonly type: "string";
-                    };
-                };
-                readonly type: "object";
-                readonly additionalProperties: false;
-                readonly required: readonly ["_id", "_collection"];
-                readonly $id: "#/file-ref";
-                readonly title: "File Reference";
-            };
+            readonly items: import("../types").DbRefSchema<"file">;
         };
         readonly images: {
             readonly title: "Images";
             readonly description: "Images in ZIP";
             readonly type: "array";
-            readonly items: {
-                readonly properties: {
-                    readonly _collection: {
-                        readonly title: "Image File";
-                        readonly type: "string";
-                        readonly enum: readonly ["imageFile"];
-                    };
-                    readonly _id: {
-                        readonly title: "ID";
-                        readonly type: "string";
-                    };
-                };
-                readonly type: "object";
-                readonly additionalProperties: false;
-                readonly required: readonly ["_id", "_collection"];
-                readonly $id: "#/image-file-ref";
-                readonly title: "Image File Reference";
-            };
+            readonly items: import("../types").DbRefSchema<"imageFile">;
         };
     };
     readonly required: readonly ["name", "meta", "paths", "files", "images"];

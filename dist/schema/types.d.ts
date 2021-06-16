@@ -20,15 +20,15 @@ export declare type PropertiesSchema = EntitySchema & {
     properties: Record<string, EntitySchema>;
 };
 export declare type PatternSchema = IdSchema & MaybeReadonly<PatternSchemaBase>;
-export declare type DbRefSchemaBase = {
+export declare type DbRefSchemaBase<T extends string> = {
     $id: string;
     title: string;
     type: 'object';
-    properties: DbRefSchemaProperties;
+    properties: DbRefSchemaProperties<T>;
     required: ['_id', '_collection'];
 };
-export declare type DbRefSchema = IdSchema & MaybeReadonly<DbRefSchemaBase>;
-export declare type DbRefSchemaProperties = {
+export declare type DbRefSchema<T extends string = string> = DbRefSchemaBase<T>;
+export declare type DbRefSchemaProperties<T extends string = string> = {
     _id: {
         title: 'ID';
         type: 'string';
@@ -36,6 +36,6 @@ export declare type DbRefSchemaProperties = {
     _collection: {
         title: 'Collection';
         type: 'string';
-        enum: [string];
+        enum: [T];
     };
 };

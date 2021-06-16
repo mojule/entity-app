@@ -35,3 +35,4 @@ export const zipFileSchema = {
   },
   required: [ 'name', 'meta', 'paths', 'files', 'images' ]
 } as const
+

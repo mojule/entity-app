@@ -4,13 +4,13 @@ import { DbRefSchema, DbRefSchemaProperties, EntitySchemaMap } from './types'
 export const refFactory = ( uri: string ) => {
   uri = uri.endsWith( '/' ) ? uri : uri + '/'
 
-  const ref = ( name: string ) => {
+  const ref = <T extends string = string>( name: T ) => {
     const slug = kebabCase( name )
     const $id = `${ uri }${ slug }-ref`
     const title = startCase( name )
     const type = 'object'
 
-    const properties: DbRefSchemaProperties = {
+    const properties: DbRefSchemaProperties<T> = {
       '_id': {
         title: 'ID',
         type: 'string'
@@ -24,7 +24,7 @@ export const refFactory = ( uri: string ) => {
 
     const required: DbRefSchema[ 'required' ] = [ '_id', '_collection' ]
 
-    const schema: DbRefSchema = {
+    const schema: DbRefSchema<T> = {
       $id, title, type, properties, required
     }
 

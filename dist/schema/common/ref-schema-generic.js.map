@@ -1,1 +1,0 @@
-{"version":3,"file":"ref-schema-generic.js","sourceRoot":"","sources":["../../../src/schema/common/ref-schema-generic.ts"],"names":[],"mappings":";;;AAAa,QAAA,eAAe,GAAG;IAC7B,IAAI,EAAE,QAAQ;IACd,oBAAoB,EAAE,KAAK;IAC3B,QAAQ,EAAE,CAAE,KAAK,EAAE,aAAa,CAAE;CAC1B,CAAA;AAEG,QAAA,mBAAmB,GAAG;IACjC,GAAG,EAAE;QACH,KAAK,EAAE,IAAI;QACX,IAAI,EAAE,QAAQ;KACf;CACO,CAAA"}
