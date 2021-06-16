@@ -23,6 +23,11 @@ export type PatternSchemaBase = {
   pattern: string
 }
 
+export type PropertiesSchema = EntitySchema & { 
+  type: 'object'
+  properties: Record<string, EntitySchema> 
+}
+
 export type PatternSchema = IdSchema & MaybeReadonly<PatternSchemaBase>
 
 export type DbRefSchemaBase = {

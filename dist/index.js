@@ -38,6 +38,7 @@ __exportStar(require("./schema/common"), exports);
 __exportStar(require("./schema/file/"), exports);
 __exportStar(require("./schema/file/common"), exports);
 __exportStar(require("./schema/file/refs"), exports);
+__exportStar(require("./schema/predicates"), exports);
 __exportStar(require("./schema/ref"), exports);
 __exportStar(require("./schema/resolve/ref-resolver"), exports);
 __exportStar(require("./schema/resolve/resolver"), exports);

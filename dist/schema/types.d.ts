@@ -15,6 +15,10 @@ export declare type PatternSchemaBase = {
     type: 'string';
     pattern: string;
 };
+export declare type PropertiesSchema = EntitySchema & {
+    type: 'object';
+    properties: Record<string, EntitySchema>;
+};
 export declare type PatternSchema = IdSchema & MaybeReadonly<PatternSchemaBase>;
 export declare type DbRefSchemaBase = {
     $id: string;
