@@ -2,9 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRefSchemaMap = exports.isDbRefSchema = exports.refFactory = void 0;
 const util_1 = require("@mojule/util");
+const refCache = {};
+const getCacheForUri = (uri) => {
+    let refCacheForUri = refCache[uri];
+    if (refCacheForUri === undefined) {
+        refCacheForUri = {};
+        refCache[uri] = refCacheForUri;
+    }
+    return refCacheForUri;
+};
+const getCachedSchema = (cache, name) => {
+    const schema = cache[name];
+    if (schema !== undefined) {
+        return schema;
+    }
+};
 const refFactory = (uri) => {
     uri = uri.endsWith('/') ? uri : uri + '/';
+    const cache = getCacheForUri(uri);
     const ref = (name) => {
+        let schema = getCachedSchema(cache, name);
+        if (schema) {
+            return schema;
+        }
         const slug = util_1.kebabCase(name);
         const $id = `${uri}${slug}-ref`;
         const title = util_1.startCase(name);
@@ -21,9 +41,10 @@ const refFactory = (uri) => {
             }
         };
         const required = ['_id', '_collection'];
-        const schema = {
+        schema = {
             $id, title, type, properties, required
         };
+        cache[name] = schema;
         return schema;
     };
     return ref;

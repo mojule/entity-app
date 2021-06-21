@@ -1,7 +1,6 @@
 import { apiKeyRoles, apiKeySchema } from './api-key-schema'
 import { pendingUserSchema, userPropertyRoles, userRoles, userSchema } from './user-schema'
 import { resetPasswordSchema } from './reset-password-schema'
-import { clone } from '@mojule/util'
 import { addRolesToSchema } from '../../security/roles'
 import { EntitySchemaMap } from '../types'
 import { SecurityEntityMap } from '../../entity/security/types'

@@ -1,4 +1,3 @@
-import { clone } from '@mojule/util'
 import { Role, RoleMap } from './types'
 
 export const Roles: Record<Role,Role> = {
@@ -18,7 +17,7 @@ export const addRolesToSchema = <T>(
   schema: T, roles: RoleMap, propertyRoles?: Record<string,RoleMap>
 ) => {
   const roleSchema = Object.assign(
-    {}, clone( schema ), { _esRoles: roles }
+    {}, schema, { _esRoles: roles }
   )
 
   if( propertyRoles ){

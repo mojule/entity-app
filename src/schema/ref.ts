@@ -1,10 +1,42 @@
 import { kebabCase, startCase, eachKeyValueMap } from '@mojule/util'
 import { DbRefSchema, DbRefSchemaProperties, EntitySchemaMap } from './types'
 
+type RefCache = Record<string,DbRefSchema|undefined>
+type RefUriCache = Record<string,RefCache|undefined>
+
+const refCache: RefUriCache = {}
+
+const getCacheForUri = ( uri: string ): RefCache => {
+  let refCacheForUri = refCache[ uri ]
+
+  if( refCacheForUri === undefined ){
+    refCacheForUri = {}
+    refCache[ uri ] = refCacheForUri
+  }
+
+  return refCacheForUri
+}
+
+const getCachedSchema = <T extends string>( cache: RefCache, name: T ) => {
+  const schema = cache[ name ]
+
+  if( schema !== undefined ){
+    return schema as DbRefSchema<T>
+  }
+}
+
 export const refFactory = ( uri: string ) => {
   uri = uri.endsWith( '/' ) ? uri : uri + '/'
 
+  const cache = getCacheForUri( uri )
+
   const ref = <T extends string = string>( name: T ) => {
+    let schema = getCachedSchema( cache, name )
+
+    if( schema ){
+      return schema
+    }
+
     const slug = kebabCase( name )
     const $id = `${ uri }${ slug }-ref`
     const title = startCase( name )
@@ -24,9 +56,11 @@ export const refFactory = ( uri: string ) => {
 
     const required: DbRefSchema[ 'required' ] = [ '_id', '_collection' ]
 
-    const schema: DbRefSchema<T> = {
+    schema = {
       $id, title, type, properties, required
     }
+
+    cache[ name ] = schema
 
     return schema
   }

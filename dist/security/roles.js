@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRolesToSchema = exports.hasAllRoles = exports.hasRole = exports.Roles = void 0;
-const util_1 = require("@mojule/util");
 exports.Roles = {
     admin: 'admin',
     user: 'user',
@@ -13,7 +12,7 @@ exports.hasRole = hasRole;
 const hasAllRoles = (required, user) => required.every(r => exports.hasRole(user, r));
 exports.hasAllRoles = hasAllRoles;
 const addRolesToSchema = (schema, roles, propertyRoles) => {
-    const roleSchema = Object.assign({}, util_1.clone(schema), { _esRoles: roles });
+    const roleSchema = Object.assign({}, schema, { _esRoles: roles });
     if (propertyRoles) {
         if (schema['properties']) {
             Object.keys(propertyRoles).forEach(key => {
