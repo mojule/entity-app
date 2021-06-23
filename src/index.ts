@@ -1,10 +1,12 @@
 export * from './concat-unique-text-nodes'
 
 export * from './db'
+export * from './db/copy-db'
 export * from './db/default-drop'
 export * from './db/default-load-paged'
 export * from './db/default-many'
 export * from './db/default-query'
+export * from './db/get-db-edges'
 export * from './db/ref'
 export * from './db/proxies/metadata'
 export * from './db/proxies/unique'

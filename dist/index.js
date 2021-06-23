@@ -12,10 +12,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./concat-unique-text-nodes"), exports);
 __exportStar(require("./db"), exports);
+__exportStar(require("./db/copy-db"), exports);
 __exportStar(require("./db/default-drop"), exports);
 __exportStar(require("./db/default-load-paged"), exports);
 __exportStar(require("./db/default-many"), exports);
 __exportStar(require("./db/default-query"), exports);
+__exportStar(require("./db/get-db-edges"), exports);
 __exportStar(require("./db/ref"), exports);
 __exportStar(require("./db/proxies/metadata"), exports);
 __exportStar(require("./db/proxies/unique"), exports);
