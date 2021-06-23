@@ -1,11 +1,11 @@
 import { getDbEdges } from './get-db-edges'
 import { set } from '@mojule/json-pointer'
-import { DbItem, EntityDb } from './types'
+import { DbItem, EntityDb, EntityDbReadable } from './types'
 import { dbItemToEntity } from '..'
 import { strictMapGet } from '@mojule/util'
 
 export const copyDb = async <EntityMap>( 
-  source: EntityDb<EntityMap>, dest: EntityDb<EntityMap>,
+  source: EntityDbReadable<EntityMap>, dest: EntityDb<EntityMap>,
   log: ( ...args: any[] ) => void = () => {}
 ) => {
   const edges = await getDbEdges( source )

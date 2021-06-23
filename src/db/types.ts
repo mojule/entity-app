@@ -50,25 +50,35 @@ export interface DbLoadPaged<TEntity> {
   ( pageSize: number, pageIndex?: number ): Promise<( TEntity & DbItem )[]>
 }
 
-export interface DbCollection<TEntity> {
+export type DbCollectionRead<TEntity> = {
   ids: DbIds
-  create: DbCreate<TEntity>
-  createMany: DbCreateMany<TEntity>
   load: DbLoad<TEntity>
   loadMany: DbLoadMany<TEntity>
-  save: DbSave<TEntity>
-  saveMany: DbSaveMany<TEntity>
-  remove: DbRemove
-  removeMany: DbRemoveMany
   find: DbFind<TEntity>
   findOne: DbFindOne<TEntity>
   loadPaged: DbLoadPaged<TEntity>
 }
 
-export interface EntityDb<TEntityMap> {
+export type DbCollectionWrite<TEntity> = {
+  create: DbCreate<TEntity>
+  createMany: DbCreateMany<TEntity>
+  save: DbSave<TEntity>
+  saveMany: DbSaveMany<TEntity>
+  remove: DbRemove
+  removeMany: DbRemoveMany
+}
+
+export type DbCollection<TEntity> = DbCollectionRead<TEntity> & DbCollectionWrite<TEntity>
+
+export type EntityDb<TEntityMap> = {
   drop: () => Promise<void>
   close: () => Promise<void>
   collections: DbCollections<TEntityMap>
+}
+
+export type EntityDbReadable<TEntityMap> = {
+  close: () => Promise<void>
+  collections: DbCollectionsReadable<TEntityMap>
 }
 
 export interface EntitySchemaDb<TEntityMap> extends EntityDb<TEntityMap> {
@@ -77,6 +87,10 @@ export interface EntitySchemaDb<TEntityMap> extends EntityDb<TEntityMap> {
 
 export type DbCollections<TEntityMap> = {
   [ key in keyof TEntityMap ]: DbCollection<TEntityMap[ key ]>
+}
+
+export type DbCollectionsReadable<TEntityMap> = {
+  [ key in keyof TEntityMap ]: DbCollectionRead<TEntityMap[ key ]>
 }
 
 export type DbItem = {

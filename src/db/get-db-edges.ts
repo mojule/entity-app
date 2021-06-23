@@ -1,7 +1,9 @@
 import { isObjectLeaf, traverseObject } from '@mojule/util'
-import { DbRef, EntityDb } from './types'
+import { DbRef, EntityDbReadable } from './types'
 
-export const getDbEdges = async <EntityMap>( db: EntityDb<EntityMap> ) => {
+export const getDbEdges = async <EntityMap>( 
+  db: EntityDbReadable<EntityMap> 
+) => {
   const collectionNames = Object.keys( db.collections ) as ( keyof EntityMap )[]
 
   const edges: DbEdge<EntityMap>[] = []
