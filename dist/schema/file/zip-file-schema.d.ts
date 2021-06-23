@@ -71,6 +71,11 @@ export declare const zipFileSchema: {
             readonly type: "array";
             readonly items: import("../types").DbRefSchema<"imageFile">;
         };
+        readonly isExtractOnly: {
+            readonly title: "Is Extract Only?";
+            readonly description: "If true, the zip file itself is not retained";
+            readonly type: "boolean";
+        };
     };
     readonly required: readonly ["name", "meta", "paths", "files", "images"];
 };

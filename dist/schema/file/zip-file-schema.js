@@ -31,6 +31,11 @@ exports.zipFileSchema = {
             description: 'Images in ZIP',
             type: 'array',
             items: refs_1.imageFileRefSchema
+        },
+        isExtractOnly: {
+            title: 'Is Extract Only?',
+            description: 'If true, the zip file itself is not retained',
+            type: 'boolean'
         }
     },
     required: ['name', 'meta', 'paths', 'files', 'images']
