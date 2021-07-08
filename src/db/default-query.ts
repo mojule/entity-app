@@ -1,34 +1,31 @@
-import { DbIds, DbLoadMany, DbFind, DbFindOne } from './types'
+import { DbIds, DbLoadMany, DbFind, DbFindOne, DbItem } from './types'
 import mingo from 'mingo'
 
-export const defaultFind = <TEntity>(
-  ids: DbIds, loadMany: DbLoadMany<TEntity>
+export const defaultFind = <TEntity,D extends DbItem = DbItem>(
+  ids: DbIds, loadMany: DbLoadMany<TEntity,D>
 ) => {
-  const find: DbFind<TEntity> = async criteria => {
+  const find: DbFind<TEntity,D> = async criteria => {
     const entityIds = await ids()
     const entities = await loadMany( entityIds )
 
     const query = new mingo.Query( criteria )
 
-    // weird typing in latest mingo :/ 
-    // wants query to be a `RawObject`, which is Record<string, unknown>
-    // complains that TEntity & DbItem is not RawObject
-    return entities.filter( e => query.test( e as any ) )
+    return entities.filter( e => query.test( e ) )
   }
 
   return find
 }
 
-export const defaultFindOne = <TEntity>(
-  ids: DbIds, loadMany: DbLoadMany<TEntity>
+export const defaultFindOne = <TEntity,D extends DbItem = DbItem>(
+  ids: DbIds, loadMany: DbLoadMany<TEntity,D>
 ) => {
-  const findOne: DbFindOne<TEntity> = async criteria => {
+  const findOne: DbFindOne<TEntity,D> = async criteria => {
     const entityIds = await ids()
     const entities = await loadMany( entityIds )
 
     const query = new mingo.Query( criteria )
 
-    return entities.find( e => query.test( e as any ) )
+    return entities.find( e => query.test( e ) )
   }
 
   return findOne

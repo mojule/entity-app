@@ -1,5 +1,6 @@
 import { EntityKeys } from '../entity/types'
 import { SchemaMap } from '../schema/types'
+import { CreateDbItem } from './db-memory/types'
 
 export interface DbCreate<TEntity> {
   ( entity: TEntity ): Promise<string>
@@ -9,20 +10,20 @@ export interface DbCreateMany<TEntity> {
   ( entities: TEntity[] ): Promise<string[]>
 }
 
-export interface DbLoad<TEntity> {
-  ( id: string ): Promise<TEntity & DbItem>
+export interface DbLoad<TEntity,D extends DbItem = DbItem> {
+  ( id: string ): Promise<TEntity & D>
 }
 
-export interface DbLoadMany<TEntity> {
-  ( ids: string[] ): Promise<(TEntity & DbItem)[]>
+export interface DbLoadMany<TEntity, D extends DbItem = DbItem> {
+  ( ids: string[] ): Promise<(TEntity & D)[]>
 }
 
 export interface DbSave<TEntity> {
-  ( document: TEntity & DbItem ): Promise<void>
+  ( document: Partial<TEntity> & DbItem ): Promise<void>
 }
 
 export interface DbSaveMany<TEntity> {
-  ( documents: (TEntity & DbItem)[] ): Promise<void>
+  ( documents: (Partial<TEntity> & DbItem)[] ): Promise<void>
 }
 
 export interface DbRemove {
@@ -37,26 +38,25 @@ export interface DbIds {
   (): Promise<string[]>
 }
 
-export interface DbFind<TEntity> {
-  ( criteria: any ): Promise<( TEntity & DbItem )[]>
+export interface DbFind<TEntity,D extends DbItem = DbItem> {
+  ( criteria: any ): Promise<( TEntity & D )[]>
 }
 
-
-export interface DbFindOne<TEntity> {
-  ( criteria: any ): Promise<TEntity & DbItem | undefined>
+export interface DbFindOne<TEntity,D extends DbItem = DbItem> {
+  ( criteria: any ): Promise<TEntity & D | undefined>
 }
 
-export interface DbLoadPaged<TEntity> {
-  ( pageSize: number, pageIndex?: number ): Promise<( TEntity & DbItem )[]>
+export interface DbLoadPaged<TEntity,D extends DbItem = DbItem> {
+  ( pageSize: number, pageIndex?: number ): Promise<( TEntity & D )[]>
 }
 
-export type DbCollectionRead<TEntity> = {
+export type DbCollectionRead<TEntity,D extends DbItem = DbItem> = {
   ids: DbIds
-  load: DbLoad<TEntity>
-  loadMany: DbLoadMany<TEntity>
-  find: DbFind<TEntity>
-  findOne: DbFindOne<TEntity>
-  loadPaged: DbLoadPaged<TEntity>
+  load: DbLoad<TEntity,D>
+  loadMany: DbLoadMany<TEntity,D>
+  find: DbFind<TEntity,D>
+  findOne: DbFindOne<TEntity,D>
+  loadPaged: DbLoadPaged<TEntity,D>
 }
 
 export type DbCollectionWrite<TEntity> = {
@@ -68,29 +68,30 @@ export type DbCollectionWrite<TEntity> = {
   removeMany: DbRemoveMany
 }
 
-export type DbCollection<TEntity> = DbCollectionRead<TEntity> & DbCollectionWrite<TEntity>
+export type DbCollection<TEntity,D extends DbItem = DbItem> = 
+  DbCollectionRead<TEntity,D> & DbCollectionWrite<TEntity>
 
-export type EntityDb<TEntityMap> = {
+export type EntityDb<TEntityMap,D extends DbItem = DbItem> = {
   drop: () => Promise<void>
   close: () => Promise<void>
-  collections: DbCollections<TEntityMap>
+  collections: DbCollections<TEntityMap,D>
 }
 
-export type EntityDbReadable<TEntityMap> = {
+export type EntityDbReadable<TEntityMap,D extends DbItem = DbItem> = {
   close: () => Promise<void>
-  collections: DbCollectionsReadable<TEntityMap>
+  collections: DbCollectionsReadable<TEntityMap,D>
 }
 
 export interface EntitySchemaDb<TEntityMap> extends EntityDb<TEntityMap> {
   getAllSchema: () => Promise<SchemaMap>
 }
 
-export type DbCollections<TEntityMap> = {
-  [ key in keyof TEntityMap ]: DbCollection<TEntityMap[ key ]>
+export type DbCollections<TEntityMap,D extends DbItem = DbItem> = {
+  [ key in keyof TEntityMap ]: DbCollection<TEntityMap[ key ],D>
 }
 
-export type DbCollectionsReadable<TEntityMap> = {
-  [ key in keyof TEntityMap ]: DbCollectionRead<TEntityMap[ key ]>
+export type DbCollectionsReadable<TEntityMap,D extends DbItem = DbItem> = {
+  [ key in keyof TEntityMap ]: DbCollectionRead<TEntityMap[ key ],D>
 }
 
 export type DbItem = {
@@ -105,9 +106,10 @@ export type DbRefFor<TEntityMap, K extends keyof TEntityMap> = DbRef<TEntityMap>
   _collection: K
 }
 
-export interface CreateDb<TEntityMap, TOptions = any> {
-  ( name: string, keys: EntityKeys<TEntityMap>, options?: TOptions ):
-    Promise<EntityDb<TEntityMap>>
+export interface CreateDb<TEntityMap,D extends DbItem = DbItem> {
+  ( name: string, keys: EntityKeys<TEntityMap>, createDbItem: CreateDbItem<D> ):
+    Promise<EntityDb<TEntityMap,D>>
 }
 
 export type ActionType = 'create' | 'update' | 'read' | 'delete'
+

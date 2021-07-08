@@ -1,9 +1,9 @@
-import { DbIds, DbLoadMany, DbLoadPaged } from './types'
+import { DbIds, DbItem, DbLoadMany, DbLoadPaged } from './types'
 
-export const defaultLoadPaged = <TEntity>(
-  ids: DbIds, loadMany: DbLoadMany<TEntity>
+export const defaultLoadPaged = <TEntity,D extends DbItem = DbItem>(
+  ids: DbIds, loadMany: DbLoadMany<TEntity,D>
 ) => {
-  const loadPaged: DbLoadPaged<TEntity> = async (
+  const loadPaged: DbLoadPaged<TEntity,D> = async (
     pageSize: number, pageIndex = 0
   ) => {
     const entityIds = await ids()

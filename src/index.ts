@@ -1,7 +1,9 @@
 export * from './concat-unique-text-nodes'
 
-export * from './db'
 export * from './db/copy-db'
+export * from './db/db-item-to-entity'
+export * from './db/db-memory'
+export * from './db/db-memory/types'
 export * from './db/default-drop'
 export * from './db/default-load-paged'
 export * from './db/default-many'
@@ -12,6 +14,7 @@ export * from './db/proxies/metadata'
 export * from './db/proxies/unique'
 export * from './db/proxies/validator'
 export * from './db/proxies/validator/types'
+export * from './db/save-partial'
 export * from './db/types'
 
 export * from './entity/common/named'

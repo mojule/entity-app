@@ -1,5 +1,5 @@
 import { EntityKeys } from '../../../entity/types'
-import { CreateDb, DbCollections} from '../../types'
+import { CreateDb, DbCollections, DbItem} from '../../types'
 import { createCacheCollection } from './create-collection'
 
 import {
@@ -16,10 +16,10 @@ import {
   It is not safe for multi-client use!
 */
 
-export const cachedDbFactory = <TEntityMap>(
-  createDb: CreateDb<TEntityMap>
+export const cachedDbFactory = <TEntityMap,D extends DbItem = DbItem>(
+  createDb: CreateDb<TEntityMap,D>
 ) => {
-  const createCachedDb: CreateDbCached<TEntityMap> = async (
+  const createCachedDb: CreateDbCached<TEntityMap,D> = async (
     name: string, keys: EntityKeys<TEntityMap>, options?: any
   ) => {
     const db = await createDb( 'cached-' + name, keys, options )
@@ -39,7 +39,7 @@ export const cachedDbFactory = <TEntityMap>(
       }
     }
 
-    const cacheDb: EntityDbCached<TEntityMap> = {
+    const cacheDb: EntityDbCached<TEntityMap,D> = {
       collections: cachedCollections,
       close, drop
     }
@@ -50,11 +50,11 @@ export const cachedDbFactory = <TEntityMap>(
   return createCachedDb
 }
 
-const createCachedCollections = async <TEntityMap>(
-  collections: DbCollections<TEntityMap>
+const createCachedCollections = async <TEntityMap,D extends DbItem = DbItem>(
+  collections: DbCollections<TEntityMap,D>
 ) => {
   const keys = Object.keys( collections )
-  const cachedCollections: DbCachedCollections<TEntityMap> = <any>{}
+  const cachedCollections: DbCachedCollections<TEntityMap,D> = <any>{}
 
   for ( let i = 0; i < keys.length; i++ ) {
     const key = keys[ i ]

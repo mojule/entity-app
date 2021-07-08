@@ -3,10 +3,11 @@ import {
 } from '../../types'
 
 import { clone } from '@mojule/util'
+import { MetadataDbItem } from './types'
 
 export const createMetadataCollection =
-  async <K extends keyof TEntityMap, TEntityMap>(
-    collection: DbCollection<TEntityMap[ K ]>,
+  <K extends keyof TEntityMap, TEntityMap, D extends MetadataDbItem>(
+    collection: DbCollection<TEntityMap[ K ], D>,
     _key: K & string,
     extendCreate = defaultExtendCreate,
     extendSave = defaultExtendSave
@@ -40,7 +41,7 @@ export const createMetadataCollection =
       return originalSaveMany( documents )
     }
 
-    const metadataCollection: DbCollection<TEntityMap[ K ]> = Object.assign(
+    const metadataCollection: DbCollection<TEntityMap[ K ], D> = Object.assign(
       {}, collection, { create, createMany, save, saveMany }
     )
 

@@ -4,8 +4,8 @@ import { DbItem, EntityDb, EntityDbReadable } from './types'
 import { dbItemToEntity } from '..'
 import { strictMapGet } from '@mojule/util'
 
-export const copyDb = async <EntityMap>( 
-  source: EntityDbReadable<EntityMap>, dest: EntityDb<EntityMap>,
+export const copyDb = async <EntityMap,D extends DbItem = DbItem>( 
+  source: EntityDbReadable<EntityMap,D>, dest: EntityDb<EntityMap,D>,
   log: ( ...args: any[] ) => void = () => {}
 ) => {
   const edges = await getDbEdges( source )
