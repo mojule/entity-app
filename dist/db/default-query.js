@@ -7,9 +7,6 @@ const defaultFind = (ids, loadMany) => {
         const entityIds = await ids();
         const entities = await loadMany(entityIds);
         const query = new mingo_1.default.Query(criteria);
-        // weird typing in latest mingo :/ 
-        // wants query to be a `RawObject`, which is Record<string, unknown>
-        // complains that TEntity & DbItem is not RawObject
         return entities.filter(e => query.test(e));
     };
     return find;

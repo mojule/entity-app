@@ -1,3 +1,3 @@
-import { DbIds, DbLoadMany, DbFind, DbFindOne } from './types';
-export declare const defaultFind: <TEntity>(ids: DbIds, loadMany: DbLoadMany<TEntity>) => DbFind<TEntity>;
-export declare const defaultFindOne: <TEntity>(ids: DbIds, loadMany: DbLoadMany<TEntity>) => DbFindOne<TEntity>;
+import { DbIds, DbLoadMany, DbFind, DbFindOne, DbItem } from './types';
+export declare const defaultFind: <TEntity, D extends DbItem = DbItem>(ids: DbIds, loadMany: DbLoadMany<TEntity, D>) => DbFind<TEntity, D>;
+export declare const defaultFindOne: <TEntity, D extends DbItem = DbItem>(ids: DbIds, loadMany: DbLoadMany<TEntity, D>) => DbFindOne<TEntity, D>;

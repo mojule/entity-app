@@ -3,6 +3,7 @@ import { DbCollections, DbItem, EntityDb } from '../types'
 import { defaultDrop } from '../default-drop'
 import { createCollection } from './create-collection'
 import { CreateDbItem } from './types'
+import { randId } from '@mojule/util'
 
 const initCollections = <TEntityMap, D extends DbItem>( 
   keys: EntityKeys<TEntityMap>, createDbItem: () => D
@@ -29,3 +30,5 @@ export const createMemoryDb = async <TEntityMap,D extends DbItem = DbItem>(
 
   return db
 } 
+
+export const createDefaultDbItem: CreateDbItem = () => ({ _id: randId() })

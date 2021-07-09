@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUniqueFieldsCollection = void 0;
-const createUniqueFieldsCollection = async (collection, key, uniqueNames) => {
+const createUniqueFieldsCollection = (collection, key, uniqueNames) => {
     const { create: originalCreate, createMany: originalCreateMany, save: originalSave, saveMany: originalSaveMany, find } = collection;
     const create = async (entity) => {
         await assertUniqueForNames(uniqueNames, key, entity, find);
@@ -27,6 +27,8 @@ const assertUniqueForNames = async (uniqueNames, entityKey, entity, find, curren
     for (let i = 0; i < uniqueNames.length; i++) {
         const name = uniqueNames[i];
         const value = entity[name];
+        if (value === 'undefined')
+            continue;
         await assertUnique(entityKey, name, value, find, currentId);
     }
 };

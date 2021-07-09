@@ -1,2 +1,2 @@
-import { DbCollection } from '../../types';
-export declare const createUniqueFieldsCollection: <K extends keyof TEntityMap, TEntityMap>(collection: DbCollection<TEntityMap[K]>, key: K & string, uniqueNames: string[]) => Promise<DbCollection<TEntityMap[K]>>;
+import { DbCollection, DbItem } from '../../types';
+export declare const createUniqueFieldsCollection: <K extends keyof TEntityMap, TEntityMap, D extends DbItem>(collection: DbCollection<TEntityMap[K], D>, key: K & string, uniqueNames: string[]) => DbCollection<TEntityMap[K], D>;

@@ -5,7 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "mocha": "node ./node_modules/mocha/bin/mocha dist/test",
+    "test": "npm run build && npm run mocha",
+    "nyc": "node ./node_modules/nyc/bin/nyc --reporter=lcov --reporter=html --reporter=text npm run mocha",
+    "coverage": "npm run build && npm run nyc"
   },
   "repository": {
     "type": "git",
@@ -31,6 +35,13 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
-    "@types/clean-css": "^4.2.4"
+    "@types/clean-css": "^4.2.4",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.12.5",
+    "mocha": "^9.0.1",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "exclude": "src/test"
   }
 }

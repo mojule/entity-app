@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCollection = void 0;
-const util_1 = require("@mojule/util");
 const default_many_1 = require("../default-many");
 const default_query_1 = require("../default-query");
 const default_load_paged_1 = require("../default-load-paged");
-const createCollection = (collection) => {
+const save_partial_1 = require("../save-partial");
+const createCollection = (collection, createDbItem) => {
     const ids = async () => Object.keys(collection);
     const create = async (entity) => {
-        const _id = util_1.randId();
-        const dbEntity = Object.assign({}, entity, { _id });
-        collection[_id] = dbEntity;
-        return _id;
+        const dbEntity = Object.assign(createDbItem(), entity);
+        collection[dbEntity._id] = dbEntity;
+        return dbEntity._id;
     };
     const createMany = default_many_1.defaultCreateMany(create);
     const load = async (id) => {
@@ -25,9 +24,7 @@ const createCollection = (collection) => {
         const { _id } = document;
         if (typeof _id !== 'string')
             throw Error('Expected document to have _id:string');
-        if (!(_id in collection))
-            throw Error(`Expected entity for ${_id}`);
-        collection[_id] = document;
+        collection[_id] = await applyPartial(document);
     };
     const saveMany = default_many_1.defaultSaveMany(save);
     const remove = async (id) => {
@@ -43,6 +40,7 @@ const createCollection = (collection) => {
         ids, create, createMany, load, loadMany, save, saveMany, remove, removeMany,
         find, findOne, loadPaged
     };
+    const applyPartial = save_partial_1.createApplyPartial(entityCollection);
     return entityCollection;
 };
 exports.createCollection = createCollection;

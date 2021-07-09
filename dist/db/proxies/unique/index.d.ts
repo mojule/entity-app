@@ -1,2 +1,2 @@
-import { CreateDb } from '../../types';
-export declare const uniqueFieldDbFactory: <TEntityMap>(createDb: CreateDb<TEntityMap, any>, getUniqueFieldNames: (key: keyof TEntityMap) => string[]) => CreateDb<TEntityMap, any>;
+import { DbItem, EntityDb } from '../../types';
+export declare const uniqueFieldDbFactory: <TEntityMap, D extends DbItem>(db: EntityDb<TEntityMap, D>, getUniqueFieldNames: (key: keyof TEntityMap) => string[]) => EntityDb<TEntityMap, D>;

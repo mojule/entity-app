@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultExtendSave = exports.defaultExtendCreate = exports.createMetadataCollection = void 0;
 const util_1 = require("@mojule/util");
-const createMetadataCollection = async (collection, _key, extendCreate = exports.defaultExtendCreate, extendSave = exports.defaultExtendSave) => {
+const createMetadataCollection = (collection, _key, extendCreate = exports.defaultExtendCreate, extendSave = exports.defaultExtendSave) => {
     const { create: originalCreate, createMany: originalCreateMany, save: originalSave, saveMany: originalSaveMany } = collection;
     const create = async (entity) => originalCreate(extendCreate(entity));
     const createMany = async (entities) => {

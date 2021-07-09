@@ -1,2 +1,2 @@
-import { DbIds, DbLoadMany, DbLoadPaged } from './types';
-export declare const defaultLoadPaged: <TEntity>(ids: DbIds, loadMany: DbLoadMany<TEntity>) => DbLoadPaged<TEntity>;
+import { DbIds, DbItem, DbLoadMany, DbLoadPaged } from './types';
+export declare const defaultLoadPaged: <TEntity, D extends DbItem = DbItem>(ids: DbIds, loadMany: DbLoadMany<TEntity, D>) => DbLoadPaged<TEntity, D>;
