@@ -11,9 +11,7 @@ const copyDb = async (source, dest, log = () => { }) => {
     const oldToNewIdMap = new Map();
     await dest.drop();
     for (const name of collectionNames) {
-        if (log) {
-            log('Copying collection', name);
-        }
+        log('Copying collection', name);
         const sourceCollection = source.collections[name];
         const destCollection = dest.collections[name];
         const ids = await sourceCollection.ids();

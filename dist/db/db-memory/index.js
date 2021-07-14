@@ -7,7 +7,7 @@ const util_1 = require("@mojule/util");
 const initCollections = (keys, createDbItem) => {
     const collections = {};
     Object.keys(keys).forEach(key => {
-        collections[key] = create_collection_1.createCollection({}, createDbItem);
+        collections[key] = create_collection_1.createCollection(createDbItem);
     });
     return collections;
 };

@@ -1,5 +1,3 @@
-import { ObjectMap } from '@mojule/util'
-
 import {
   DbIds, DbCreate, DbLoad, DbItem, DbSave, DbRemove, DbCollection
 } from '../types'
@@ -13,23 +11,24 @@ import { defaultLoadPaged } from '../default-load-paged'
 import { createApplyPartial } from '../save-partial'
 
 export const createCollection = <TEntity, D extends DbItem>(
-  collection: ObjectMap<TEntity & D>,
   createDbItem: () => D
 ) => {
-  const ids: DbIds = async () => Object.keys( collection )
+  const collection = new Map<string,TEntity & D>()
+
+  const ids: DbIds = async () => [ ...collection.keys() ]
 
   const create: DbCreate<TEntity> = async entity => {    
     const dbEntity = Object.assign( createDbItem(), entity )
 
-    collection[ dbEntity._id ] = dbEntity
+    collection.set( dbEntity._id, dbEntity )
 
     return dbEntity._id
   }
 
   const createMany = defaultCreateMany( create )
 
-  const load: DbLoad<TEntity, D> = async id => {
-    const dbEntity = collection[ id ]
+  const load: DbLoad<TEntity,D> = async id => {
+    const dbEntity = collection.get( id )
 
     if ( dbEntity === undefined )
       throw Error( `Expected entity for ${ id }` )
@@ -45,16 +44,18 @@ export const createCollection = <TEntity, D extends DbItem>(
     if ( typeof _id !== 'string' )
       throw Error( 'Expected document to have _id:string' )
 
-    collection[ _id ] = await applyPartial( document )      
+    const dbEntity = await applyPartial( document )
+    
+    collection.set( _id, dbEntity )
   }
 
   const saveMany = defaultSaveMany( save )
 
   const remove: DbRemove = async id => {
-    if ( !( id in collection ) )
+    if ( !( collection.has( id ) ) )
       throw Error( `Expected entity for ${ id }` )
 
-    delete collection[ id ]
+    collection.delete( id )
   }
 
   const removeMany = defaultRemoveMany( remove )

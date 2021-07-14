@@ -5,16 +5,17 @@ const default_many_1 = require("../default-many");
 const default_query_1 = require("../default-query");
 const default_load_paged_1 = require("../default-load-paged");
 const save_partial_1 = require("../save-partial");
-const createCollection = (collection, createDbItem) => {
-    const ids = async () => Object.keys(collection);
+const createCollection = (createDbItem) => {
+    const collection = new Map();
+    const ids = async () => [...collection.keys()];
     const create = async (entity) => {
         const dbEntity = Object.assign(createDbItem(), entity);
-        collection[dbEntity._id] = dbEntity;
+        collection.set(dbEntity._id, dbEntity);
         return dbEntity._id;
     };
     const createMany = default_many_1.defaultCreateMany(create);
     const load = async (id) => {
-        const dbEntity = collection[id];
+        const dbEntity = collection.get(id);
         if (dbEntity === undefined)
             throw Error(`Expected entity for ${id}`);
         return dbEntity;
@@ -24,13 +25,14 @@ const createCollection = (collection, createDbItem) => {
         const { _id } = document;
         if (typeof _id !== 'string')
             throw Error('Expected document to have _id:string');
-        collection[_id] = await applyPartial(document);
+        const dbEntity = await applyPartial(document);
+        collection.set(_id, dbEntity);
     };
     const saveMany = default_many_1.defaultSaveMany(save);
     const remove = async (id) => {
-        if (!(id in collection))
+        if (!(collection.has(id)))
             throw Error(`Expected entity for ${id}`);
-        delete collection[id];
+        collection.delete(id);
     };
     const removeMany = default_many_1.defaultRemoveMany(remove);
     const find = default_query_1.defaultFind(ids, loadMany);

@@ -11,7 +11,7 @@ const initCollections = <TEntityMap, D extends DbItem>(
   const collections = {} as DbCollections<TEntityMap, D>
 
   Object.keys( keys ).forEach( key => {
-    collections[ key ] = createCollection( {}, createDbItem )
+    collections[ key ] = createCollection( createDbItem )
   } )
 
   return collections 

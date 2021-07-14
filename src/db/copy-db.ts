@@ -15,9 +15,7 @@ export const copyDb = async <EntityMap,D extends DbItem = DbItem>(
   await dest.drop()
 
   for( const name of collectionNames ){
-    if( log ){
-      log( 'Copying collection', name )
-    }
+    log( 'Copying collection', name )
 
     const sourceCollection = source.collections[ name ]
     const destCollection = dest.collections[ name ]
