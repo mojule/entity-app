@@ -12,9 +12,8 @@ const initCollections = (collections, getUniqueFieldNames) => {
     return unique;
 };
 const uniqueFieldDbFactory = (db, getUniqueFieldNames) => {
-    const { drop, close } = db;
     const collections = initCollections(db.collections, getUniqueFieldNames);
-    const metadataDb = { collections, drop, close };
+    const metadataDb = Object.assign({}, db, { collections });
     return metadataDb;
 };
 exports.uniqueFieldDbFactory = uniqueFieldDbFactory;

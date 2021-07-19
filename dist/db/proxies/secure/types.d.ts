@@ -21,8 +21,11 @@ export declare type LoginUser = {
 export declare type SecureEntityMapExternal<EntityMap extends SecureEntityMap> = Omit<EntityMap, SecureEntityKey>;
 export declare type SecureDbExternal<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = EntityDb<SecureEntityMapExternal<EntityMap>, D>;
 export declare type SecureDbCollections<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = DbCollections<SecureEntityMapExternal<EntityMap>, D>;
-export declare type SecureDb<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = SecureDbExternal<EntityMap, D> & UserFns & GroupFns & {
+export declare type SecureDb<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = SecureDbExternal<EntityMap, D> & UserFns & GroupFns & AccessFns<EntityMap>;
+export declare type AccessFns<EntityMap> = {
     chmod: Chmod<EntityMap>;
+    chown: Chown<EntityMap>;
+    chgrp: Chgrp<EntityMap>;
 };
 export declare type UserFns = {
     userNames: UserNames;
@@ -41,6 +44,8 @@ export declare type GroupFns = {
     removeUserFromGroups: RemoveUserFromGroups;
 };
 export declare type Chmod<EntityMap> = (mode: number, collection: keyof EntityMap & string, _id?: string) => Promise<void>;
+export declare type Chown<EntityMap> = (userName: string, collection: keyof EntityMap & string, _id?: string) => Promise<void>;
+export declare type Chgrp<EntityMap> = (groupName: string, collection: keyof EntityMap & string, _id?: string) => Promise<void>;
 export declare type UserNames = () => Promise<string[]>;
 export declare type CreateUser = (user: LoginUser, isRoot?: boolean) => Promise<void>;
 export declare type RemoveUser = (name: string) => Promise<void>;

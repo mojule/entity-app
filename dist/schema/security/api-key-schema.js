@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.apiKeyRoles = exports.apiKeySchema = void 0;
+exports.apiKeySchema = void 0;
 const tags_schema_1 = require("../common/tags-schema");
 const refs_1 = require("./refs");
 exports.apiKeySchema = {
@@ -28,20 +28,6 @@ exports.apiKeySchema = {
         'name',
         'user',
         'secret'
-    ]
-};
-exports.apiKeyRoles = {
-    create: [
-        'admin'
-    ],
-    read: [
-        'admin'
-    ],
-    update: [
-        'admin'
-    ],
-    delete: [
-        'admin'
     ]
 };
 //# sourceMappingURL=api-key-schema.js.map

@@ -23,13 +23,13 @@ export const uniqueFieldDbFactory = <TEntityMap, D extends DbItem>(
   db: EntityDb<TEntityMap,D>,
   getUniqueFieldNames: ( key: keyof TEntityMap ) => string[]
 ) => {
-  const { drop, close } = db
-
   const collections = initCollections(
     db.collections, getUniqueFieldNames
   )
 
-  const metadataDb: EntityDb<TEntityMap,D> = { collections, drop, close }
+  const metadataDb: EntityDb<TEntityMap,D> = Object.assign(
+    {}, db, { collections }
+  )
 
   return metadataDb
 }

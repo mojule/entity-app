@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createMetadataItem = exports.metadataDbFactory = void 0;
+exports.createMetadataDbItem = exports.metadataDbFactory = void 0;
 const create_collection_1 = require("./create-collection");
 const util_1 = require("@mojule/util");
 const initCollections = (collections) => {
@@ -12,20 +12,20 @@ const initCollections = (collections) => {
     return metadataCollections;
 };
 const metadataDbFactory = (db) => {
-    const { drop, close } = db;
     const collections = initCollections(db.collections);
-    const metadataDb = { collections, drop, close };
+    const metadataDb = Object.assign({}, db, { collections });
     return metadataDb;
 };
 exports.metadataDbFactory = metadataDbFactory;
-const createMetadataItem = () => {
-    const now = new Date().toJSON();
+const createMetadataDbItem = () => {
+    const now = Date.now();
     const _id = util_1.randId();
-    const _v = 0;
-    const _created = now;
-    const _updated = now;
-    const dbItem = { _id, _v, _created, _updated };
+    const _ver = 0;
+    const _atime = now;
+    const _ctime = now;
+    const _mtime = now;
+    const dbItem = { _id, _ver, _atime, _ctime, _mtime };
     return dbItem;
 };
-exports.createMetadataItem = createMetadataItem;
+exports.createMetadataDbItem = createMetadataDbItem;
 //# sourceMappingURL=index.js.map

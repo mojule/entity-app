@@ -1,15 +1,13 @@
 import { KeyValueMap } from '@mojule/util'
 import { JSONSchema } from 'json-schema-to-ts'
 import { DeepReadonly } from 'json-schema-to-ts/lib/utils'
-import { SchemaRoles } from '../entity/security/types'
 
 export type EntitySchema = JSONSchema
 
 export type MaybeReadonly<T> = T | DeepReadonly<T>
 
 export type IdSchemaBase = {
-  $id: string
-  _esRoles?: SchemaRoles
+  $id: string  
 }
 
 export type IdSchema = EntitySchema & MaybeReadonly<IdSchemaBase>

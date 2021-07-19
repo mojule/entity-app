@@ -84,4 +84,3 @@ export declare type DbRefFor<TEntityMap, K extends keyof TEntityMap> = DbRef<TEn
 export interface CreateDb<TEntityMap, D extends DbItem = DbItem> {
     (name: string, keys: EntityKeys<TEntityMap>, createDbItem: CreateDbItem<D>): Promise<EntityDb<TEntityMap, D>>;
 }
-export declare type ActionType = 'create' | 'update' | 'read' | 'delete';

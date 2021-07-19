@@ -110,6 +110,3 @@ export interface CreateDb<TEntityMap,D extends DbItem = DbItem> {
   ( name: string, keys: EntityKeys<TEntityMap>, createDbItem: CreateDbItem<D> ):
     Promise<EntityDb<TEntityMap,D>>
 }
-
-export type ActionType = 'create' | 'update' | 'read' | 'delete'
-

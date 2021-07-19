@@ -1,17 +1,16 @@
 import {
   DbCollection, DbCollections, DbItem, DbRefFor, EntityDb
 } from '../../types'
-import { createUniqueFieldsCollection } from '../unique/create-collection'
-import { createChmod } from './chmod'
 
+import { createUniqueFieldsCollection } from '../unique/create-collection'
+import { createAccessFns } from './access'
 import { createSecureCollection } from './create-collection'
 
 import { createEperm } from './errors'
 import { createGroupFns } from './group'
 
 import {
-  SecureEntityMap, SecureDbItem, LoginUser, SecureUser, SecureDb, Chmod,
-  SecureGroup,
+  SecureEntityMap, SecureDbItem, LoginUser, SecureUser, SecureDb, SecureGroup,
   SecureDbCollections
 } from './types'
 
@@ -31,9 +30,9 @@ const initCollections = async <
       db, key, user
     )
 
-    if( key === 'user' || key === 'group' || key === 'collectionData' ){
+    if (key === 'user' || key === 'group' || key === 'collectionData') {
       collection = createUniqueFieldsCollection(
-        collection, key, [ 'name' ]
+        collection, key, ['name']
       )
     }
 
@@ -69,26 +68,23 @@ export const secureDbFactory = async <
     if (!existingUser.isRoot)
       throw Error(`User ${existingUser.name} exists but is not root`)
 
-    const isValid = await validateDbUser( db.collections.user, rootUser )
+    const isValid = await validateDbUser(db.collections.user, rootUser)
 
     if (!isValid) throw createEperm('secureDbFactory')
-  }  
+  }
 
   const login = async (user: LoginUser) => {
     const dbUser = await db.collections.user.findOne({ name: user.name })
 
-    if (dbUser === undefined){
+    if (dbUser === undefined) {
       throw createEperm('login')
     }
 
     const internalCollections = await initCollections(db, dbUser)
 
-    const userFns = createUserFns(internalCollections.user, dbUser)
-    const groupFns = createGroupFns(internalCollections, dbUser)
+    const isValid = await validateDbUser(db.collections.user, user)
 
-    const isValid = await validateDbUser( db.collections.user, user)
-
-    if (!isValid){
+    if (!isValid) {
       throw createEperm('login')
     }
 
@@ -113,14 +109,19 @@ export const secureDbFactory = async <
     const collections: SecureDbCollections<EntityMap, D> =
       Object.assign({}, internalCollections, deleteExternal)
 
-    const chmod = await createChmod(internalCollections, dbUser)
+    const userFns = createUserFns(internalCollections.user, dbUser)
+    const groupFns = createGroupFns(internalCollections, dbUser)
+
+    const accessFns = createAccessFns(
+      internalCollections, groupFns.isUserInGroup, dbUser
+    )
 
     const secureDb: SecureDb<EntityMap, D> = {
-      drop, close, collections, chmod,
-      ...userFns, ...groupFns
+      drop, close, collections,
+      ...accessFns, ...userFns, ...groupFns
     }
 
-    return secureDb
+    return Object.assign( {}, db, secureDb )
   }
 
   return login

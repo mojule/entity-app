@@ -2,9 +2,7 @@ import { DbCollections, EntityDb } from '../../types'
 import { createMetadataCollection } from './create-collection'
 import { MetadataDbItem } from './types'
 import { randId } from '@mojule/util'
-import { createMemoryDb } from '../../db-memory'
 import { CreateDbItem } from '../../db-memory/types'
-import { EntityKeys } from '../../../entity/types'
 
 const initCollections = <TEntityMap, D extends MetadataDbItem>(
   collections: DbCollections<TEntityMap, D>
@@ -26,23 +24,24 @@ export const metadataDbFactory = <
 >(
   db: EntityDb<TEntityMap, D>
 ) => {
-  const { drop, close } = db
-
   const collections = initCollections<TEntityMap, D>(db.collections)
 
-  const metadataDb: EntityDb<TEntityMap, D> = { collections, drop, close }
+  const metadataDb: EntityDb<TEntityMap, D> = Object.assign(
+    {}, db, { collections }
+  )
 
   return metadataDb
 }
 
-export const createMetadataItem: CreateDbItem<MetadataDbItem> = () => {
-  const now = new Date().toJSON()
+export const createMetadataDbItem: CreateDbItem<MetadataDbItem> = () => {
+  const now = Date.now()
   const _id = randId()
-  const _v = 0
-  const _created = now
-  const _updated = now
+  const _ver = 0
+  const _atime = now
+  const _ctime = now
+  const _mtime = now
 
-  const dbItem: MetadataDbItem = { _id, _v, _created, _updated }
+  const dbItem: MetadataDbItem = { _id, _ver, _atime, _ctime, _mtime }
 
   return dbItem
 }

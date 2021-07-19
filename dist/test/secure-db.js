@@ -14,6 +14,10 @@ describe('secure db', () => {
         assert(db);
         assert(db.collections);
     });
+    it('create user', async () => {
+        const { login } = await secure_db_1.createSecureMemDbLogin();
+        const db = await login(secure_db_1.getRootUser());
+    });
     it('chmod entity', async () => {
         const { login, memDb } = await secure_db_1.createSecureMemDbLogin();
         const db = await login(secure_db_1.getRootUser());

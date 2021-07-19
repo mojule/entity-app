@@ -1,3 +1,4 @@
+import { metadataDbItemSchema } from '../metadata/schema'
 import { secureGroupRefSchema, secureUserRefSchema } from './refs'
 
 export const secureDbItemSchema = {
@@ -5,16 +6,13 @@ export const secureDbItemSchema = {
   title: 'Secure DB Item',
   type: 'object',
   properties: {
-    _id: { type: 'string' },
     _mode: { type: 'integer', minimum: 0, maximum: 0o7777, default: 0o0700 },
     _owner: secureUserRefSchema,
     _group: secureGroupRefSchema,
-    _atime: { type: 'integer' },
-    _ctime: { type: 'integer' },
-    _mtime: { type: 'integer' }    
+    ...metadataDbItemSchema.properties
   },
   required: [
-    '_id', '_mode', '_owner', '_group', '_atime', '_ctime', '_mtime'
+    '_id', '_mode', '_owner', '_group', '_atime', '_ctime', '_mtime', '_ver'
   ]
 } as const
 

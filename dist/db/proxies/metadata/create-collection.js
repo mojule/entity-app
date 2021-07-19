@@ -1,43 +1,74 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultExtendSave = exports.defaultExtendCreate = exports.createMetadataCollection = void 0;
-const util_1 = require("@mojule/util");
-const createMetadataCollection = (collection, _key, extendCreate = exports.defaultExtendCreate, extendSave = exports.defaultExtendSave) => {
-    const { create: originalCreate, createMany: originalCreateMany, save: originalSave, saveMany: originalSaveMany } = collection;
-    const create = async (entity) => originalCreate(extendCreate(entity));
-    const createMany = async (entities) => {
-        const now = new Date().toJSON();
-        entities = entities.map(entity => extendCreate(entity, now));
-        return originalCreateMany(entities);
+exports.defaultExtendAccessMany = exports.defaultExtendAccess = exports.createMetadataCollection = void 0;
+const createMetadataCollection = (collection, _key, extendAccess = exports.defaultExtendAccess, extendAccessMany = exports.defaultExtendAccessMany) => {
+    const { load: originalLoad, loadMany: originalLoadMany, find: originalFind, findOne: originalFindOne, loadPaged: originalLoadPaged, save: originalSave, saveMany: originalSaveMany } = collection;
+    const load = async (id) => extendAccess(originalSave, await originalLoad(id));
+    const loadMany = async (ids) => {
+        const entities = await originalLoadMany(ids);
+        return extendAccessMany(originalSaveMany, entities);
     };
-    const save = async (document) => originalSave(extendSave(document));
+    const find = async (critera) => {
+        const entities = await originalFind(critera);
+        return extendAccessMany(originalSaveMany, entities);
+    };
+    const findOne = async (criteria) => {
+        const entity = await originalFindOne(criteria);
+        if (entity === undefined)
+            return;
+        return extendAccess(originalSave, entity);
+    };
+    const loadPaged = async (pageSize, pageIndex) => {
+        const entities = await originalLoadPaged(pageSize, pageIndex);
+        return extendAccessMany(originalSaveMany, entities);
+    };
+    const save = async (document) => {
+        const original = await originalLoad(document._id);
+        const { _ver } = original;
+        document['_ver'] = typeof _ver === 'number' ? _ver + 1 : 0;
+        document['_mtime'] = Date.now();
+        return originalSave(document);
+    };
     const saveMany = async (documents) => {
-        const now = new Date().toJSON();
-        documents = documents.map(document => extendSave(document, now));
+        const now = Date.now();
+        const ids = documents.map(d => d._id);
+        const existing = await originalLoadMany(ids);
+        for (let i = 0; i < documents.length; i++) {
+            const entity = existing[i];
+            const document = documents[i];
+            if (entity._id !== document._id)
+                throw Error('Expected entity._id to be the same as document._id, ' +
+                    'check underlying db is returning items in correct order');
+            const { _ver } = entity;
+            document['_ver'] = typeof _ver === 'number' ? _ver + 1 : 0;
+            document['_mtime'] = now;
+        }
         return originalSaveMany(documents);
     };
-    const metadataCollection = Object.assign({}, collection, { create, createMany, save, saveMany });
+    const metadataCollection = Object.assign({}, collection, {
+        load, loadMany, find, findOne, loadPaged, save, saveMany
+    });
     return metadataCollection;
 };
 exports.createMetadataCollection = createMetadataCollection;
-const defaultExtendCreate = (entity, now = new Date().toJSON()) => {
-    entity = util_1.clone(entity);
-    entity['_v'] = 0;
-    entity['_created'] = now;
-    entity['_updated'] = now;
+const defaultExtendAccess = async (save, entity, now = Date.now()) => {
+    const { _id } = entity;
+    const _atime = now;
+    const saveEntity = { _id, _atime };
+    await save(saveEntity);
+    entity['_atime'] = now;
     return entity;
 };
-exports.defaultExtendCreate = defaultExtendCreate;
-const defaultExtendSave = (entity, now = new Date().toJSON()) => {
-    entity = util_1.clone(entity);
-    if (typeof entity['_v'] === 'number') {
-        entity['_v']++;
+exports.defaultExtendAccess = defaultExtendAccess;
+const defaultExtendAccessMany = async (saveMany, entities, now = Date.now()) => {
+    const _atime = now;
+    const saveEntities = [];
+    for (const entity of entities) {
+        saveEntities.push({ _id: entity._id, _atime });
+        entity._atime = _atime;
     }
-    else {
-        entity['_v'] = 0;
-    }
-    entity['_updated'] = now;
-    return entity;
+    await saveMany(saveEntities);
+    return entities;
 };
-exports.defaultExtendSave = defaultExtendSave;
+exports.defaultExtendAccessMany = defaultExtendAccessMany;
 //# sourceMappingURL=create-collection.js.map

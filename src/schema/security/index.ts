@@ -1,50 +1,16 @@
-import { apiKeyRoles, apiKeySchema } from './api-key-schema'
-import { pendingUserSchema, userPropertyRoles, userRoles, userSchema } from './user-schema'
+import { apiKeySchema } from './api-key-schema'
 import { resetPasswordSchema } from './reset-password-schema'
-import { addRolesToSchema } from '../../security/roles'
 import { EntitySchemaMap } from '../types'
 import { SecurityEntityMap } from '../../entity/security/types'
 
-// no straightforward way to extend schema at the moment - figure this out
-// later
+const createPendingUserSchema = () => {
+  console.error( 'TODO: Not implemented')
 
-// TODO - readOnly is nonstandard find where used and figure out better way
-// and default doesn't work either - why??? it should be able to be string[]?
-Object.assign(
-  userSchema.properties.roles,
-  {
-    readOnly: true,
-    default: ["user"]
-  }
-)
-
-Object.assign(
-  pendingUserSchema.properties.roles,
-  {
-    readOnly: true,
-    default: ["user"]
-  }
-)
-
-Object.assign(
-  pendingUserSchema.properties.secret,
-  {
-    readOnly: true,
-    default: ''
-  }
-)
-
-Object.assign(
-  resetPasswordSchema.properties.secret,
-  {
-    readOnly: true,
-    default: ''
-  }
-)
+  return { $id: '' }
+}
 
 export const securitySchema: EntitySchemaMap<SecurityEntityMap> = {
-  apiKey: addRolesToSchema(apiKeySchema, apiKeyRoles),
-  user: addRolesToSchema(userSchema, userRoles, userPropertyRoles),
-  pendingUser: addRolesToSchema(pendingUserSchema, userRoles, userPropertyRoles),
+  apiKey: apiKeySchema,
+  pendingUser: createPendingUserSchema(),
   resetPassword: resetPasswordSchema
 }

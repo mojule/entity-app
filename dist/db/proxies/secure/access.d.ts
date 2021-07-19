@@ -1,8 +1,12 @@
 import { DbCollections } from '../../types';
-import { SecureEntityMap, SecureUser, Chmod } from './types';
-export declare const createChmod: <EntityMap extends SecureEntityMap, D extends {
+import { SecureEntityMap, SecureUser, AccessFns, IsUserInGroup } from './types';
+export declare const createAccessFns: <EntityMap extends SecureEntityMap, D extends {
     [x: string]: unknown;
     _id: string;
+    _atime: number;
+    _ctime: number;
+    _mtime: number;
+    _ver: number;
     _mode: number;
     _owner: {
         [x: string]: unknown;
@@ -14,12 +18,13 @@ export declare const createChmod: <EntityMap extends SecureEntityMap, D extends 
         _id: string;
         _collection: "group";
     };
-    _atime: number;
-    _ctime: number;
-    _mtime: number;
 } = {
     [x: string]: unknown;
     _id: string;
+    _atime: number;
+    _ctime: number;
+    _mtime: number;
+    _ver: number;
     _mode: number;
     _owner: {
         [x: string]: unknown;
@@ -31,7 +36,4 @@ export declare const createChmod: <EntityMap extends SecureEntityMap, D extends 
         _id: string;
         _collection: "group";
     };
-    _atime: number;
-    _ctime: number;
-    _mtime: number;
-}>(collections: DbCollections<EntityMap, D>, user: SecureUser) => Promise<Chmod<EntityMap>>;
+}>(collections: DbCollections<EntityMap, D>, isUserInGroup: IsUserInGroup, user: SecureUser) => AccessFns<EntityMap>;

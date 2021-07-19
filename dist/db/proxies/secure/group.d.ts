@@ -3,6 +3,10 @@ import { GroupFns, SecureEntityMap, SecureUser } from './types';
 export declare const createGroupFns: <EntityMap extends SecureEntityMap, D extends {
     [x: string]: unknown;
     _id: string;
+    _atime: number;
+    _ctime: number;
+    _mtime: number;
+    _ver: number;
     _mode: number;
     _owner: {
         [x: string]: unknown;
@@ -14,12 +18,13 @@ export declare const createGroupFns: <EntityMap extends SecureEntityMap, D exten
         _id: string;
         _collection: "group";
     };
-    _atime: number;
-    _ctime: number;
-    _mtime: number;
 } = {
     [x: string]: unknown;
     _id: string;
+    _atime: number;
+    _ctime: number;
+    _mtime: number;
+    _ver: number;
     _mode: number;
     _owner: {
         [x: string]: unknown;
@@ -31,7 +36,4 @@ export declare const createGroupFns: <EntityMap extends SecureEntityMap, D exten
         _id: string;
         _collection: "group";
     };
-    _atime: number;
-    _ctime: number;
-    _mtime: number;
 }>(collections: DbCollections<EntityMap, D>, dbUser: SecureUser) => GroupFns;

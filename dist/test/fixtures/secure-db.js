@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSecureMemDbLogin = exports.getRootUser = exports.entityKeys = void 0;
-const util_1 = require("@mojule/util");
 const __1 = require("../..");
 const secure_1 = require("../../db/proxies/secure");
+const secure_db_item_1 = require("../../db/proxies/secure/secure-db-item");
 exports.entityKeys = {
     publicThing: 'publicThing',
     user: 'user',
@@ -16,26 +16,7 @@ const getRootUser = () => ({
 });
 exports.getRootUser = getRootUser;
 const createSecureMemDbLogin = async () => {
-    const createSecureDbItem = () => {
-        const now = Date.now();
-        const dbItem = {
-            _id: util_1.randId(),
-            _atime: now,
-            _ctime: now,
-            _mtime: now,
-            _group: {
-                _collection: 'group',
-                _id: ''
-            },
-            _owner: {
-                _collection: 'user',
-                _id: ''
-            },
-            _mode: 0o0700
-        };
-        return dbItem;
-    };
-    const memDb = await __1.createMemoryDb('', exports.entityKeys, createSecureDbItem);
+    const memDb = await __1.createMemoryDb('', exports.entityKeys, secure_db_item_1.createSecureDbItem);
     const login = await secure_1.secureDbFactory(memDb, exports.getRootUser());
     return { login, memDb };
 };

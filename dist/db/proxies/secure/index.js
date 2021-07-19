@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.secureDbFactory = void 0;
 const create_collection_1 = require("../unique/create-collection");
-const chmod_1 = require("./chmod");
+const access_1 = require("./access");
 const create_collection_2 = require("./create-collection");
 const errors_1 = require("./errors");
 const group_1 = require("./group");
@@ -45,8 +45,6 @@ const secureDbFactory = async (db, rootUser) => {
             throw errors_1.createEperm('login');
         }
         const internalCollections = await initCollections(db, dbUser);
-        const userFns = user_1.createUserFns(internalCollections.user, dbUser);
-        const groupFns = group_1.createGroupFns(internalCollections, dbUser);
         const isValid = await user_1.validateDbUser(db.collections.user, user);
         if (!isValid) {
             throw errors_1.createEperm('login');
@@ -67,9 +65,11 @@ const secureDbFactory = async (db, rootUser) => {
             collectionData: undefined
         };
         const collections = Object.assign({}, internalCollections, deleteExternal);
-        const chmod = await chmod_1.createChmod(internalCollections, dbUser);
-        const secureDb = Object.assign(Object.assign({ drop, close, collections, chmod }, userFns), groupFns);
-        return secureDb;
+        const userFns = user_1.createUserFns(internalCollections.user, dbUser);
+        const groupFns = group_1.createGroupFns(internalCollections, dbUser);
+        const accessFns = access_1.createAccessFns(internalCollections, groupFns.isUserInGroup, dbUser);
+        const secureDb = Object.assign(Object.assign(Object.assign({ drop, close, collections }, accessFns), userFns), groupFns);
+        return Object.assign({}, db, secureDb);
     };
     return login;
 };
