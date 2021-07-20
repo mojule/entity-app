@@ -50,6 +50,28 @@ const refFactory = (uri) => {
     return ref;
 };
 exports.refFactory = refFactory;
+const isIdSchema = (schema) => {
+    if (typeof schema !== 'object')
+        return false;
+    if (typeof schema['title'] !== 'string')
+        return false;
+    if (schema['type'] !== 'string')
+        return false;
+    return true;
+};
+const isCollectionSchema = (schema) => {
+    if (typeof schema !== 'object')
+        return false;
+    if (typeof schema['title'] !== 'string')
+        return false;
+    if (schema['type'] !== 'string')
+        return false;
+    if (!Array.isArray(schema['enum']))
+        return false;
+    if (typeof schema['enum'][0] !== 'string')
+        return false;
+    return true;
+};
 const isDbRefSchema = (schema) => {
     if (typeof schema !== 'object')
         return false;
@@ -61,9 +83,9 @@ const isDbRefSchema = (schema) => {
         return false;
     if (!schema['properties'])
         return false;
-    if (!schema['properties']._id)
+    if (!isIdSchema(schema['properties']._id))
         return false;
-    if (!schema['properties']._collection)
+    if (!isCollectionSchema(schema['properties']._collection))
         return false;
     return true;
 };

@@ -14,10 +14,8 @@ const validatedDbFactory = (db, validator, validateOptions = {
     onLoad: false,
     onSave: true
 }) => {
-    const { drop, close } = db;
     const collections = initCollections(db.collections, validator, validateOptions);
-    const validatedDb = { collections, drop, close };
-    return validatedDb;
+    return Object.assign({}, db, { collections });
 };
 exports.validatedDbFactory = validatedDbFactory;
 //# sourceMappingURL=index.js.map

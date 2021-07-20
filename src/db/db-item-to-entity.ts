@@ -1,9 +1,9 @@
 import { DbItem } from './types'
 
-export const dbItemToEntity = <TEntity>( 
-  dbItem: TEntity
-): TEntity => {
-  const entity = {} as TEntity
+export const dbItemToEntity = <Entity>(
+  dbItem: Entity
+) => {
+  const entity = {} as Entity
 
   Object.keys( dbItem ).forEach( key => {
     if( key !== '_id' && key.startsWith( '_' ) ) return

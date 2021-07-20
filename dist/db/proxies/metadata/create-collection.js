@@ -25,7 +25,7 @@ const createMetadataCollection = (collection, _key, extendAccess = exports.defau
     const save = async (document) => {
         const original = await originalLoad(document._id);
         const { _ver } = original;
-        document['_ver'] = typeof _ver === 'number' ? _ver + 1 : 0;
+        document['_ver'] = _ver + 1;
         document['_mtime'] = Date.now();
         return originalSave(document);
     };
@@ -40,7 +40,7 @@ const createMetadataCollection = (collection, _key, extendAccess = exports.defau
                 throw Error('Expected entity._id to be the same as document._id, ' +
                     'check underlying db is returning items in correct order');
             const { _ver } = entity;
-            document['_ver'] = typeof _ver === 'number' ? _ver + 1 : 0;
+            document['_ver'] = _ver + 1;
             document['_mtime'] = now;
         }
         return originalSaveMany(documents);

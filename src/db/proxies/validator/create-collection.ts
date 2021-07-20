@@ -81,7 +81,6 @@ export const createValidatedCollection = <
   }
 
   if (onSave) {
-
     save = async document => {     
       const entity = await applyPartial( document )
 

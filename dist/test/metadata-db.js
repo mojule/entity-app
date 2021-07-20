@@ -72,6 +72,15 @@ describe('metadata db', () => {
                 assertModify(oldItems[i], currentItems[i]);
             }
         });
+        it('saveMany expected ordered result', async () => {
+            const db = await metadata_db_1.createDisorderedDb();
+            const _ids = await db.collections.publicThing.createMany([
+                { name: 'thing', value: 42 },
+                { name: 'other', value: 69 }
+            ]);
+            const saveIds = _ids.map(_id => ({ _id }));
+            assert.rejects(db.collections.publicThing.saveMany(saveIds));
+        });
     });
     describe('access', () => {
         it('load', async () => {
@@ -120,6 +129,11 @@ describe('metadata db', () => {
             const current = await db.collections.publicThing.findOne({ _id });
             assert(old && current);
             assertAccess(old, current);
+        });
+        it('findOne with bad query', async () => {
+            const db = await metadata_db_1.createMetadataDb();
+            const none = await db.collections.publicThing.findOne({});
+            assert(none === undefined);
         });
         it('loadPaged', async () => {
             const db = await metadata_db_1.createMetadataDb();

@@ -27,13 +27,9 @@ export const validatedDbFactory = <TEntityMap, D extends DbItem = DbItem>(
     onSave: true
   }
 ) => {
-  const { drop, close } = db
-
   const collections = initCollections(
     db.collections, validator, validateOptions
   )
 
-  const validatedDb: EntityDb<TEntityMap, D> = { collections, drop, close }
-
-  return validatedDb
+  return Object.assign( {}, db, { collections } )
 }

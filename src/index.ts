@@ -1,5 +1,3 @@
-export * from './concat-unique-text-nodes'
-
 export * from './db/copy-db'
 export * from './db/db-item-to-entity'
 export * from './db/db-memory'

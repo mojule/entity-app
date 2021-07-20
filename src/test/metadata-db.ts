@@ -1,7 +1,7 @@
 import { delayPromise } from '@mojule/util'
 import * as assert from 'assert'
 import { MetadataDbItem } from '../db/proxies/metadata/types'
-import { createMetadataDb } from './fixtures/metadata-db'
+import { createDisorderedDb, createMetadataDb } from './fixtures/metadata-db'
 
 describe('metadata db', () => {
   const assertCreate = (
@@ -116,6 +116,23 @@ describe('metadata db', () => {
         assertModify(oldItems[i], currentItems[i])
       }
     })
+
+    it( 'saveMany expected ordered result', async () => {
+      const db = await createDisorderedDb()
+
+      const _ids = await db.collections.publicThing.createMany(
+        [
+          { name: 'thing', value: 42 },
+          { name: 'other', value: 69 }
+        ]
+      )
+
+      const saveIds = _ids.map(_id => ({ _id }))
+
+      assert.rejects(
+        db.collections.publicThing.saveMany( saveIds )
+      )
+    })
   })
 
   describe('access', () => {
@@ -199,6 +216,14 @@ describe('metadata db', () => {
       assert(old && current)
 
       assertAccess(old, current)
+    })
+
+    it( 'findOne with bad query', async () => {
+      const db = await createMetadataDb()
+
+      const none = await db.collections.publicThing.findOne({})
+
+      assert( none === undefined )
     })
 
     it( 'loadPaged', async () => {

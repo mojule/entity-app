@@ -59,7 +59,7 @@ export const createMetadataCollection =
 
       const { _ver } = original
 
-      document['_ver'] = typeof _ver === 'number' ? _ver + 1 : 0
+      document['_ver'] = _ver + 1
       document['_mtime'] = Date.now()
 
       return originalSave(document)
@@ -84,7 +84,7 @@ export const createMetadataCollection =
 
         const { _ver } = entity
 
-        document['_ver'] = typeof _ver === 'number' ? _ver + 1 : 0
+        document['_ver'] = _ver + 1
         document['_mtime'] = now
       }
 

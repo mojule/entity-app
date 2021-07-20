@@ -27,9 +27,5 @@ export const uniqueFieldDbFactory = <TEntityMap, D extends DbItem>(
     db.collections, getUniqueFieldNames
   )
 
-  const metadataDb: EntityDb<TEntityMap,D> = Object.assign(
-    {}, db, { collections }
-  )
-
-  return metadataDb
+  return Object.assign( {}, db, { collections } )
 }

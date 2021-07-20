@@ -24,7 +24,7 @@
   "homepage": "https://github.com/mojule/entity-app#readme",
   "dependencies": {
     "@entity-schema/json-schema-traverse": "^0.6.0",
-    "@mojule/dom": "^0.1.2",
+    "@mojule/dom": "^0.1.3",
     "@mojule/json-pointer": "^0.3.4",
     "@mojule/mode": "^0.2.0",
     "@mojule/util": "^0.1.3",
