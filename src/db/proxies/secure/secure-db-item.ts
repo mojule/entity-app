@@ -13,7 +13,7 @@ export const createSecureDbItem = () => {
       _collection: 'user' as const,
       _id: ''
     },
-    _mode: 0o0700
+    _mode: 0o0770
   }
 
   const secureDbItem: SecureDbItem = Object.assign(

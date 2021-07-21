@@ -41,7 +41,7 @@ export const createGroupFns = <
   const isUserInGroup: IsUserInGroup = async (userName, groupName) => {
     if (!dbUser.isRoot) throw createEperm('isUserInGroup')
 
-    const user = await collections.user.findOne({ userName })
+    const user = await collections.user.findOne({ name: userName })
 
     if (!user) throw Error(`Expected a user named ${userName}`)
 
@@ -65,15 +65,15 @@ export const createGroupFns = <
       existing.users.map(u => u._id)
     )
 
-    existingUsers[0]._group
-
     const primaryUsers = await collections.user.find(
       { '_group._id': existing._id }
     )
 
     existingUsers.push(...primaryUsers)
 
-    const users = new Set<string>(...existingUsers.map(u => u.name))
+    const userNames = existingUsers.map(u => u.name)
+
+    const users = new Set<string>( userNames )
 
     return [...users]
   }

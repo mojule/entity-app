@@ -2,7 +2,10 @@ import { clone } from '@mojule/util'
 import * as bcrypt from 'bcryptjs'
 import { DbCollection, DbCollections, DbItem } from '../../types'
 import { createEperm } from './errors'
-import { CreateUser, LoginUser, RemoveUser, SecureDbItem, SecureEntityMap, SecureUser, SetPassword, UserFns, UserNames, ValidateUser } from './types'
+import { 
+  CreateUser, LoginUser, RemoveUser, SecureDbItem, SecureEntityMap, SecureUser, 
+  SetPassword, UserFns, UserNames, ValidateUser
+} from './types'
 
 export const createUserFns = <
   EntityMap extends SecureEntityMap,
@@ -22,7 +25,10 @@ export const createUserFns = <
   const createUser: CreateUser = async ( user, isRoot ) => {
     if( !dbUser.isRoot ) throw createEperm( 'createUser' )
 
-    await collection.create( { ...user, isRoot } )
+    user = clone( user )
+    user[ 'isRoot' ] = isRoot
+    
+    await collection.create( user )
   }
 
   const removeUser: RemoveUser = async name => {

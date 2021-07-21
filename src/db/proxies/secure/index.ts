@@ -73,20 +73,17 @@ export const secureDbFactory = async <
     if (!isValid) throw createEperm('secureDbFactory')
   }
 
-  const login = async (user: LoginUser) => {
-    const dbUser = await db.collections.user.findOne({ name: user.name })
-
-    if (dbUser === undefined) {
-      throw createEperm('login')
-    }
-
-    const internalCollections = await initCollections(db, dbUser)
-
+  const login = async (user: LoginUser) => {    
     const isValid = await validateDbUser(db.collections.user, user)
 
     if (!isValid) {
       throw createEperm('login')
     }
+
+    // we can bang assert because isValid would have thrown
+    const dbUser = (await db.collections.user.findOne({ name: user.name }))!
+
+    const internalCollections = await initCollections(db, dbUser)
 
     const drop: EntityDb<EntityMap, D>['drop'] = async () => {
       if (!dbUser.isRoot) throw createEperm('drop')
@@ -113,7 +110,7 @@ export const secureDbFactory = async <
     const groupFns = createGroupFns(internalCollections, dbUser)
 
     const accessFns = createAccessFns(
-      internalCollections, groupFns.isUserInGroup, dbUser
+      db.collections, groupFns.isUserInGroup, dbUser
     )
 
     const secureDb: SecureDb<EntityMap, D> = {
@@ -121,10 +118,40 @@ export const secureDbFactory = async <
       ...accessFns, ...userFns, ...groupFns
     }
 
-    return Object.assign( {}, db, secureDb )
+    return Object.assign({}, db, secureDb)
   }
 
   return login
+}
+
+const initGroups = async<
+  EntityMap extends SecureEntityMap,
+  D extends SecureDbItem = SecureDbItem
+>(db: EntityDb<EntityMap, D>, userRef: DbRefFor<EntityMap, 'user'>) => {
+  const createGroup = async (
+    name: string, users: DbRefFor<EntityMap, 'user'>[]
+  ) => {
+    const group: SecureGroup = { name, users }
+
+    const groupId = await db.collections.group.create(group)
+
+    const groupRef: DbRefFor<EntityMap, 'group'> = { _id: groupId, _collection: 'group' }
+
+    const dbGroup = await db.collections.group.load(groupId)
+
+    dbGroup._owner = userRef
+    dbGroup._group = groupRef
+
+    await db.collections.group.save(dbGroup)
+
+    return groupRef
+  }
+
+  const rootGroupRef = await createGroup('root', [userRef])
+  const usersRef = await createGroup('users', [userRef])
+  const nobodyRef = await createGroup('nobody', [])
+
+  return { rootGroupRef, usersRef, nobodyRef }
 }
 
 const initRootUser = async <
@@ -141,26 +168,12 @@ const initRootUser = async <
     _id: userId, _collection: 'user'
   }
 
-  const rootGroup: SecureGroup = {
-    name: 'root',
-    users: [userRef]
-  }
-
-  const groupId = await db.collections.group.create(rootGroup)
-
-  const groupRef: DbRefFor<EntityMap, 'group'> = { _id: groupId, _collection: 'group' }
-
-  const dbGroup = await db.collections.group.load(groupId)
-
-  dbGroup._owner = userRef
-  dbGroup._group = groupRef
-
-  await db.collections.group.save(dbGroup)
+  const { rootGroupRef } = await initGroups(db, userRef)
 
   const dbUser = await db.collections.user.load(userId)
 
   dbUser._owner = userRef
-  dbUser._group = groupRef
+  dbUser._group = rootGroupRef
 
   const saveUser: Partial<SecureUser> & DbItem = {
     _id: dbUser._id
@@ -176,16 +189,16 @@ const initRootUser = async <
 
   // create collectionData, owned by root
   for (const key in db.collections) {
-    await ensureGetCollectionData(
+    await initCollectionData(
       db.collections.collectionData,
       key,
       userRef,
-      groupRef
+      rootGroupRef
     )
   }
 }
 
-const ensureGetCollectionData = async <
+const initCollectionData = async <
   EntityMap extends SecureEntityMap,
   D extends SecureDbItem = SecureDbItem
 >(
@@ -194,17 +207,11 @@ const ensureGetCollectionData = async <
   userRef: DbRefFor<EntityMap, 'user'>,
   groupRef: DbRefFor<EntityMap, 'group'>
 ) => {
-  let collectionData = await collection.findOne(
-    { name: key }
+  const _id = await collection.create(
+    { name: key, _owner: userRef, _group: groupRef }
   )
 
-  if (collectionData === undefined) {
-    const _id = await collection.create(
-      { name: key, _owner: userRef, _group: groupRef }
-    )
-
-    collectionData = await collection.load(_id)
-  }
+  const collectionData = await collection.load(_id)
 
   return collectionData
 }

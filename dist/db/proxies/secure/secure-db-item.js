@@ -13,7 +13,7 @@ const createSecureDbItem = () => {
             _collection: 'user',
             _id: ''
         },
-        _mode: 0o0700
+        _mode: 0o0770
     };
     const secureDbItem = Object.assign(metadataDbItem, dbItem);
     return secureDbItem;

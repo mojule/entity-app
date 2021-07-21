@@ -36,4 +36,4 @@ export declare const createAccessFns: <EntityMap extends SecureEntityMap, D exte
         _id: string;
         _collection: "group";
     };
-}>(collections: DbCollections<EntityMap, D>, isUserInGroup: IsUserInGroup, user: SecureUser) => AccessFns<EntityMap>;
+}>(insecureCollections: DbCollections<EntityMap, D>, isUserInGroup: IsUserInGroup, user: SecureUser) => AccessFns<EntityMap>;

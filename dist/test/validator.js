@@ -5,7 +5,7 @@ const validator_1 = require("./fixtures/validator");
 describe('db validator', () => {
     describe('create', () => {
         it('create', async () => {
-            const { validatedDb } = await validator_1.createValidatedDb({ onCreate: true, onLoad: false, onSave: false });
+            const { validatedDb } = await validator_1.createValidatedDb();
             assert.doesNotReject(async () => await validatedDb.collections.a.create({ name: '' }));
             assert.rejects(async () => await validatedDb.collections.a.create({}));
         });

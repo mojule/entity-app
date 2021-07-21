@@ -17,14 +17,19 @@ export const createUniqueFieldsCollection =
     } = collection
 
     const create: DbCreate<TEntityMap[K]> = async entity => {
-      await assertUniqueForNames(uniqueNames, key, entity, find)
+      await assertUniqueForNames(uniqueNames, key, entity, find, [] )
 
       return originalCreate(entity)
     }
 
     const createMany: DbCreateMany<TEntityMap[K]> = async entities => {
       await Promise.all(
-        entities.map(e => assertUniqueForNames(uniqueNames, key, e, find))
+        entities.map(
+          e => assertUniqueForNames(
+            uniqueNames, key, e, find, 
+            entities.filter( e2 => e2 !== e ) 
+          ) 
+        )
       )
 
       return originalCreateMany(entities)
@@ -32,7 +37,7 @@ export const createUniqueFieldsCollection =
 
     const save: DbSave<TEntityMap[K]> = async document => {
       await assertUniqueForNames(
-        uniqueNames, key, document, find, document._id
+        uniqueNames, key, document, find, [], document._id
       )
 
       return originalSave(document)
@@ -41,7 +46,11 @@ export const createUniqueFieldsCollection =
     const saveMany: DbSaveMany<TEntityMap[K]> = async documents => {
       await Promise.all(
         documents.map(
-          e => assertUniqueForNames(uniqueNames, key, e, find, e._id)
+          e => assertUniqueForNames(
+            uniqueNames, key, e, find, 
+            documents.filter( e2 => e2 !== e ), 
+            e._id
+          )
         )
       )
 
@@ -58,26 +67,41 @@ export const createUniqueFieldsCollection =
 const assertUniqueForNames = async <TEntity, D extends DbItem>(
   uniqueNames: string[], entityKey: string, entity: Partial<TEntity>,
   find: DbFind<TEntity, D>,
+  additional: (( Partial<TEntity> & DbItem )|( TEntity ))[],
   currentId = ''
 ) => {
   for (let i = 0; i < uniqueNames.length; i++) {
     const name = uniqueNames[i]
     const value = entity[name]
 
-    if (value === 'undefined') continue
+    if (value === undefined ) continue
 
-    await assertUnique(entityKey, name, value, find, currentId)
+    await assertUnique(entityKey, name, value, find, additional, currentId)
   }
 }
 
 const assertUnique = async <TEntity, D extends DbItem>(
   entityKey: string, propertyKey: string, value: any, find: DbFind<TEntity, D>,
-  currentId = ''
+  additional: (( Partial<TEntity> & DbItem )|( TEntity ))[],
+  currentId: string
 ) => {
   let duplicates = await find({ [propertyKey]: value })
 
+  let siblings = additional.filter( d => d[ propertyKey ] === value )
+
+  // remove siblings from duplicates?
+  if( additional.length ){
+    duplicates = duplicates.filter( d => !additional.some( s => '_id' in s && s._id === d._id ) )
+  }
+
   if (currentId !== '') {
     duplicates = duplicates.filter(e => e._id !== currentId)
+  }
+
+  if( siblings.length > 0 ){
+    throw Error(
+      `Expected "${entityKey}:${propertyKey}" to be unique, but another entity also has the value ${value}`
+    )
   }
 
   if (duplicates.length === 0) return

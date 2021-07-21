@@ -13,8 +13,7 @@ const initCollections = (collections, getUniqueFieldNames) => {
 };
 const uniqueFieldDbFactory = (db, getUniqueFieldNames) => {
     const collections = initCollections(db.collections, getUniqueFieldNames);
-    const metadataDb = Object.assign({}, db, { collections });
-    return metadataDb;
+    return Object.assign({}, db, { collections });
 };
 exports.uniqueFieldDbFactory = uniqueFieldDbFactory;
 //# sourceMappingURL=index.js.map

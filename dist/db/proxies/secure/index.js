@@ -40,15 +40,13 @@ const secureDbFactory = async (db, rootUser) => {
             throw errors_1.createEperm('secureDbFactory');
     }
     const login = async (user) => {
-        const dbUser = await db.collections.user.findOne({ name: user.name });
-        if (dbUser === undefined) {
-            throw errors_1.createEperm('login');
-        }
-        const internalCollections = await initCollections(db, dbUser);
         const isValid = await user_1.validateDbUser(db.collections.user, user);
         if (!isValid) {
             throw errors_1.createEperm('login');
         }
+        // we can bang assert because isValid would have thrown
+        const dbUser = (await db.collections.user.findOne({ name: user.name }));
+        const internalCollections = await initCollections(db, dbUser);
         const drop = async () => {
             if (!dbUser.isRoot)
                 throw errors_1.createEperm('drop');
@@ -67,13 +65,29 @@ const secureDbFactory = async (db, rootUser) => {
         const collections = Object.assign({}, internalCollections, deleteExternal);
         const userFns = user_1.createUserFns(internalCollections.user, dbUser);
         const groupFns = group_1.createGroupFns(internalCollections, dbUser);
-        const accessFns = access_1.createAccessFns(internalCollections, groupFns.isUserInGroup, dbUser);
+        const accessFns = access_1.createAccessFns(db.collections, groupFns.isUserInGroup, dbUser);
         const secureDb = Object.assign(Object.assign(Object.assign({ drop, close, collections }, accessFns), userFns), groupFns);
         return Object.assign({}, db, secureDb);
     };
     return login;
 };
 exports.secureDbFactory = secureDbFactory;
+const initGroups = async (db, userRef) => {
+    const createGroup = async (name, users) => {
+        const group = { name, users };
+        const groupId = await db.collections.group.create(group);
+        const groupRef = { _id: groupId, _collection: 'group' };
+        const dbGroup = await db.collections.group.load(groupId);
+        dbGroup._owner = userRef;
+        dbGroup._group = groupRef;
+        await db.collections.group.save(dbGroup);
+        return groupRef;
+    };
+    const rootGroupRef = await createGroup('root', [userRef]);
+    const usersRef = await createGroup('users', [userRef]);
+    const nobodyRef = await createGroup('nobody', []);
+    return { rootGroupRef, usersRef, nobodyRef };
+};
 const initRootUser = async (db, rootUser) => {
     const user = await user_1.hashPassword(rootUser);
     user.isRoot = true;
@@ -81,19 +95,10 @@ const initRootUser = async (db, rootUser) => {
     const userRef = {
         _id: userId, _collection: 'user'
     };
-    const rootGroup = {
-        name: 'root',
-        users: [userRef]
-    };
-    const groupId = await db.collections.group.create(rootGroup);
-    const groupRef = { _id: groupId, _collection: 'group' };
-    const dbGroup = await db.collections.group.load(groupId);
-    dbGroup._owner = userRef;
-    dbGroup._group = groupRef;
-    await db.collections.group.save(dbGroup);
+    const { rootGroupRef } = await initGroups(db, userRef);
     const dbUser = await db.collections.user.load(userId);
     dbUser._owner = userRef;
-    dbUser._group = groupRef;
+    dbUser._group = rootGroupRef;
     const saveUser = {
         _id: dbUser._id
     };
@@ -105,15 +110,12 @@ const initRootUser = async (db, rootUser) => {
     await db.collections.user.save(saveUser);
     // create collectionData, owned by root
     for (const key in db.collections) {
-        await ensureGetCollectionData(db.collections.collectionData, key, userRef, groupRef);
+        await initCollectionData(db.collections.collectionData, key, userRef, rootGroupRef);
     }
 };
-const ensureGetCollectionData = async (collection, key, userRef, groupRef) => {
-    let collectionData = await collection.findOne({ name: key });
-    if (collectionData === undefined) {
-        const _id = await collection.create({ name: key, _owner: userRef, _group: groupRef });
-        collectionData = await collection.load(_id);
-    }
+const initCollectionData = async (collection, key, userRef, groupRef) => {
+    const _id = await collection.create({ name: key, _owner: userRef, _group: groupRef });
+    const collectionData = await collection.load(_id);
     return collectionData;
 };
 //# sourceMappingURL=index.js.map

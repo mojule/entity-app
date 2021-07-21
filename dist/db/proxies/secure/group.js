@@ -25,7 +25,7 @@ const createGroupFns = (collections, dbUser) => {
     const isUserInGroup = async (userName, groupName) => {
         if (!dbUser.isRoot)
             throw errors_1.createEperm('isUserInGroup');
-        const user = await collections.user.findOne({ userName });
+        const user = await collections.user.findOne({ name: userName });
         if (!user)
             throw Error(`Expected a user named ${userName}`);
         const primaryGroup = await collections.group.load(user._group._id);
@@ -41,10 +41,10 @@ const createGroupFns = (collections, dbUser) => {
         if (!existing)
             throw Error(`Expected a group named ${name}`);
         const existingUsers = await collections.user.loadMany(existing.users.map(u => u._id));
-        existingUsers[0]._group;
         const primaryUsers = await collections.user.find({ '_group._id': existing._id });
         existingUsers.push(...primaryUsers);
-        const users = new Set(...existingUsers.map(u => u.name));
+        const userNames = existingUsers.map(u => u.name);
+        const users = new Set(userNames);
         return [...users];
     };
     const setUserPrimaryGroup = async (userName, groupName) => {

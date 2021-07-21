@@ -14,7 +14,9 @@ const createUserFns = (collection, dbUser) => {
     const createUser = async (user, isRoot) => {
         if (!dbUser.isRoot)
             throw errors_1.createEperm('createUser');
-        await collection.create(Object.assign(Object.assign({}, user), { isRoot }));
+        user = util_1.clone(user);
+        user['isRoot'] = isRoot;
+        await collection.create(user);
     };
     const removeUser = async (name) => {
         if (!dbUser.isRoot)

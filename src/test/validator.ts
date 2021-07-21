@@ -5,9 +5,7 @@ describe('db validator', () => {
 
   describe('create', () => {
     it('create', async () => {
-      const { validatedDb } = await createValidatedDb(
-        { onCreate: true, onLoad: false, onSave: false }
-      )
+      const { validatedDb } = await createValidatedDb()
 
       assert.doesNotReject(
         async () => await validatedDb.collections.a.create({ name: '' })

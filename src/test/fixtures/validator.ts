@@ -37,7 +37,7 @@ export const validator: ValidateEntity<ValidatorEntityMap> = async ( key, entity
   return Error( 'Expected a or b' )
 }
 
-export const createValidatedDb = async ( options: ValidateOptions ) => {
+export const createValidatedDb = async ( options?: ValidateOptions ) => {
   const memDb = await createMemoryDb( 
     '', validatorEntityKeys, createDefaultDbItem 
   )

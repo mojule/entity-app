@@ -1,13 +1,13 @@
 import { canAccess, r, w } from '@mojule/mode'
 import { defaultLoadPaged } from '../../default-load-paged'
 
-import { 
-  EntityDb, DbRefFor, DbItem, DbIds, DbCreate, DbCreateMany, DbLoad, DbLoadMany, 
-  DbSave, DbSaveMany, DbFind, DbFindOne, DbRemove, DbRemoveMany, DbCollection 
+import {
+  EntityDb, DbRefFor, DbItem, DbIds, DbCreate, DbCreateMany, DbLoad, DbLoadMany,
+  DbSave, DbSaveMany, DbFind, DbFindOne, DbRemove, DbRemoveMany, DbCollection
 } from '../../types'
 
-import { 
-  SecureEntityMap, SecureDbItem, SecureUser, privilegedDbItemKeys 
+import {
+  SecureEntityMap, SecureDbItem, SecureUser, privilegedDbItemKeys
 } from './types'
 
 import { createEperm } from './errors'
@@ -23,36 +23,50 @@ export const createSecureCollection = async <
   key: K,
   user: SecureUser & D
 ) => {
+  const getUser = () => db.collections.user.load(user._id)
+
   type Entity = EntityMap[K]
 
   const collection = db.collections[key]
 
-  const collectionData = await db.collections.collectionData.findOne({ name: key })
+  // we can bang assert because they are created in init
+  const collectionData = (
+    await db.collections.collectionData.findOne({ name: key })
+  )!
 
-  if( collectionData === undefined )
-    throw Error( `Expected collectionData for ${ key }`)
 
-  const collectionAccessOptions = await createAccessOptions(
-    db, user, collectionData, true
+  const collectionAccessOptions = async () => createAccessOptions(
+    db, await getUser(), collectionData, true
   )
 
-  const canReadCollection = canAccess(r, collectionAccessOptions)
-  const canWriteCollection = canAccess(w, collectionAccessOptions)
+  const canReadCollection = async () => {
+    const canRead = canAccess(r, await collectionAccessOptions())
 
-  const userRef: DbRefFor<EntityMap,'user'> = { 
-    _id: user._id, _collection: 'user' 
+    return canRead
   }
 
-  const groupRef: DbRefFor<EntityMap,'group'> = { 
-    _id: user._group._id, _collection: 'group' 
-  }  
+  const canWriteCollection = async () => {
+    const canWrite = canAccess(w, await collectionAccessOptions())
+
+    return canWrite
+  }
+
+  const userRef: DbRefFor<EntityMap, 'user'> = {
+    _id: user._id, _collection: 'user'
+  }
+
+  const getGroupRef = async (): Promise<DbRefFor<EntityMap, 'group'>> => ({
+    _id: (await getUser())._group._id, _collection: 'group'
+  })
 
   const assertReadEntity = async (
     entity: SecureDbItem, operation: string
   ) => {
-    const accessOptions = await createAccessOptions(db, user, entity, false)
+    const accessOptions = await createAccessOptions(
+      db, await getUser(), entity, false
+    )
 
-    if (!canReadCollection || !canAccess(r, accessOptions))
+    if (!(await canReadCollection()) || !canAccess(r, accessOptions))
       throw createEperm(operation)
   }
 
@@ -61,9 +75,9 @@ export const createSecureCollection = async <
   ) => {
     const entity = await collection.load(document._id)
 
-    const accessOptions = await createAccessOptions(db, user, entity, false)
+    const accessOptions = await createAccessOptions(db, await getUser(), entity, false)
 
-    if (!canWriteCollection || !canAccess(w, accessOptions))
+    if (!( await canWriteCollection() ) || !canAccess(w, accessOptions))
       throw createEperm(operation)
   }
 
@@ -81,13 +95,13 @@ export const createSecureCollection = async <
     return entity
   }
 
-  const decorateItem = <Entity>( entity: Entity ) => {
-    entity[ '_user' ] = userRef
-    entity[ '_group' ] = groupRef
+  const decorateItem = async <Entity>(entity: Entity) => {
+    entity['_owner'] = userRef
+    entity['_group'] = await getGroupRef()
   }
 
   const ids: DbIds = async () => {
-    if (!canReadCollection)
+    if (!(await canReadCollection()))
       throw createEperm('ids')
 
     const ids = await collection.ids()
@@ -96,7 +110,7 @@ export const createSecureCollection = async <
 
     for (const id of ids) {
       const entity = await collection.load(id)
-      const accessOptions = await createAccessOptions(db, user, entity, false)
+      const accessOptions = await createAccessOptions(db, await getUser(), entity, false)
 
       if (canAccess(r, accessOptions)) filteredIds.push(id)
     }
@@ -104,28 +118,47 @@ export const createSecureCollection = async <
     return filteredIds
   }
 
-  const create: DbCreate<Entity> = async entity => {
-    if (!canWriteCollection)
-      throw createEperm('create')
+  const decorateUser = async <TEntity>(user: TEntity) => {
+    user = await hashPassword(user)
 
-    if( key === 'user' ){
-      entity = await hashPassword( entity )      
+    const userEntity = user as unknown as SecureUser
+
+    if (!userEntity.isRoot) {
+      const group = await db.collections.group.findOne({ name: 'users' })
+
+      // hasn't been created yet
+      if (group === undefined) throw Error('Expected users group')
+
+      user['_group']['_id'] = group._id
     }
 
-    decorateItem( entity )
+    return user
+  }
+
+  const create: DbCreate<Entity> = async entity => {
+    if (!( await canWriteCollection() ))
+      throw createEperm('create')
+
+    await decorateItem(entity)
+
+    if (key === 'user') {
+      entity = await decorateUser(entity)
+    }
 
     return collection.create(entity)
   }
 
   const createMany: DbCreateMany<Entity> = async entities => {
-    if (!canWriteCollection)
+    if (!( await canWriteCollection() ))
       throw createEperm('createMany')
 
-    if( key === 'user' ){
-      entities = await Promise.all( entities.map( hashPassword ) )
+    for (const entity of entities) {
+      await decorateItem(entity)
     }
 
-    entities.forEach( decorateItem )
+    if (key === 'user') {
+      entities = await Promise.all(entities.map(decorateUser))
+    }
 
     return collection.createMany(entities)
   }
@@ -147,8 +180,8 @@ export const createSecureCollection = async <
   }
 
 
-  const filterDocument = (document: Partial<Entity> & DbItem) => {
-    if (!user.isRoot) {
+  const filterDocument = async (document: Partial<Entity> & DbItem) => {
+    if (!(await getUser()).isRoot) {
       const originalDocument = document
 
       document = {} as Partial<Entity> & D
@@ -168,34 +201,34 @@ export const createSecureCollection = async <
   const save: DbSave<Entity> = async document => {
     await assertSave(document)
 
-    if( key === 'user' ){
-      document = await hashPassword( document )
+    if (key === 'user') {
+      document = await hashPassword(document)
     }
 
-    return collection.save(filterDocument(document))
+    return collection.save(await filterDocument(document))
   }
 
   const saveMany: DbSaveMany<Entity> = async documents => {
     await Promise.all(documents.map(assertSave))
 
-    documents = documents.map(filterDocument)
+    documents = await Promise.all(documents.map(filterDocument))
 
-    if( key === 'user' ){
-      documents = await Promise.all( documents.map( hashPassword ) )
+    if (key === 'user') {
+      documents = await Promise.all(documents.map(hashPassword))
     }
 
     return collection.saveMany(documents)
   }
 
   const find: DbFind<Entity, D> = async query => {
-    if (!canReadCollection) throw createEperm('find')
+    if (!(await canReadCollection())) throw createEperm('find')
 
     const result = await collection.find(query)
 
     const filteredResult: typeof result = []
 
     for (const entity of result) {
-      const accessOptions = await createAccessOptions(db, user, entity, false)
+      const accessOptions = await createAccessOptions(db, await getUser(), entity, false)
 
       if (canAccess(r, accessOptions)) {
         filteredResult.push(cleanPassword(entity))
@@ -206,13 +239,13 @@ export const createSecureCollection = async <
   }
 
   const findOne: DbFindOne<Entity, D> = async query => {
-    if (!canReadCollection) throw createEperm('find')
+    if (!(await canReadCollection())) throw createEperm('find')
 
     const entity = await collection.findOne(query)
 
     if (entity === undefined) return
 
-    const accessOptions = await createAccessOptions(db, user, entity, false)
+    const accessOptions = await createAccessOptions(db, await getUser(), entity, false)
 
     if (!canAccess(r, accessOptions)) return
 
@@ -221,17 +254,43 @@ export const createSecureCollection = async <
 
   const loadPaged = defaultLoadPaged(ids, loadMany)
 
+  const onRemoveUser = async (userId: string) => {
+    const allGroups = await db.collections.group.find({})
+
+    for (const group of allGroups) {
+      const withoutUser = group.users.filter(r => r._id !== userId)
+
+      if (withoutUser.length !== group.users.length) {
+        group.users = withoutUser
+
+        await db.collections.group.save(group)
+      }
+    }
+  }
+
   const remove: DbRemove = async id => {
     const entity = await collection.load(id)
 
     await assertWriteEntity(entity, 'remove')
+
+    if (key === 'user') {
+      await onRemoveUser(entity._id)
+    }
+
 
     return collection.remove(id)
   }
 
   const removeMany: DbRemoveMany = async ids => {
     const entities = await collection.loadMany(ids)
-    const mapper = (entity: DbItem) => assertWriteEntity(entity, 'save')
+
+    const mapper = (entity: DbItem) => async () => {
+      await assertWriteEntity(entity, 'removeMany')
+
+      if (key === 'user') {
+        await onRemoveUser(entity._id)
+      }
+    }
 
     await Promise.all(entities.map(mapper))
 

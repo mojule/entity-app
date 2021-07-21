@@ -10,7 +10,7 @@ export const createAccessFns = <
   EntityMap extends SecureEntityMap,
   D extends SecureDbItem = SecureDbItem
 >(
-  collections: DbCollections<EntityMap, D>,
+  insecureCollections: DbCollections<EntityMap, D>,
   isUserInGroup: IsUserInGroup,
   user: SecureUser
 ) => {
@@ -22,7 +22,7 @@ export const createAccessFns = <
     action: EntityAction,
     collection: keyof EntityMap & string, _id?: string
   ) => {
-    const collectionData = await collections.collectionData.findOne(
+    const collectionData = await insecureCollections.collectionData.findOne(
       { name: collection }
     )
 
@@ -32,10 +32,10 @@ export const createAccessFns = <
     if (_id === undefined) {
       await action( collectionData )
 
-      return collections.collectionData.save(collectionData)
+      return insecureCollections.collectionData.save(collectionData)
     }
 
-    const dbCollection = collections[collection]
+    const dbCollection = insecureCollections[collection]
 
     const entity = await dbCollection.load(_id)
 
@@ -68,6 +68,7 @@ export const createAccessFns = <
     accessChange( 
       async entity => {
         assertRootOrOwner( entity, 'chmod' )
+
         entity._mode = mode
       }, 
       collection, _id 
@@ -78,7 +79,7 @@ export const createAccessFns = <
       async entity => {
         assertRootOrOwner( entity, 'chmod' )
 
-        const newOwner = await collections.user.findOne({ name: userName })
+        const newOwner = await insecureCollections.user.findOne({ name: userName })
 
         if( newOwner === undefined )
           throw Error( `Expected user named ${ userName }`)
@@ -93,7 +94,7 @@ export const createAccessFns = <
       async entity => {
         assertGrp( entity, groupName )
 
-        const newGroup = await collections.group.findOne({ name: groupName })
+        const newGroup = await insecureCollections.group.findOne({ name: groupName })
 
         if( newGroup === undefined )
           throw Error( `Expected group named ${ groupName }`)
