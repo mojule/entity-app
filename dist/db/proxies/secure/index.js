@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.secureDbFactory = void 0;
+exports.InternalCollections = exports.secureDbFactory = void 0;
 const create_collection_1 = require("../unique/create-collection");
 const access_1 = require("./access");
 const create_collection_2 = require("./create-collection");
@@ -67,11 +67,13 @@ const secureDbFactory = async (db, rootUser) => {
         const groupFns = group_1.createGroupFns(internalCollections, dbUser);
         const accessFns = access_1.createAccessFns(db.collections, groupFns.isUserInGroup, dbUser);
         const secureDb = Object.assign(Object.assign(Object.assign({ drop, close, collections }, accessFns), userFns), groupFns);
+        secureDb[exports.InternalCollections] = internalCollections;
         return Object.assign({}, db, secureDb);
     };
     return login;
 };
 exports.secureDbFactory = secureDbFactory;
+exports.InternalCollections = Symbol('Internal Collections');
 const initGroups = async (db, userRef) => {
     const createGroup = async (name, users) => {
         const group = { name, users };

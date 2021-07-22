@@ -79,7 +79,7 @@ describe('metadata db', () => {
                 { name: 'other', value: 69 }
             ]);
             const saveIds = _ids.map(_id => ({ _id }));
-            assert.rejects(db.collections.publicThing.saveMany(saveIds));
+            await assert.rejects(db.collections.publicThing.saveMany(saveIds));
         });
     });
     describe('access', () => {

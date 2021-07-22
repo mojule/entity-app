@@ -205,7 +205,7 @@ describe('ref', () => {
 
     await db.collections.foo.save( Object.assign( foo0, { _id: foo0Id } ) )
 
-    assert.rejects(
+    await assert.rejects(
       async () => await resolveRefsDeep<RefDbModelMap,RefDbEntityMap,'foo'>( db, foo0 ),
       { message: 'Exceeded depth limit'}
     )

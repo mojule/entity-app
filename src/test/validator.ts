@@ -7,11 +7,11 @@ describe('db validator', () => {
     it('create', async () => {
       const { validatedDb } = await createValidatedDb()
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () => await validatedDb.collections.a.create({ name: '' })
       )
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.create({} as any)
       )
     })
@@ -21,14 +21,14 @@ describe('db validator', () => {
         { onCreate: true, onLoad: false, onSave: false }
       )
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () =>
           await validatedDb.collections.a.createMany(
             [{ name: 'a' }, { name: 'b' }]
           )
       )
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.createMany(
           [{ name: 'a' }, {}] as any
         )
@@ -44,11 +44,11 @@ describe('db validator', () => {
 
       const _id = await validatedDb.collections.a.create({ name: 'a' })
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () => await validatedDb.collections.a.save({ _id, name: 'b' })
       )
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.save({ _id, name: 42 } as any)
       )
     })
@@ -65,16 +65,14 @@ describe('db validator', () => {
       const saveOk = _ids.map(_id => ({ _id, name: _id }))
       const saveFail = _ids.map(_id => ({ _id, name: 42 }))
 
-      assert.doesNotReject(
-        async () => await validatedDb.collections.a.saveMany(
-          saveOk
-        )
+      await assert.doesNotReject(
+        async () => await validatedDb.collections.a.saveMany( saveOk )
       )
 
-      assert.rejects(
-        async () => await validatedDb.collections.a.createMany(
-          saveFail as any
-        )
+      await assert.rejects(
+        async () => {
+          await validatedDb.collections.a.saveMany( saveFail as any )
+        }
       )
     })
   })
@@ -88,11 +86,11 @@ describe('db validator', () => {
       const _id = await validatedDb.collections.a.create({ name: 'a' })
       const _failId = await validatedDb.collections.a.create({ name: 42 } as any)
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () => await validatedDb.collections.a.load(_id)
       )
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.load(_failId)
       )
     })
@@ -105,11 +103,11 @@ describe('db validator', () => {
       const _ids = await validatedDb.collections.a.createMany([{ name: 'a' }, { name: 'b' }])
       const _failIds = await validatedDb.collections.a.createMany([{ name: 'a' }, { name: 42 }] as any)
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () => await validatedDb.collections.a.loadMany(_ids)
       )
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.loadMany(_failIds)
       )
     })
@@ -121,7 +119,7 @@ describe('db validator', () => {
 
       await validatedDb.collections.a.createMany([{ name: 'a' }, { name: 'b' }])
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () => await validatedDb.collections.a.find({})
       )
     })
@@ -133,7 +131,7 @@ describe('db validator', () => {
 
       await validatedDb.collections.a.createMany([{ name: 'a' }, { name: 42 }] as any)
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.find({})
       )
     })
@@ -145,15 +143,17 @@ describe('db validator', () => {
 
       await validatedDb.collections.a.createMany([{ name: 'a' }, { name: 'b' }])
 
-      assert.doesNotReject(
+      await assert.doesNotReject(
         async () => {
           const result = await validatedDb.collections.a.findOne({ name: 'a' })
 
           if (result === undefined) throw Error('Expected a')
 
-          const expectUndef = validatedDb.collections.a.findOne({ name: 'c' })
-
-          if( expectUndef !== undefined ) throw Error( 'Expected undefined' )
+          const expectUndef = await validatedDb.collections.a.findOne({ name: 'c' })
+          
+          if( expectUndef !== undefined ){
+            throw Error( 'Expected undefined, got ' + JSON.stringify( expectUndef ) )
+          }
         }
       )
     })
@@ -165,10 +165,9 @@ describe('db validator', () => {
 
       await validatedDb.collections.a.createMany([{ name: 'a' }, { name: 42 }] as any)
 
-      assert.rejects(
+      await assert.rejects(
         async () => await validatedDb.collections.a.findOne({ name: 42 })
       )
     })
-
   })
 })

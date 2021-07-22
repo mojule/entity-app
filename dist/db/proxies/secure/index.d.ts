@@ -37,3 +37,4 @@ export declare const secureDbFactory: <EntityMap extends SecureEntityMap, D exte
         _collection: "group";
     };
 }>(db: EntityDb<EntityMap, D>, rootUser: LoginUser) => Promise<(user: LoginUser) => Promise<EntityDb<EntityMap, D> & import("./types").SecureDbExternal<EntityMap, D> & import("./types").UserFns & import("./types").GroupFns & import("./types").AccessFns<EntityMap>>>;
+export declare const InternalCollections: unique symbol;

@@ -115,14 +115,18 @@ export const secureDbFactory = async <
 
     const secureDb: SecureDb<EntityMap, D> = {
       drop, close, collections,
-      ...accessFns, ...userFns, ...groupFns
+      ...accessFns, ...userFns, ...groupFns      
     }
+
+    secureDb[ InternalCollections ] = internalCollections
 
     return Object.assign({}, db, secureDb)
   }
 
   return login
 }
+
+export const InternalCollections = Symbol( 'Internal Collections') 
 
 const initGroups = async<
   EntityMap extends SecureEntityMap,

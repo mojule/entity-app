@@ -136,7 +136,7 @@ describe('ref', () => {
         // make a circular ref
         foo0.qux = { _collection: 'qux', _id: qux0Id };
         await db.collections.foo.save(Object.assign(foo0, { _id: foo0Id }));
-        assert.rejects(async () => await ref_1.resolveRefsDeep(db, foo0), { message: 'Exceeded depth limit' });
+        await assert.rejects(async () => await ref_1.resolveRefsDeep(db, foo0), { message: 'Exceeded depth limit' });
     });
 });
 //# sourceMappingURL=ref.js.map

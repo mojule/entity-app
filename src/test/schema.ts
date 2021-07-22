@@ -131,9 +131,9 @@ describe('schema', () => {
 
       db.collections = {} as any
 
-      assert.rejects(
+      await assert.rejects(
         () => schemaResolver(db, 'foo', testSchemaDbMap),
-        `Expected bar in db.collections`
+        { message: `Expected bar in db.collections` }
       )
     })
   })

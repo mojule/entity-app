@@ -67,10 +67,8 @@ const createSecureCollection = async (db, key, user) => {
         user = await user_1.hashPassword(user);
         const userEntity = user;
         if (!userEntity.isRoot) {
-            const group = await db.collections.group.findOne({ name: 'users' });
-            // hasn't been created yet
-            if (group === undefined)
-                throw Error('Expected users group');
+            // we can bang assert as created by init
+            const group = (await db.collections.group.findOne({ name: 'users' }));
             user['_group']['_id'] = group._id;
         }
         return user;
@@ -178,13 +176,13 @@ const createSecureCollection = async (db, key, user) => {
     };
     const removeMany = async (ids) => {
         const entities = await collection.loadMany(ids);
-        const mapper = (entity) => async () => {
+        for (const entity of entities) {
             await assertWriteEntity(entity, 'removeMany');
             if (key === 'user') {
                 await onRemoveUser(entity._id);
             }
-        };
-        await Promise.all(entities.map(mapper));
+        }
+        ids = entities.map(e => e._id);
         return collection.removeMany(ids);
     };
     const secureCollection = {

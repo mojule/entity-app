@@ -57,9 +57,9 @@ describe('memoryDb', () => {
 
     const patchUser: any = testMemUser
 
-    assert.rejects(
+    await assert.rejects(
       () => db.collections.user.save(patchUser),
-      'Expected document to have _id:string'
+      { message: 'Expected document to have _id:string' }
     )
   })
 
@@ -68,9 +68,9 @@ describe('memoryDb', () => {
 
     await db.collections.user.remove(_id)
 
-    assert.rejects(
+    await assert.rejects(
       () => db.collections.user.load(_id),
-      `Expected entity for ${_id}`
+      { message: `Expected entity for ${_id}` }
     )
   })
 
@@ -78,9 +78,9 @@ describe('memoryDb', () => {
     const db = await createMemDb()
     const _id = 'xxx'
 
-    assert.rejects(
+    await assert.rejects(
       () => db.collections.user.remove(_id),
-      `Expected entity for ${_id}`
+      { message: `Expected entity for ${_id}` }
     )
   })
 

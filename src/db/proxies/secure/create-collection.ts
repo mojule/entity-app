@@ -124,10 +124,8 @@ export const createSecureCollection = async <
     const userEntity = user as unknown as SecureUser
 
     if (!userEntity.isRoot) {
-      const group = await db.collections.group.findOne({ name: 'users' })
-
-      // hasn't been created yet
-      if (group === undefined) throw Error('Expected users group')
+      // we can bang assert as created by init
+      const group = (await db.collections.group.findOne({ name: 'users' }))!
 
       user['_group']['_id'] = group._id
     }
@@ -284,7 +282,7 @@ export const createSecureCollection = async <
   const removeMany: DbRemoveMany = async ids => {
     const entities = await collection.loadMany(ids)
 
-    const mapper = (entity: DbItem) => async () => {
+    for( const entity of entities ){
       await assertWriteEntity(entity, 'removeMany')
 
       if (key === 'user') {
@@ -292,7 +290,7 @@ export const createSecureCollection = async <
       }
     }
 
-    await Promise.all(entities.map(mapper))
+    ids = entities.map( e => e._id )
 
     return collection.removeMany(ids)
   }

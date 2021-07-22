@@ -1,13 +1,13 @@
-import { SecureEntityMap, SecureUser } from '../../db/proxies/secure/types';
+import { LoginUser, SecureEntityMap, SecureUser } from '../../db/proxies/secure/types';
 import { EntityKeys } from '../../entity/types';
 import { PublicThing } from './common';
-export declare type EntityMap = SecureEntityMap & {
+export declare type PublicThingEntityMap = SecureEntityMap & {
     publicThing: PublicThing;
 };
-export declare const entityKeys: EntityKeys<EntityMap>;
+export declare const entityKeys: EntityKeys<PublicThingEntityMap>;
 export declare const getRootUser: () => SecureUser;
 export declare const createSecureMemDbLogin: () => Promise<{
-    login: (user: import("../../db/proxies/secure/types").LoginUser) => Promise<import("../..").EntityDb<EntityMap, {
+    login: (user: LoginUser) => Promise<import("../..").EntityDb<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;
         _atime: number;
@@ -25,7 +25,7 @@ export declare const createSecureMemDbLogin: () => Promise<{
             _id: string;
             _collection: "group";
         };
-    }> & import("../../db/proxies/secure/types").SecureDbExternal<EntityMap, {
+    }> & import("../../db/proxies/secure/types").SecureDbExternal<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;
         _atime: number;
@@ -43,8 +43,8 @@ export declare const createSecureMemDbLogin: () => Promise<{
             _id: string;
             _collection: "group";
         };
-    }> & import("../../db/proxies/secure/types").UserFns & import("../../db/proxies/secure/types").GroupFns & import("../../db/proxies/secure/types").AccessFns<EntityMap>>;
-    memDb: import("../..").EntityDb<EntityMap, {
+    }> & import("../../db/proxies/secure/types").UserFns & import("../../db/proxies/secure/types").GroupFns & import("../../db/proxies/secure/types").AccessFns<PublicThingEntityMap>>;
+    memDb: import("../..").EntityDb<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;
         _atime: number;
@@ -64,3 +64,4 @@ export declare const createSecureMemDbLogin: () => Promise<{
         };
     }>;
 }>;
+export declare const getLoginBob: () => LoginUser;

@@ -129,7 +129,7 @@ describe('metadata db', () => {
 
       const saveIds = _ids.map(_id => ({ _id }))
 
-      assert.rejects(
+      await assert.rejects(
         db.collections.publicThing.saveMany( saveIds )
       )
     })

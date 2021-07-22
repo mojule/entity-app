@@ -38,17 +38,17 @@ describe('memoryDb', () => {
     it('does not save entity with no _id', async () => {
         const db = await memory_db_1.createMemDb();
         const patchUser = memory_db_1.testMemUser;
-        assert.rejects(() => db.collections.user.save(patchUser), 'Expected document to have _id:string');
+        await assert.rejects(() => db.collections.user.save(patchUser), { message: 'Expected document to have _id:string' });
     });
     it('removes an entity', async () => {
         const { db, _id } = await memory_db_1.createMemDbWithUser();
         await db.collections.user.remove(_id);
-        assert.rejects(() => db.collections.user.load(_id), `Expected entity for ${_id}`);
+        await assert.rejects(() => db.collections.user.load(_id), { message: `Expected entity for ${_id}` });
     });
     it('rejects remove with bad _id', async () => {
         const db = await memory_db_1.createMemDb();
         const _id = 'xxx';
-        assert.rejects(() => db.collections.user.remove(_id), `Expected entity for ${_id}`);
+        await assert.rejects(() => db.collections.user.remove(_id), { message: `Expected entity for ${_id}` });
     });
     it('gets ids', async () => {
         const { db, _id } = await memory_db_1.createMemDbWithUser();

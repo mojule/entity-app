@@ -96,7 +96,7 @@ describe('schema', () => {
             await db.collections.bar.create(bar0);
             await db.collections.bar.create(bar1);
             db.collections = {};
-            assert.rejects(() => __1.schemaResolver(db, 'foo', schema_1.testSchemaDbMap), `Expected bar in db.collections`);
+            await assert.rejects(() => __1.schemaResolver(db, 'foo', schema_1.testSchemaDbMap), { message: `Expected bar in db.collections` });
         });
     });
     describe('refFactory', () => {

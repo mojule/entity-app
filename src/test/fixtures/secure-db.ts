@@ -3,17 +3,18 @@ import { secureDbFactory } from '../../db/proxies/secure'
 import { createSecureDbItem } from '../../db/proxies/secure/secure-db-item'
 
 import { 
+  LoginUser,
   SecureEntityMap, SecureUser 
 } from '../../db/proxies/secure/types'
 
 import { EntityKeys } from '../../entity/types'
 import { PublicThing } from './common'
 
-export type EntityMap = SecureEntityMap & {
+export type PublicThingEntityMap = SecureEntityMap & {
   publicThing: PublicThing
 }
 
-export const entityKeys: EntityKeys<EntityMap> = { 
+export const entityKeys: EntityKeys<PublicThingEntityMap> = { 
   publicThing: 'publicThing',
   user: 'user',
   group: 'group',
@@ -36,3 +37,6 @@ export const createSecureMemDbLogin = async () => {
 
   return { login, memDb }
 }
+
+export const getLoginBob = (): LoginUser => 
+  ({ name: 'Bob', password: 'Boogers' })

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSecureMemDbLogin = exports.getRootUser = exports.entityKeys = void 0;
+exports.getLoginBob = exports.createSecureMemDbLogin = exports.getRootUser = exports.entityKeys = void 0;
 const __1 = require("../..");
 const secure_1 = require("../../db/proxies/secure");
 const secure_db_item_1 = require("../../db/proxies/secure/secure-db-item");
@@ -21,4 +21,6 @@ const createSecureMemDbLogin = async () => {
     return { login, memDb };
 };
 exports.createSecureMemDbLogin = createSecureMemDbLogin;
+const getLoginBob = () => ({ name: 'Bob', password: 'Boogers' });
+exports.getLoginBob = getLoginBob;
 //# sourceMappingURL=secure-db.js.map
