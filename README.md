@@ -54,10 +54,10 @@ export const fooBarEntityKeys: EntityKeys<FooBarEntityMap> = {
 
 #### data stores
 
-- memory
-- fs
-- mongodb
-- level
+- memory 
+- fs  `@mojule/entity-app-server`
+- mongodb  `@mojule/entity-app-mongo-db`
+- level `@mojule/entity-app-level-db`
 
 ```ts
 import { 
