@@ -8,33 +8,85 @@ A system for creating, editing, displaying and generally managing "Entities"
 
 An Entity is essentially a model description
 
-The entities in this system have to be generated twice, once as JSON Schema and
-once as TypeScript types
+It is most useful when the entities in this system exist twice, once as JSON 
+Schema and once as TypeScript types
 
 You can avoid a considerable amount of duplication by using:
 
 https://www.npmjs.com/package/json-schema-to-ts
 
-It has the added advantage of deriving the types directly from JSON Schema, so
-an additional build step is not required
+# define entities
 
-Once you have your entities, the sytem is able to automatically derive:
+```ts
+export type Foo = {
+  name: string
+  value: number
+}
 
-A CRUD REST API backed by:
+export type Bar = Foo & {
+  foo?: DbRefFor<FooBarEntityMap,'foo'>
+}
 
-A strongly typed data store, backed by eg mongodb, memory, file system, level
-etc
+export type FooBarEntityMap = {
+  foo: Foo
+  bar: Bar
+}
 
-A network data store with the same interface as the persistence store, so that 
-a web client can access the CRUD REST API using the same interface as the 
-server side storage, allowing code for eg resolving references to run on both
-the server and client
+export const fooBarEntityKeys: EntityKeys<FooBarEntityMap> = {
+  foo: 'foo',
+  bar: 'bar'
+}
+```
 
-It automatically generates an admin application, for editing entities on the
-client browser
+# data stores
 
-It has a view/templating engine that integrates with the entity system to 
-populate templates
+- memory
+- fs
+- mongodb
+- level
+
+```ts
+const db = await createMemoryDb( 'my db', fooBarEntityKeys, createDefaultDbItem )
+
+const { foo, bar } = db.collections
+
+const fooId = await foo.create({ name: 'a', value: 0 })
+
+const dbFoo = await foo.load( fooId )
+
+const barId = await bar.create({ 
+  name: 'b', value: 1, 
+  foo: {
+    _collection: 'foo',
+    _id: fooId
+  }
+})
+
+await bar.remove( barId )
+```
+
+# data store proxies
+
+- metadata
+- secure
+- unique
+- validator
+
+# rest apis
+
+url paths for route tree generated from and backed by data store + proxies
+
+- for express `@mojule/entity-app-server`
+- for SPA, via `@mojule/spa-app`, `@mojule/entity-app-client`
+
+# client side admin
+
+`@mojule/entity-app-client`
+
+# view / templating
+
+`@mojule/dom`
+`@mojule/dom-components`
 
 ## License
 
