@@ -334,8 +334,7 @@ start().catch( console.error )
 
 ```ts
 import { FromSchema } from 'json-schema-to-ts'
-import { EntityKeys } from '..'
-import { refFactory } from '../schema/ref'
+import { EntityKeys, refFactory } from '@mojule/entity-app'
 
 export const fooSchema = {
   $id: '#/foo',
