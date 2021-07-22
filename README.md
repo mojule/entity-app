@@ -15,7 +15,7 @@ You can avoid a considerable amount of duplication by using:
 
 https://www.npmjs.com/package/json-schema-to-ts
 
-# define entities
+### define entities
 
 ```ts
 export type Foo = {
@@ -38,7 +38,7 @@ export const fooBarEntityKeys: EntityKeys<FooBarEntityMap> = {
 }
 ```
 
-# data stores
+#### data stores
 
 - memory
 - fs
@@ -65,25 +65,25 @@ const barId = await bar.create({
 await bar.remove( barId )
 ```
 
-# data store proxies
+### data store proxies
 
 - metadata
 - secure
 - unique
 - validator
 
-# rest apis
+### rest apis
 
 url paths for route tree generated from and backed by data store + proxies
 
 - for express `@mojule/entity-app-server`
 - for SPA, via `@mojule/spa-app`, `@mojule/entity-app-client`
 
-# client side admin
+### client side admin
 
 `@mojule/entity-app-client`
 
-# view / templating
+### view / templating
 
 `@mojule/dom`
 `@mojule/dom-components`
