@@ -1,6 +1,7 @@
 import { createMemoryDb, resolveRefsShallow } from '..'
 import { createMetadataDbItem, metadataDbFactory } from '../db/proxies/metadata'
 import { fooBarEntityKeys, FooBarEntityMap, FooBarModelMap } from './types'
+import { populateDb } from './util'
 
 type Mod = FooBarModelMap
 type Ent = FooBarEntityMap
@@ -12,19 +13,13 @@ const start = async () => {
 
   const db = metadataDbFactory( memDb )
 
-  const { foo, bar } = db.collections
-  
-  const fooId = await foo.create({ name: 'a', value: 0 })
-   
-  const barId = await bar.create({ 
-    name: 'b', value: 1, 
-    foo: {
-      _collection: 'foo',
-      _id: fooId
-    }
-  })
+  await populateDb( db )
 
-  const dbBar = await bar.load( barId )
+  const { bar } = db.collections
+
+  const dbBar = await bar.findOne({})
+
+  if( dbBar === undefined ) throw Error( 'expected dbBar' )
 
   console.log( JSON.stringify( dbBar, null, 2 ) )
 

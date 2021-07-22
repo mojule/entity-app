@@ -25,7 +25,7 @@ export type SecureEntityMap = {
 
 export type SecureEntityKey = keyof SecureEntityMap
 
-export const secureDbKeys: EntityKeys<SecureEntityMap> = {
+export const secureEntityKeys: EntityKeys<SecureEntityMap> = {
   user: 'user',
   group: 'group',
   collectionData: 'collectionData'

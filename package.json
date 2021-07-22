@@ -9,7 +9,11 @@
     "mocha": "node ./node_modules/mocha/bin/mocha dist/test",
     "test": "npm run build && npm run mocha",
     "nyc": "node ./node_modules/nyc/bin/nyc --reporter=lcov --reporter=html --reporter=text npm run mocha",
-    "coverage": "npm run build && npm run nyc"
+    "coverage": "npm run build && npm run nyc",
+    "memory-example": "npm run build && node ./dist/example/memory-store",
+    "metadata-example": "npm run build && node ./dist/example/metadata-store",
+    "secure-example": "npm run build && node ./dist/example/secure-store",
+    "secure-example-nobuild": "node ./dist/example/secure-store"
   },
   "repository": {
     "type": "git",

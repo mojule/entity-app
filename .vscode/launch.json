@@ -16,6 +16,74 @@
         "${workspaceFolder}/dist/test"
       ],
       "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Memory Store Example",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "memory-example"
+      ],
+      "env": {
+        "LOG_LEVEL": "info"
+      },
+      "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Metadata Store Example",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "metadata-example"
+      ],
+      "env": {
+        "LOG_LEVEL": "info"
+      },
+      "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Secure Store Example",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "secure-example"
+      ],
+      "env": {
+        "LOG_LEVEL": "info"
+      },
+      "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Secure Store Example, No Build",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "secure-example-nobuild"
+      ],
+      "env": {
+        "LOG_LEVEL": "info"
+      },
+      "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
     }
   ]
 }

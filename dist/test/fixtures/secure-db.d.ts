@@ -29,7 +29,7 @@ export declare const createSecureMemDbLogin: () => Promise<{
             _id: string;
             _collection: "group";
         };
-    }> & import("../../db/proxies/secure/types").SecureDbExternal<PublicThingEntityMap, {
+    }> & import("../..").SecureDbExternal<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;
         _atime: number;
@@ -47,7 +47,7 @@ export declare const createSecureMemDbLogin: () => Promise<{
             _id: string;
             _collection: "group";
         };
-    }> & import("../../db/proxies/secure/types").UserFns & import("../../db/proxies/secure/types").GroupFns & import("../../db/proxies/secure/types").AccessFns<PublicThingEntityMap>>;
+    }> & import("../..").UserFns & import("../..").GroupFns & import("../..").AccessFns<PublicThingEntityMap>>;
     memDb: import("../..").EntityDb<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;
