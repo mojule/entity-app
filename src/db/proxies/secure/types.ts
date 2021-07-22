@@ -3,6 +3,7 @@ import { EntityKeys } from '../../../entity/types'
 import { DbCollections, EntityDb } from '../../types'
 
 import {
+  loginUserSchema,
   secureCollectionSchema,
   secureDbItemSchema, secureGroupSchema, secureUserSchema
 } from './schema'
@@ -30,10 +31,7 @@ export const secureDbKeys: EntityKeys<SecureEntityMap> = {
   collectionData: 'collectionData'
 }
 
-export type LoginUser = {
-  name: string
-  password: string
-}
+export type LoginUser = FromSchema<typeof loginUserSchema>
 
 export type SecureEntityMapExternal<EntityMap extends SecureEntityMap> =
   Omit<EntityMap, SecureEntityKey>

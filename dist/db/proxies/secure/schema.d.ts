@@ -30,9 +30,9 @@ export declare const secureDbItemSchema: {
     };
     readonly required: readonly ["_id", "_mode", "_owner", "_group", "_atime", "_ctime", "_mtime", "_ver"];
 };
-export declare const secureUserSchema: {
-    readonly id: "#/secure-user";
-    readonly title: "Secure User";
+export declare const loginUserSchema: {
+    readonly id: "#/login-user";
+    readonly title: "Login User";
     readonly type: "object";
     readonly properties: {
         readonly name: {
@@ -42,9 +42,24 @@ export declare const secureUserSchema: {
             readonly type: "string";
             readonly format: "password";
         };
+    };
+    readonly required: readonly ["name", "password"];
+};
+export declare const secureUserSchema: {
+    readonly id: "#/secure-user";
+    readonly title: "Secure User";
+    readonly type: "object";
+    readonly properties: {
         readonly isRoot: {
             readonly type: "boolean";
             readonly default: false;
+        };
+        readonly name: {
+            readonly type: "string";
+        };
+        readonly password: {
+            readonly type: "string";
+            readonly format: "password";
         };
     };
     readonly required: readonly ["name", "password"];

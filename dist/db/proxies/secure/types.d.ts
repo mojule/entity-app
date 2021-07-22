@@ -1,7 +1,7 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { EntityKeys } from '../../../entity/types';
 import { DbCollections, EntityDb } from '../../types';
-import { secureCollectionSchema, secureDbItemSchema, secureGroupSchema, secureUserSchema } from './schema';
+import { loginUserSchema, secureCollectionSchema, secureDbItemSchema, secureGroupSchema, secureUserSchema } from './schema';
 export declare type SecureDbItem = FromSchema<typeof secureDbItemSchema>;
 export declare type SecureUser = FromSchema<typeof secureUserSchema>;
 export declare type SecureGroup = FromSchema<typeof secureGroupSchema>;
@@ -14,10 +14,7 @@ export declare type SecureEntityMap = {
 };
 export declare type SecureEntityKey = keyof SecureEntityMap;
 export declare const secureDbKeys: EntityKeys<SecureEntityMap>;
-export declare type LoginUser = {
-    name: string;
-    password: string;
-};
+export declare type LoginUser = FromSchema<typeof loginUserSchema>;
 export declare type SecureEntityMapExternal<EntityMap extends SecureEntityMap> = Omit<EntityMap, SecureEntityKey>;
 export declare type SecureDbExternal<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = EntityDb<SecureEntityMapExternal<EntityMap>, D>;
 export declare type SecureDbCollections<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = DbCollections<SecureEntityMapExternal<EntityMap>, D>;

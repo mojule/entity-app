@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.secureCollectionSchema = exports.secureGroupSchema = exports.secureUserSchema = exports.secureDbItemSchema = void 0;
+exports.secureCollectionSchema = exports.secureGroupSchema = exports.secureUserSchema = exports.loginUserSchema = exports.secureDbItemSchema = void 0;
 const schema_1 = require("../metadata/schema");
 const refs_1 = require("./refs");
 exports.secureDbItemSchema = {
@@ -12,15 +12,21 @@ exports.secureDbItemSchema = {
         '_id', '_mode', '_owner', '_group', '_atime', '_ctime', '_mtime', '_ver'
     ]
 };
+exports.loginUserSchema = {
+    id: '#/login-user',
+    title: 'Login User',
+    type: 'object',
+    properties: {
+        name: { type: 'string' },
+        password: { type: 'string', format: 'password' }
+    },
+    required: ['name', 'password']
+};
 exports.secureUserSchema = {
     id: '#/secure-user',
     title: 'Secure User',
     type: 'object',
-    properties: {
-        name: { type: 'string' },
-        password: { type: 'string', format: 'password' },
-        isRoot: { type: 'boolean', default: false }
-    },
+    properties: Object.assign(Object.assign({}, exports.loginUserSchema.properties), { isRoot: { type: 'boolean', default: false } }),
     required: ['name', 'password']
 };
 exports.secureGroupSchema = {

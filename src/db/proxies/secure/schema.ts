@@ -16,13 +16,23 @@ export const secureDbItemSchema = {
   ]
 } as const
 
+export const loginUserSchema = {
+  id: '#/login-user',
+  title: 'Login User',
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    password: { type: 'string', format: 'password' }
+  },
+  required: [ 'name', 'password' ]
+} as const
+
 export const secureUserSchema = {
   id: '#/secure-user',
   title: 'Secure User',
   type: 'object',
   properties: {
-    name: { type: 'string' },
-    password: { type: 'string', format: 'password' },
+    ...loginUserSchema.properties,
     isRoot: { type: 'boolean', default: false }
   },
   required: [ 'name', 'password' ]

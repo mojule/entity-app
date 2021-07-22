@@ -18,16 +18,29 @@ https://www.npmjs.com/package/json-schema-to-ts
 ### define entities
 
 ```ts
-export type Foo = {
+import { DbRefFor, EntityKeys } from '@mojule/entity-app'
+
+export type DbFoo = {
   name: string
   value: number
 }
 
-export type Bar = Foo & {
+export type Foo = DbFoo
+
+export type DbBar = DbFoo & {
   foo?: DbRefFor<FooBarEntityMap,'foo'>
 }
 
+export type Bar = Foo & {
+  foo?: Foo
+}
+
 export type FooBarEntityMap = {
+  foo: DbFoo
+  bar: DbBar
+}
+
+export type FooBarModelMap = {
   foo: Foo
   bar: Bar
 }
@@ -36,6 +49,7 @@ export const fooBarEntityKeys: EntityKeys<FooBarEntityMap> = {
   foo: 'foo',
   bar: 'bar'
 }
+
 ```
 
 #### data stores
@@ -46,31 +60,87 @@ export const fooBarEntityKeys: EntityKeys<FooBarEntityMap> = {
 - level
 
 ```ts
-const db = await createMemoryDb( 'my db', fooBarEntityKeys, createDefaultDbItem )
+import { 
+  createDefaultDbItem, createMemoryDb, resolveRefsShallow 
+} from '@mojule/entity-app'
 
-const { foo, bar } = db.collections
+import { fooBarEntityKeys, FooBarEntityMap, FooBarModelMap } from './types'
 
-const fooId = await foo.create({ name: 'a', value: 0 })
+type Mod = FooBarModelMap
+type Ent = FooBarEntityMap
 
-const dbFoo = await foo.load( fooId )
+const start = async () => {
+  const db = await createMemoryDb( 
+    'my db', fooBarEntityKeys, createDefaultDbItem 
+  )
 
-const barId = await bar.create({ 
-  name: 'b', value: 1, 
-  foo: {
-    _collection: 'foo',
-    _id: fooId
-  }
-})
+  const { foo, bar } = db.collections
+  
+  const fooId = await foo.create({ name: 'a', value: 0 })
+   
+  const barId = await bar.create({ 
+    name: 'b', value: 1, 
+    foo: {
+      _collection: 'foo',
+      _id: fooId
+    }
+  })
 
-await bar.remove( barId )
+  await bar.save({ _id: barId, value: 2 })
+
+  const dbBar = await bar.load( barId )
+
+  console.log( JSON.stringify( dbBar, null, 2 ) )
+  /*
+        {
+          "_id": "7bfbcb66d0f75071ba655c0f",
+          "name": "b",
+          "value": 2,
+          "foo": {
+            "_collection": "foo",
+            "_id": "6dcdc64768366e5190521b3b"
+          }
+        }
+  */
+
+  await foo.save({ _id: fooId, value: 5 })
+
+  const barModel = await resolveRefsShallow<Mod,Ent,'bar'>( db, dbBar )
+
+  console.log( JSON.stringify( barModel, null, 2 ) )
+  /*
+        {
+          "_id": "7bfbcb66d0f75071ba655c0f",
+          "name": "b",
+          "value": 2,
+          "foo": {
+            "_id": "6dcdc64768366e5190521b3b",
+            "name": "a",
+            "value": 5
+          }
+        }  
+  */
+}
+
+start().catch( console.error )
+
 ```
 
 ### data store proxies
 
 - metadata
+  - filesystem like, atime, ctime, mtime etc, updated as db accessed
 - secure
+  - similar to linux file permissions, manage access to collections and 
+    entities via users and groups
 - unique
+  - ensure unique indexes on given fields
 - validator
+  - validate entities as they enter the store, or optionally on load
+
+```ts
+
+```
 
 ### rest apis
 
