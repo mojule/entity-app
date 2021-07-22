@@ -11,11 +11,7 @@ An Entity is essentially a model description
 The entities in this system have to be generated twice, once as JSON Schema and
 once as TypeScript types
 
-In its predecessor we automatically generated TS types from the schema, but it 
-wasn't able to handle some of our use cases
-
-However this new package appears to be able to do that, so keep that in mind if
-we have the time and resources to refactor it:
+You can avoid a considerable amount of duplication by using:
 
 https://www.npmjs.com/package/json-schema-to-ts
 
