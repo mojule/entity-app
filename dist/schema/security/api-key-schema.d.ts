@@ -1,4 +1,3 @@
-import { RoleMap } from '../../security/types';
 export declare const apiKeySchema: {
     readonly $id: "#/api-key";
     readonly title: "API Key";
@@ -32,4 +31,3 @@ export declare const apiKeySchema: {
     };
     readonly required: readonly ["name", "user", "secret"];
 };
-export declare const apiKeyRoles: RoleMap;

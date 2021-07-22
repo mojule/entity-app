@@ -1,24 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.metadataDbFactory = void 0;
-const each_entity_key_1 = require("../../../entity/each-entity-key");
+exports.createMetadataDbItem = exports.metadataDbFactory = void 0;
 const create_collection_1 = require("./create-collection");
-const initCollections = async (collections, keys) => {
+const util_1 = require("@mojule/util");
+const initCollections = (collections) => {
     const metadataCollections = {};
-    await each_entity_key_1.eachEntityKey(keys, async (key) => {
-        metadataCollections[key] = await create_collection_1.createMetadataCollection(collections[key], key);
+    const keys = Object.keys(collections);
+    keys.forEach(key => {
+        metadataCollections[key] = create_collection_1.createMetadataCollection(collections[key], key);
     });
     return metadataCollections;
 };
-const metadataDbFactory = (createDb) => {
-    const createMetadataDb = async (name, keys, options) => {
-        const db = await createDb(name, keys, options);
-        const { drop, close } = db;
-        const collections = await initCollections(db.collections, keys);
-        const metadataDb = { collections, drop, close };
-        return metadataDb;
-    };
-    return createMetadataDb;
+const metadataDbFactory = (db) => {
+    const collections = initCollections(db.collections);
+    const metadataDb = Object.assign({}, db, { collections });
+    return metadataDb;
 };
 exports.metadataDbFactory = metadataDbFactory;
+const createMetadataDbItem = () => {
+    const now = Date.now();
+    const _id = util_1.randId();
+    const _ver = 0;
+    const _atime = now;
+    const _ctime = now;
+    const _mtime = now;
+    const dbItem = { _id, _ver, _atime, _ctime, _mtime };
+    return dbItem;
+};
+exports.createMetadataDbItem = createMetadataDbItem;
 //# sourceMappingURL=index.js.map

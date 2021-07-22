@@ -25,17 +25,7 @@ const dbRefResolver = async (_key, schema, db) => {
             throw Error(`Expected ${entityKey} in db.collections`);
         const ids = await collection.ids();
         const entities = await collection.loadMany(ids);
-        const titles = entities.map(e => {
-            if ('name' in e)
-                return e['name'];
-            const keys = Object.keys(e);
-            for (let i = 0; i < keys.length; i++) {
-                const key = keys[i];
-                if (typeof e[key] === 'string')
-                    return e[key];
-            }
-            return e._id;
-        });
+        const titles = entities.map((e, i) => (typeof e['name'] === 'string' ? e['name'] : `${entityKey} ${i + 1}`));
         dbRefSchema.properties._id['enum'] = ids;
         dbRefSchema.properties._id['_enumTitles'] = titles;
     });

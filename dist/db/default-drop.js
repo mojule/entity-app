@@ -3,9 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultDrop = void 0;
 const defaultDrop = (db) => {
     const drop = async () => {
-        const collections = Object.values(db.collections);
-        for (let c = 0; c < collections.length; c++) {
-            const collection = collections[c];
+        for (const key in db.collections) {
+            const collection = db.collections[key];
             const ids = await collection.ids();
             await collection.removeMany(ids);
         }

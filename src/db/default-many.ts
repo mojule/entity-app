@@ -1,6 +1,7 @@
 import {
   DbLoad, DbLoadMany, DbCreate, DbCreateMany, DbSave, DbSaveMany, DbRemove,
-  DbRemoveMany
+  DbRemoveMany,
+  DbItem
 } from './types'
 
 export const defaultCreateMany = <TEntity>( create: DbCreate<TEntity> ) => {
@@ -10,8 +11,10 @@ export const defaultCreateMany = <TEntity>( create: DbCreate<TEntity> ) => {
   return createMany
 }
 
-export const defaultLoadMany = <TEntity>( load: DbLoad<TEntity> ) => {
-  const loadMany: DbLoadMany<TEntity> = async ids =>
+export const defaultLoadMany = <TEntity,D extends DbItem = DbItem>( 
+  load: DbLoad<TEntity, D> 
+) => {
+  const loadMany: DbLoadMany<TEntity,D> = async ids =>
     Promise.all( ids.map( load ) )
 
   return loadMany

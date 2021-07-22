@@ -2,10 +2,8 @@ import { EntityDb, DbCollection } from './types'
 
 export const defaultDrop = <TEntityMap>( db: EntityDb<TEntityMap> ) => {
   const drop = async () => {
-    const collections = <DbCollection<any>[]>Object.values( db.collections )
-
-    for ( let c = 0; c < collections.length; c++ ) {
-      const collection = collections[ c ]
+    for( const key in db.collections ){
+      const collection = db.collections[ key ]
 
       const ids = await collection.ids()
 

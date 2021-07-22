@@ -1,5 +1,3 @@
-import { ObjectMap,randId } from '@mojule/util'
-
 import {
   DbIds, DbCreate, DbLoad, DbItem, DbSave, DbRemove, DbCollection
 } from '../types'
@@ -10,25 +8,27 @@ import {
 
 import { defaultFind, defaultFindOne } from '../default-query'
 import { defaultLoadPaged } from '../default-load-paged'
+import { createApplyPartial } from '../save-partial'
 
-export const createCollection = <TEntity>(
-  collection: ObjectMap<TEntity & DbItem>
+export const createCollection = <TEntity, D extends DbItem>(
+  createDbItem: () => D
 ) => {
-  const ids: DbIds = async () => Object.keys( collection )
+  const collection = new Map<string,TEntity & D>()
 
-  const create: DbCreate<TEntity> = async entity => {
-    const _id = randId()
-    const dbEntity = Object.assign( {}, entity, { _id } )
+  const ids: DbIds = async () => [ ...collection.keys() ]
 
-    collection[ _id ] = dbEntity
+  const create: DbCreate<TEntity> = async entity => {    
+    const dbEntity = Object.assign( createDbItem(), entity )
 
-    return _id
+    collection.set( dbEntity._id, dbEntity )
+
+    return dbEntity._id
   }
 
   const createMany = defaultCreateMany( create )
 
-  const load: DbLoad<TEntity> = async id => {
-    const dbEntity = collection[ id ]
+  const load: DbLoad<TEntity,D> = async id => {
+    const dbEntity = collection.get( id )
 
     if ( dbEntity === undefined )
       throw Error( `Expected entity for ${ id }` )
@@ -44,19 +44,18 @@ export const createCollection = <TEntity>(
     if ( typeof _id !== 'string' )
       throw Error( 'Expected document to have _id:string' )
 
-    if( !( _id in collection ) )
-      throw Error( `Expected entity for ${ _id }` )
-
-    collection[ _id ] = document
+    const dbEntity = await applyPartial( document )
+    
+    collection.set( _id, dbEntity )
   }
 
   const saveMany = defaultSaveMany( save )
 
   const remove: DbRemove = async id => {
-    if ( !( id in collection ) )
+    if ( !( collection.has( id ) ) )
       throw Error( `Expected entity for ${ id }` )
 
-    delete collection[ id ]
+    collection.delete( id )
   }
 
   const removeMany = defaultRemoveMany( remove )
@@ -66,10 +65,12 @@ export const createCollection = <TEntity>(
 
   const loadPaged = defaultLoadPaged( ids, loadMany )
 
-  const entityCollection: DbCollection<TEntity> = {
+  const entityCollection: DbCollection<TEntity, D> = {
     ids, create, createMany, load, loadMany, save, saveMany, remove, removeMany,
     find, findOne, loadPaged
   }
+
+  const applyPartial = createApplyPartial( entityCollection )
 
   return entityCollection
 }

@@ -1,4 +1,3 @@
-import { RoleMap } from '../../security/types'
 import { tagsSchema } from '../common/tags-schema'
 import { userRefSchema } from './refs'
 
@@ -29,18 +28,3 @@ export const apiKeySchema = {
     'secret'
   ]
 } as const
-
-export const apiKeyRoles: RoleMap = {
-  create: [
-    'admin'
-  ],
-  read: [
-    'admin'
-  ],
-  update: [
-    'admin'
-  ],
-  delete: [
-    'admin'
-  ]
-} 

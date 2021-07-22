@@ -40,15 +40,17 @@ const resolveRefsShallow = async (db, obj) => {
     const result = {};
     const keys = Object.keys(obj);
     for (let i = 0; i < keys.length; i++) {
-        const value = obj[keys[i]];
+        const key = keys[i];
+        const value = obj[key];
         if (exports.isRef(value)) {
-            result[keys[i]] = await exports.resolveRef(db, value);
+            const resolved = await exports.resolveRef(db, value);
+            result[key] = resolved;
         }
         else if (exports.isRefArray(value)) {
-            result[keys[i]] = await exports.resolveRefArray(db, value);
+            result[key] = await exports.resolveRefArray(db, value);
         }
         else {
-            result[keys[i]] = value;
+            result[key] = value;
         }
     }
     return result;

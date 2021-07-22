@@ -1,38 +1,47 @@
-import { CreateDb, DbCollections, EntityDb } from '../../types'
-import { EntityKeys } from '../../../entity/types'
-import { eachEntityKey } from '../../../entity/each-entity-key'
+import { DbCollections, EntityDb } from '../../types'
 import { createMetadataCollection } from './create-collection'
+import { MetadataDbItem } from './types'
+import { randId } from '@mojule/util'
+import { CreateDbItem } from '../../db-memory/types'
 
-const initCollections = async <TEntityMap>(
-  collections: DbCollections<TEntityMap>, keys: EntityKeys<TEntityMap>
+const initCollections = <TEntityMap, D extends MetadataDbItem>(
+  collections: DbCollections<TEntityMap, D>
 ) => {
-  const metadataCollections: DbCollections<TEntityMap> = <any>{}
+  const metadataCollections = {} as DbCollections<TEntityMap, D>
+  const keys = Object.keys(collections) as (keyof TEntityMap & string)[]
 
-  await eachEntityKey( keys, async ( key: keyof TEntityMap ) => {
-    metadataCollections[ key ] = await createMetadataCollection(
-      collections[ key ], <keyof TEntityMap & string>key
+  keys.forEach(key => {
+    metadataCollections[key] = createMetadataCollection(
+      collections[key], key
     )
-  } )
+  })
 
   return metadataCollections
 }
 
-export const metadataDbFactory = <TEntityMap>(
-  createDb: CreateDb<TEntityMap>
+export const metadataDbFactory = <
+  TEntityMap, D extends MetadataDbItem = MetadataDbItem
+>(
+  db: EntityDb<TEntityMap, D>
 ) => {
-  const createMetadataDb: CreateDb<TEntityMap> = async (
-    name: string, keys: EntityKeys<TEntityMap>, options?: any
-  ) => {
-    const db = await createDb( name, keys, options )
+  const collections = initCollections<TEntityMap, D>(db.collections)
 
-    const { drop, close } = db
+  const metadataDb: EntityDb<TEntityMap, D> = Object.assign(
+    {}, db, { collections }
+  )
 
-    const collections = await initCollections( db.collections, keys )
+  return metadataDb
+}
 
-    const metadataDb: EntityDb<TEntityMap> = { collections, drop, close }
+export const createMetadataDbItem: CreateDbItem<MetadataDbItem> = () => {
+  const now = Date.now()
+  const _id = randId()
+  const _ver = 0
+  const _atime = now
+  const _ctime = now
+  const _mtime = now
 
-    return metadataDb
-  }
+  const dbItem: MetadataDbItem = { _id, _ver, _atime, _ctime, _mtime }
 
-  return createMetadataDb
+  return dbItem
 }

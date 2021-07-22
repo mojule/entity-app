@@ -68,14 +68,36 @@ export const refFactory = ( uri: string ) => {
   return ref
 }
 
+type _idSchema = DbRefSchema[ 'properties' ][ '_id' ]
+
+const isIdSchema = ( schema: any ): schema is _idSchema => {
+  if( typeof schema !== 'object' ) return false
+  if ( typeof schema[ 'title' ] !== 'string' ) return false
+  if ( schema[ 'type' ] !== 'string' ) return false
+
+  return true
+}
+
+type _collectionSchema = DbRefSchema[ 'properties' ][ '_collection' ]
+
+const isCollectionSchema = ( schema: any ): schema is _collectionSchema => {
+  if( typeof schema !== 'object' ) return false
+  if ( typeof schema[ 'title' ] !== 'string' ) return false
+  if ( schema[ 'type' ] !== 'string' ) return false
+  if( !Array.isArray( schema[ 'enum'])) return false
+  if( typeof schema[ 'enum' ][ 0 ] !== 'string' ) return false
+
+  return true
+}
+
 export const isDbRefSchema = ( schema: any  ): schema is DbRefSchema => {
   if( typeof schema !== 'object' ) return false
   if( typeof schema[ '$id' ] !== 'string' ) return false
   if ( typeof schema[ 'title' ] !== 'string' ) return false
   if ( schema[ 'type' ] !== 'object' ) return false
   if ( !schema[ 'properties' ] ) return false
-  if ( !schema[ 'properties' ]._id ) return false
-  if ( !schema[ 'properties' ]._collection ) return false
+  if ( !isIdSchema( schema[ 'properties' ]._id ) ) return false
+  if ( !isCollectionSchema( schema[ 'properties' ]._collection ) ) return false
 
   return true
 }

@@ -1,10 +1,10 @@
 import {
-  DbCollection, DbCreate, DbCreateMany, DbSave, DbSaveMany, DbFind
+  DbCollection, DbCreate, DbCreateMany, DbSave, DbSaveMany, DbFind, DbItem
 } from '../../types'
 
 export const createUniqueFieldsCollection =
-  async <K extends keyof TEntityMap, TEntityMap>(
-    collection: DbCollection<TEntityMap[ K ]>,
+  <K extends keyof TEntityMap, TEntityMap, D extends DbItem>(
+    collection: DbCollection<TEntityMap[K], D>,
     key: K & string,
     uniqueNames: string[]
   ) => {
@@ -16,71 +16,98 @@ export const createUniqueFieldsCollection =
       find
     } = collection
 
-    const create: DbCreate<TEntityMap[ K ]> = async entity => {
-      await assertUniqueForNames( uniqueNames, key, entity, find )
+    const create: DbCreate<TEntityMap[K]> = async entity => {
+      await assertUniqueForNames(uniqueNames, key, entity, find, [] )
 
-      return originalCreate( entity )
+      return originalCreate(entity)
     }
 
-    const createMany: DbCreateMany<TEntityMap[ K ]> = async entities => {
+    const createMany: DbCreateMany<TEntityMap[K]> = async entities => {
       await Promise.all(
-        entities.map( e => assertUniqueForNames( uniqueNames, key, e, find ) )
-      )
-
-      return originalCreateMany( entities )
-    }
-
-    const save: DbSave<TEntityMap[ K ]> = async document => {
-      await assertUniqueForNames(
-        uniqueNames, key, document, find, document._id
-      )
-
-      return originalSave( document )
-    }
-
-    const saveMany: DbSaveMany<TEntityMap[ K ]> = async documents => {
-      await Promise.all(
-        documents.map(
-          e => assertUniqueForNames( uniqueNames, key, e, find, e._id )
+        entities.map(
+          e => assertUniqueForNames(
+            uniqueNames, key, e, find, 
+            entities.filter( e2 => e2 !== e ) 
+          ) 
         )
       )
 
-      return originalSaveMany( documents )
+      return originalCreateMany(entities)
     }
 
-    const uniqueCollection: DbCollection<TEntityMap[ K ]> = Object.assign(
+    const save: DbSave<TEntityMap[K]> = async document => {
+      await assertUniqueForNames(
+        uniqueNames, key, document, find, [], document._id
+      )
+
+      return originalSave(document)
+    }
+
+    const saveMany: DbSaveMany<TEntityMap[K]> = async documents => {
+      await Promise.all(
+        documents.map(
+          e => assertUniqueForNames(
+            uniqueNames, key, e, find, 
+            documents.filter( e2 => e2 !== e ), 
+            e._id
+          )
+        )
+      )
+
+      return originalSaveMany(documents)
+    }
+
+    const uniqueCollection: DbCollection<TEntityMap[K], D> = Object.assign(
       {}, collection, { create, createMany, save, saveMany }
     )
 
     return uniqueCollection
   }
 
-const assertUniqueForNames = async <TEntity>(
-  uniqueNames: string[], entityKey: string, entity: TEntity, find: DbFind<TEntity>,
+const assertUniqueForNames = async <TEntity, D extends DbItem>(
+  uniqueNames: string[], entityKey: string, entity: Partial<TEntity>,
+  find: DbFind<TEntity, D>,
+  additional: (( Partial<TEntity> & DbItem )|( TEntity ))[],
   currentId = ''
 ) => {
-  for ( let i = 0; i < uniqueNames.length; i++ ) {
-    const name = uniqueNames[ i ]
-    const value = entity[ name ]
+  for (let i = 0; i < uniqueNames.length; i++) {
+    const name = uniqueNames[i]
+    const value = entity[name]
 
-    await assertUnique( entityKey, name, value, find, currentId )
+    if (value === undefined ) continue
+
+    await assertUnique(entityKey, name, value, find, additional, currentId)
   }
 }
 
-const assertUnique = async <TEntity>(
-  entityKey: string, propertyKey: string, value: any, find: DbFind<TEntity>,
-  currentId = ''
+const assertUnique = async <TEntity, D extends DbItem>(
+  entityKey: string, propertyKey: string, value: any, find: DbFind<TEntity, D>,
+  additional: (( Partial<TEntity> & DbItem )|( TEntity ))[],
+  currentId: string
 ) => {
-  let duplicates = await find( { [ propertyKey ]: value } )
+  let duplicates = await find({ [propertyKey]: value })
 
-  if ( currentId !== '' ) {
-    duplicates = duplicates.filter( e => e._id !== currentId )
+  let siblings = additional.filter( d => d[ propertyKey ] === value )
+
+  // remove siblings from duplicates?
+  if( additional.length ){
+    duplicates = duplicates.filter( d => !additional.some( s => '_id' in s && s._id === d._id ) )
   }
 
-  if ( duplicates.length === 0 ) return
+  if (currentId !== '') {
+    duplicates = duplicates.filter(e => e._id !== currentId)
+  }
+
+  if( siblings.length > 0 ){
+    throw Error(
+      `Expected "${entityKey}:${propertyKey}" to be unique, but another entity also has the value ${value}`
+    )
+  }
+
+  if (duplicates.length === 0) return
 
   throw Error(
-    `Expected "${ entityKey }:${ propertyKey }" to be unique, but entity with id ${
-    duplicates[ 0 ]._id } also has the value ${ value }`
+    `Expected "${entityKey}:${propertyKey}" to be unique, but entity with id ${
+      duplicates[0]._id} also has the value ${value}`
   )
 }
