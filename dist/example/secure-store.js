@@ -43,9 +43,35 @@ const start = async () => {
     if (firstDbBar === undefined)
         throw Error('Expected firstDbBar');
     // remove any metadata that we don't want resolved in the model
-    const entity = db_item_to_entity_1.dbItemToEntity(firstDbBar);
-    const model = await __1.resolveRefsShallow(bobDb, entity);
-    console.log(JSON.stringify(model, null, 2));
+    const dbBarEntity = db_item_to_entity_1.dbItemToEntity(firstDbBar);
+    const barModel = await __1.resolveRefsShallow(bobDb, dbBarEntity);
+    // note that the resolved foo property on bar still has metadata
+    console.log(JSON.stringify(barModel, null, 2));
+    /*
+          {
+            "_id": "8429f2ed5d5f257897544d68",
+            "name": "b",
+            "value": 2,
+            "foo": {
+              "_id": "70636266f2e8c323caa51d5d",
+              "_ver": 0,
+              "_atime": 1626926136316,
+              "_ctime": 1626926136316,
+              "_mtime": 1626926136316,
+              "_group": {
+                "_id": "011664236e52c03b06329ed4",
+                "_collection": "group"
+              },
+              "_owner": {
+                "_id": "9ccb30147c8792f12868125f",
+                "_collection": "user"
+              },
+              "_mode": 504,
+              "name": "a",
+              "value": 7
+            }
+          }
+    */
 };
 start().catch(console.error);
 //# sourceMappingURL=secure-store.js.map
