@@ -34,10 +34,10 @@ const accountManageFactory = (db) => {
         await db.collections.userSecret.create(userSecret);
         return secret;
     };
-    const userForApiKey = async (secret) => {
-        const userSecret = await db.collections.userSecret.findOne({ secret, type: 'api-key' });
+    const userForSecret = async (secret, type = 'api-key') => {
+        const userSecret = await db.collections.userSecret.findOne({ secret, type });
         if (userSecret === undefined)
-            throw Error('Expected user secret for secret');
+            throw Error(`Expected ${type} for secret`);
         const dbUser = await db.collections.user.load(userSecret.user._id);
         return dbUser.name;
     };
@@ -80,7 +80,7 @@ const accountManageFactory = (db) => {
         await db.collections.pendingUser.removeMany(ids);
     };
     const accountFns = {
-        createPendingUser, verifyPendingUser, createApiKey, userForApiKey,
+        createPendingUser, verifyPendingUser, createApiKey, userForSecret,
         forgotPassword, resetPassword, cleanSecrets, cleanPendingUsers
     };
     return accountFns;

@@ -40,7 +40,7 @@ export const accountManageFactory = <EntityMap extends SecureEntityMap,D extends
     return name
   }
 
-  const createApiKey = async (userName: string) => {
+  const createSecret = async (userName: string, type = 'api-key' ) => {
     const dbUser = await db.collections.user.findOne({ name: userName })
 
     if (dbUser === undefined)
@@ -49,7 +49,7 @@ export const accountManageFactory = <EntityMap extends SecureEntityMap,D extends
     const secret = v4()
 
     const userSecret: UserSecret = {
-      type: 'api-key',
+      type,
       secret,
       user: { _id: dbUser._id, _collection: 'user' }
     }
@@ -59,13 +59,13 @@ export const accountManageFactory = <EntityMap extends SecureEntityMap,D extends
     return secret
   }
 
-  const userForApiKey = async (secret: string) => {
+  const userForSecret = async (secret: string, type = 'api-key' ) => {
     const userSecret = await db.collections.userSecret.findOne(
-      { secret, type: 'api-key' }
+      { secret, type }
     )
 
     if (userSecret === undefined)
-      throw Error('Expected user secret for secret')
+      throw Error(`Expected ${ type } for secret`)
 
     const dbUser = await db.collections.user.load(userSecret.user._id)
 
@@ -136,9 +136,28 @@ export const accountManageFactory = <EntityMap extends SecureEntityMap,D extends
     await db.collections.pendingUser.removeMany( ids )
   }
 
+  const tempSecretForUser = async ( userName: string ) => {
+    const dbUser = await db.collections.user.findOne({ name: userName })
+
+    if (dbUser === undefined)
+      throw Error(`Expected user named ${userName}`)
+
+    const userSecret = await db.collections.userSecret.findOne(
+      { 'user._id': dbUser._id, type: 'temp' }
+    )
+
+    if (userSecret === undefined)
+      throw Error(`Expected temp for secret`)
+
+    await db.collections.userSecret.remove( userSecret._id )
+
+    return userSecret.secret
+  }
+
   const accountFns: AccountFns = { 
-    createPendingUser, verifyPendingUser, createApiKey, userForApiKey, 
-    forgotPassword, resetPassword, cleanSecrets, cleanPendingUsers
+    createPendingUser, verifyPendingUser, createSecret, userForSecret, 
+    forgotPassword, resetPassword, cleanSecrets, cleanPendingUsers,
+    tempSecretForUser
   }
 
   return accountFns

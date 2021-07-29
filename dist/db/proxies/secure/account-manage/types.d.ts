@@ -13,7 +13,7 @@ export declare type AccountFns = {
     createPendingUser: CreatePendingUser;
     verifyPendingUser: VerifyPendingUser;
     createApiKey: CreateApiKey;
-    userForApiKey: UserForApiKey;
+    userForSecret: UserForSecret;
     forgotPassword: ForgotPassword;
     resetPassword: ResetPassword;
     cleanSecrets: CleanSecrets;
@@ -22,7 +22,7 @@ export declare type AccountFns = {
 export declare type CreatePendingUser = (user: LoginUser) => Promise<string>;
 export declare type VerifyPendingUser = (secret: string) => Promise<string>;
 export declare type CreateApiKey = (userName: string) => Promise<string>;
-export declare type UserForApiKey = (secret: string) => Promise<string>;
+export declare type UserForSecret = (secret: string, type?: 'api-key' | 'forgot-password') => Promise<string>;
 export declare type ForgotPassword = (userName: string) => Promise<string>;
 export declare type ResetPassword = (secret: string, newPassword: string) => Promise<void>;
 export declare type CleanSecrets = (maxAgeMs: number) => Promise<void>;
