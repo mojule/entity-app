@@ -2,10 +2,13 @@ import { FromSchema } from 'json-schema-to-ts'
 import { EntityKeys } from '../../../entity/types'
 import { DbCollections, EntityDb } from '../../types'
 
+import { 
+  AccountFns, accountManageEntityKeys, AccountManageEntityMap 
+} from './account-manage/types'
+
 import {
-  loginUserSchema,
-  secureCollectionSchema,
-  secureDbItemSchema, secureGroupSchema, secureUserSchema
+  loginUserSchema, secureCollectionSchema, secureDbItemSchema, 
+  secureGroupSchema, secureUserSchema
 } from './schema'
 
 export type SecureDbItem = FromSchema<typeof secureDbItemSchema>
@@ -17,10 +20,10 @@ export const privilegedDbItemKeys: (keyof SecureDbItem)[] = [
   '_mode', '_owner', '_group', '_atime', '_ctime', '_mtime', '_ver'
 ]
 
-export type SecureEntityMap = {
+export type SecureEntityMap = AccountManageEntityMap & {
   user: SecureUser
   group: SecureGroup
-  collectionData: SecureCollection
+  collectionData: SecureCollection,
 }
 
 export type SecureEntityKey = keyof SecureEntityMap
@@ -28,7 +31,8 @@ export type SecureEntityKey = keyof SecureEntityMap
 export const secureEntityKeys: EntityKeys<SecureEntityMap> = {
   user: 'user',
   group: 'group',
-  collectionData: 'collectionData'
+  collectionData: 'collectionData',
+  ...accountManageEntityKeys
 }
 
 export type LoginUser = FromSchema<typeof loginUserSchema>
@@ -49,7 +53,11 @@ export type SecureDbCollections<
 export type SecureDb<
   EntityMap extends SecureEntityMap,
   D extends SecureDbItem = SecureDbItem
-  > = SecureDbExternal<EntityMap, D> & UserFns & GroupFns & AccessFns<EntityMap>
+  > = (
+    SecureDbExternal<EntityMap, D> & 
+    UserFns & GroupFns & AccessFns<EntityMap> &
+    { account: AccountFns }
+  )
 
 export type AccessFns<EntityMap> = {
   chmod: Chmod<EntityMap>

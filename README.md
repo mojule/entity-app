@@ -2,20 +2,25 @@
 
 Manage data entities - WARNING this is very much a work in progress
 
-## Architecture
+## overview
 
 A system for creating, editing, displaying and generally managing "Entities"
 
-An Entity is essentially a model description
+An Entity is essentially a model description - at minimum, a typescript type
 
-It is most useful when the entities in this system exist twice, once as JSON 
-Schema and once as TypeScript types
+It is most useful when the entities in this system exist twice, once as ts types 
+and once as JSON Schema
 
-You can avoid a considerable amount of duplication by using:
+You can just write ts types, you could manually write both, or you could avoid a 
+considerable amount of duplication by writing json schema first and using this
+package to derive the ts types:
 
 https://www.npmjs.com/package/json-schema-to-ts
 
 ### define entities
+
+Just using typescript types - example later in document shows how to do it
+using json schema
 
 ```ts
 import { DbRefFor, EntityKeys } from '@mojule/entity-app'

@@ -4,6 +4,7 @@ import { createSecureDbItem } from '../../db/proxies/secure/secure-db-item'
 
 import { 
   LoginUser,
+  secureEntityKeys,
   SecureEntityMap, SecureUser 
 } from '../../db/proxies/secure/types'
 
@@ -16,9 +17,7 @@ export type PublicThingEntityMap = SecureEntityMap & {
 
 export const entityKeys: EntityKeys<PublicThingEntityMap> = { 
   publicThing: 'publicThing',
-  user: 'user',
-  group: 'group',
-  collectionData: 'collectionData'
+  ...secureEntityKeys
 }
 
 export const getRootUser = (): SecureUser => ({

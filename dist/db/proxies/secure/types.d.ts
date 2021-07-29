@@ -1,13 +1,14 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { EntityKeys } from '../../../entity/types';
 import { DbCollections, EntityDb } from '../../types';
+import { AccountFns, AccountManageEntityMap } from './account-manage/types';
 import { loginUserSchema, secureCollectionSchema, secureDbItemSchema, secureGroupSchema, secureUserSchema } from './schema';
 export declare type SecureDbItem = FromSchema<typeof secureDbItemSchema>;
 export declare type SecureUser = FromSchema<typeof secureUserSchema>;
 export declare type SecureGroup = FromSchema<typeof secureGroupSchema>;
 export declare type SecureCollection = FromSchema<typeof secureCollectionSchema>;
 export declare const privilegedDbItemKeys: (keyof SecureDbItem)[];
-export declare type SecureEntityMap = {
+export declare type SecureEntityMap = AccountManageEntityMap & {
     user: SecureUser;
     group: SecureGroup;
     collectionData: SecureCollection;
@@ -18,7 +19,9 @@ export declare type LoginUser = FromSchema<typeof loginUserSchema>;
 export declare type SecureEntityMapExternal<EntityMap extends SecureEntityMap> = Omit<EntityMap, SecureEntityKey>;
 export declare type SecureDbExternal<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = EntityDb<SecureEntityMapExternal<EntityMap>, D>;
 export declare type SecureDbCollections<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = DbCollections<SecureEntityMapExternal<EntityMap>, D>;
-export declare type SecureDb<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = SecureDbExternal<EntityMap, D> & UserFns & GroupFns & AccessFns<EntityMap>;
+export declare type SecureDb<EntityMap extends SecureEntityMap, D extends SecureDbItem = SecureDbItem> = (SecureDbExternal<EntityMap, D> & UserFns & GroupFns & AccessFns<EntityMap> & {
+    account: AccountFns;
+});
 export declare type AccessFns<EntityMap> = {
     chmod: Chmod<EntityMap>;
     chown: Chown<EntityMap>;

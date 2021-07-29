@@ -47,7 +47,9 @@ export declare const createSecureMemDbLogin: () => Promise<{
             _id: string;
             _collection: "group";
         };
-    }> & import("../..").UserFns & import("../..").GroupFns & import("../..").AccessFns<PublicThingEntityMap>>;
+    }> & import("../..").UserFns & import("../..").GroupFns & import("../..").AccessFns<PublicThingEntityMap> & {
+        account: import("../../db/proxies/secure/account-manage/types").AccountFns;
+    }>;
     memDb: import("../..").EntityDb<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;

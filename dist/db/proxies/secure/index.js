@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InternalCollections = exports.secureDbFactory = void 0;
+const account_manage_1 = require("./account-manage");
 const create_collection_1 = require("../unique/create-collection");
 const access_1 = require("./access");
 const create_collection_2 = require("./create-collection");
@@ -20,9 +21,6 @@ const initCollections = async (db, user) => {
 };
 /*
   creates a secure db
-
-  there should be at least one root user in unproxied db or nobody will be able
-  to do much!
 
   returns a login function that returns a db where the logged in user can only
   do what they have permission for
@@ -60,13 +58,16 @@ const secureDbFactory = async (db, rootUser) => {
         const deleteExternal = {
             user: undefined,
             group: undefined,
-            collectionData: undefined
+            collectionData: undefined,
+            pendingUser: undefined,
+            userSecret: undefined
         };
         const collections = Object.assign({}, internalCollections, deleteExternal);
         const userFns = user_1.createUserFns(internalCollections.user, dbUser);
         const groupFns = group_1.createGroupFns(internalCollections, dbUser);
         const accessFns = access_1.createAccessFns(db.collections, groupFns.isUserInGroup, dbUser);
-        const secureDb = Object.assign(Object.assign(Object.assign({ drop, close, collections }, accessFns), userFns), groupFns);
+        const accountFns = account_manage_1.accountManageFactory(db);
+        const secureDb = Object.assign(Object.assign(Object.assign(Object.assign({ drop, close, collections }, accessFns), userFns), groupFns), { account: accountFns });
         secureDb[exports.InternalCollections] = internalCollections;
         return Object.assign({}, db, secureDb);
     };

@@ -2,6 +2,8 @@ import {
   DbCollection, DbCollections, DbItem, DbRefFor, EntityDb
 } from '../../types'
 
+import { accountManageFactory } from './account-manage'
+
 import { createUniqueFieldsCollection } from '../unique/create-collection'
 import { createAccessFns } from './access'
 import { createSecureCollection } from './create-collection'
@@ -44,9 +46,6 @@ const initCollections = async <
 
 /*
   creates a secure db 
-
-  there should be at least one root user in unproxied db or nobody will be able
-  to do much!
 
   returns a login function that returns a db where the logged in user can only
   do what they have permission for
@@ -100,7 +99,9 @@ export const secureDbFactory = async <
     const deleteExternal: Record<keyof SecureEntityMap, undefined> = {
       user: undefined,
       group: undefined,
-      collectionData: undefined
+      collectionData: undefined,
+      pendingUser: undefined,
+      userSecret: undefined
     }
 
     const collections: SecureDbCollections<EntityMap, D> =
@@ -113,9 +114,12 @@ export const secureDbFactory = async <
       db.collections, groupFns.isUserInGroup, dbUser
     )
 
+    const accountFns = accountManageFactory( db )
+
     const secureDb: SecureDb<EntityMap, D> = {
       drop, close, collections,
-      ...accessFns, ...userFns, ...groupFns      
+      ...accessFns, ...userFns, ...groupFns,
+      account: accountFns   
     }
 
     secureDb[ InternalCollections ] = internalCollections

@@ -4,12 +4,8 @@ exports.getLoginBob = exports.createSecureMemDbLogin = exports.getRootUser = exp
 const __1 = require("../..");
 const secure_1 = require("../../db/proxies/secure");
 const secure_db_item_1 = require("../../db/proxies/secure/secure-db-item");
-exports.entityKeys = {
-    publicThing: 'publicThing',
-    user: 'user',
-    group: 'group',
-    collectionData: 'collectionData'
-};
+const types_1 = require("../../db/proxies/secure/types");
+exports.entityKeys = Object.assign({ publicThing: 'publicThing' }, types_1.secureEntityKeys);
 const getRootUser = () => ({
     name: 'Nik',
     password: 'goobers'
