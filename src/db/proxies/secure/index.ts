@@ -72,15 +72,21 @@ export const secureDbFactory = async <
     if (!isValid) throw createEperm('secureDbFactory')
   }
 
-  const login = async (user: LoginUser) => {    
-    const isValid = await validateDbUser(db.collections.user, user)
+  const login = async (user?: LoginUser) => {
+    if (user !== undefined) {
+      const isValid = await validateDbUser(db.collections.user, user)
 
-    if (!isValid) {
-      throw createEperm('login')
+      if (!isValid) {
+        throw createEperm('login')
+      }
     }
 
-    // we can bang assert because isValid would have thrown
-    const dbUser = (await db.collections.user.findOne({ name: user.name }))!
+    const userName = user ? user.name : 'nobody'
+
+    const dbUser = await db.collections.user.findOne({ name: userName })
+
+    if( dbUser === undefined )
+      throw Error( `Expected db user named ${ userName }` )
 
     const internalCollections = await initCollections(db, dbUser)
 
@@ -114,15 +120,15 @@ export const secureDbFactory = async <
       db.collections, groupFns.isUserInGroup, dbUser
     )
 
-    const accountFns = accountManageFactory( db )
+    const accountFns = accountManageFactory(db)
 
     const secureDb: SecureDb<EntityMap, D> = {
       drop, close, collections,
       ...accessFns, ...userFns, ...groupFns,
-      account: accountFns   
+      account: accountFns
     }
 
-    secureDb[ InternalCollections ] = internalCollections
+    secureDb[InternalCollections] = internalCollections
 
     return Object.assign({}, db, secureDb)
   }
@@ -130,7 +136,7 @@ export const secureDbFactory = async <
   return login
 }
 
-export const InternalCollections = Symbol( 'Internal Collections') 
+export const InternalCollections = Symbol('Internal Collections')
 
 const initGroups = async<
   EntityMap extends SecureEntityMap,

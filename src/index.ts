@@ -15,6 +15,7 @@ export * from './db/proxies/validator/types'
 export * from './db/proxies/secure'
 export * from './db/proxies/secure/secure-db-item'
 export * from './db/proxies/secure/types'
+export * from './db/db-remote'
 export * from './db/save-partial'
 export * from './db/types'
 
