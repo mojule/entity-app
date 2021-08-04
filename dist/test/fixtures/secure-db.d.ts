@@ -7,11 +7,11 @@ export declare type PublicThingEntityMap = SecureEntityMap & {
 export declare const entityKeys: EntityKeys<PublicThingEntityMap>;
 export declare const getRootUser: () => SecureUser;
 export declare const createSecureMemDbLogin: () => Promise<{
-    login: (user: {
+    login: (user?: {
         [x: string]: unknown;
         password: string;
         name: string;
-    }) => Promise<import("../..").EntityDb<PublicThingEntityMap, {
+    } | undefined) => Promise<import("../..").EntityDb<PublicThingEntityMap, {
         [x: string]: unknown;
         _id: string;
         _atime: number;

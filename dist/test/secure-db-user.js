@@ -58,10 +58,10 @@ describe('secure db', () => {
                     const loginBob = secure_db_1.getLoginBob();
                     await db.createUser(loginBob);
                     let usernames = await db.userNames();
-                    assert.deepStrictEqual(usernames, [root.name, loginBob.name]);
+                    assert.deepStrictEqual(usernames, [root.name, 'nobody', loginBob.name]);
                     await db.removeUser('Bob');
                     usernames = await db.userNames();
-                    assert.deepStrictEqual(usernames, [root.name]);
+                    assert.deepStrictEqual(usernames, [root.name, 'nobody']);
                 });
                 it('fails perm', async () => {
                     const { login } = await secure_db_1.createSecureMemDbLogin();
@@ -130,7 +130,7 @@ describe('secure db', () => {
                     const loginBob = secure_db_1.getLoginBob();
                     await db.createUser(loginBob);
                     const usernames = await db.userNames();
-                    assert.deepStrictEqual(usernames, [root.name, loginBob.name]);
+                    assert.deepStrictEqual(usernames, [root.name, 'nobody', loginBob.name]);
                 });
                 it('fails', async () => {
                     const { login } = await secure_db_1.createSecureMemDbLogin();

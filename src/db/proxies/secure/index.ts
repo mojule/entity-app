@@ -182,7 +182,9 @@ const initRootUser = async <
     _id: userId, _collection: 'user'
   }
 
-  const { rootGroupRef } = await initGroups(db, userRef)
+  const { rootGroupRef, nobodyRef } = await initGroups(db, userRef)
+
+  await initNobodyUser( db, nobodyRef )
 
   const dbUser = await db.collections.user.load(userId)
 
@@ -210,6 +212,38 @@ const initRootUser = async <
       rootGroupRef
     )
   }
+}
+
+const initNobodyUser = async <
+  EntityMap extends SecureEntityMap,
+  D extends SecureDbItem = SecureDbItem
+>(db: EntityDb<EntityMap, D>, nobodyGroupRef: DbRefFor<EntityMap,'group'> ) => {
+  const user: SecureUser = await hashPassword({ name: 'nobody', password: '' })
+
+  user.isRoot = false
+
+  const userId = await db.collections.user.create(user)
+
+  const userRef: DbRefFor<EntityMap, 'user'> = {
+    _id: userId, _collection: 'user'
+  }
+
+  const dbUser = await db.collections.user.load(userId)
+
+  dbUser._owner = userRef
+  dbUser._group = nobodyGroupRef
+
+  const saveUser: Partial<SecureUser> & DbItem = {
+    _id: dbUser._id
+  }
+
+  Object.keys(dbUser).forEach(key => {
+    if (key === 'password') return
+
+    saveUser[key] = dbUser[key]
+  })
+
+  await db.collections.user.save(saveUser)
 }
 
 const initCollectionData = async <

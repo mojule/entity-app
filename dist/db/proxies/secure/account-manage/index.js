@@ -21,13 +21,13 @@ const accountManageFactory = (db) => {
         await db.collections.pendingUser.remove(dbPending._id);
         return name;
     };
-    const createApiKey = async (userName) => {
+    const createSecret = async (userName, type = 'api-key') => {
         const dbUser = await db.collections.user.findOne({ name: userName });
         if (dbUser === undefined)
             throw Error(`Expected user named ${userName}`);
         const secret = uuid_1.v4();
         const userSecret = {
-            type: 'api-key',
+            type,
             secret,
             user: { _id: dbUser._id, _collection: 'user' }
         };
@@ -79,9 +79,20 @@ const accountManageFactory = (db) => {
         const ids = oldSecrets.map(s => s._id);
         await db.collections.pendingUser.removeMany(ids);
     };
+    const tempSecretForUser = async (userName) => {
+        const dbUser = await db.collections.user.findOne({ name: userName });
+        if (dbUser === undefined)
+            throw Error(`Expected user named ${userName}`);
+        const userSecret = await db.collections.userSecret.findOne({ 'user._id': dbUser._id, type: 'temp' });
+        if (userSecret === undefined)
+            throw Error(`Expected temp for secret`);
+        await db.collections.userSecret.remove(userSecret._id);
+        return userSecret.secret;
+    };
     const accountFns = {
-        createPendingUser, verifyPendingUser, createApiKey, userForSecret,
-        forgotPassword, resetPassword, cleanSecrets, cleanPendingUsers
+        createPendingUser, verifyPendingUser, createSecret, userForSecret,
+        forgotPassword, resetPassword, cleanSecrets, cleanPendingUsers,
+        tempSecretForUser
     };
     return accountFns;
 };

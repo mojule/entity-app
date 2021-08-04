@@ -12,18 +12,21 @@ export declare const accountManageEntityKeys: EntityKeys<AccountManageEntityMap>
 export declare type AccountFns = {
     createPendingUser: CreatePendingUser;
     verifyPendingUser: VerifyPendingUser;
-    createApiKey: CreateApiKey;
+    createSecret: CreateSecret;
     userForSecret: UserForSecret;
     forgotPassword: ForgotPassword;
     resetPassword: ResetPassword;
     cleanSecrets: CleanSecrets;
     cleanPendingUsers: CleanPendingUsers;
+    tempSecretForUser: TempSecretForUser;
 };
+export declare type SecretType = 'api-key' | 'forgot-password' | 'temp';
 export declare type CreatePendingUser = (user: LoginUser) => Promise<string>;
 export declare type VerifyPendingUser = (secret: string) => Promise<string>;
-export declare type CreateApiKey = (userName: string) => Promise<string>;
-export declare type UserForSecret = (secret: string, type?: 'api-key' | 'forgot-password') => Promise<string>;
+export declare type CreateSecret = (userName: string, type?: SecretType) => Promise<string>;
+export declare type UserForSecret = (secret: string, type?: SecretType) => Promise<string>;
 export declare type ForgotPassword = (userName: string) => Promise<string>;
 export declare type ResetPassword = (secret: string, newPassword: string) => Promise<void>;
 export declare type CleanSecrets = (maxAgeMs: number) => Promise<void>;
 export declare type CleanPendingUsers = (maxAgeMs: number) => Promise<void>;
+export declare type TempSecretForUser = (userName: string) => Promise<string>;

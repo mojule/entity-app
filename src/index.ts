@@ -39,7 +39,6 @@ export * from './schema/predicates'
 export * from './schema/ref'
 export * from './schema/resolve/ref-resolver'
 export * from './schema/resolve/resolver'
-export * from './schema/security'
 export * from './schema/security/refs'
 export * from './schema/types'
 

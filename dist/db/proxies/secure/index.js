@@ -38,12 +38,16 @@ const secureDbFactory = async (db, rootUser) => {
             throw errors_1.createEperm('secureDbFactory');
     }
     const login = async (user) => {
-        const isValid = await user_1.validateDbUser(db.collections.user, user);
-        if (!isValid) {
-            throw errors_1.createEperm('login');
+        if (user !== undefined) {
+            const isValid = await user_1.validateDbUser(db.collections.user, user);
+            if (!isValid) {
+                throw errors_1.createEperm('login');
+            }
         }
-        // we can bang assert because isValid would have thrown
-        const dbUser = (await db.collections.user.findOne({ name: user.name }));
+        const userName = user ? user.name : 'nobody';
+        const dbUser = await db.collections.user.findOne({ name: userName });
+        if (dbUser === undefined)
+            throw Error(`Expected db user named ${userName}`);
         const internalCollections = await initCollections(db, dbUser);
         const drop = async () => {
             if (!dbUser.isRoot)
@@ -98,7 +102,8 @@ const initRootUser = async (db, rootUser) => {
     const userRef = {
         _id: userId, _collection: 'user'
     };
-    const { rootGroupRef } = await initGroups(db, userRef);
+    const { rootGroupRef, nobodyRef } = await initGroups(db, userRef);
+    await initNobodyUser(db, nobodyRef);
     const dbUser = await db.collections.user.load(userId);
     dbUser._owner = userRef;
     dbUser._group = rootGroupRef;
@@ -115,6 +120,26 @@ const initRootUser = async (db, rootUser) => {
     for (const key in db.collections) {
         await initCollectionData(db.collections.collectionData, key, userRef, rootGroupRef);
     }
+};
+const initNobodyUser = async (db, nobodyGroupRef) => {
+    const user = await user_1.hashPassword({ name: 'nobody', password: '' });
+    user.isRoot = false;
+    const userId = await db.collections.user.create(user);
+    const userRef = {
+        _id: userId, _collection: 'user'
+    };
+    const dbUser = await db.collections.user.load(userId);
+    dbUser._owner = userRef;
+    dbUser._group = nobodyGroupRef;
+    const saveUser = {
+        _id: dbUser._id
+    };
+    Object.keys(dbUser).forEach(key => {
+        if (key === 'password')
+            return;
+        saveUser[key] = dbUser[key];
+    });
+    await db.collections.user.save(saveUser);
 };
 const initCollectionData = async (collection, key, userRef, groupRef) => {
     const _id = await collection.create({ name: key, _owner: userRef, _group: groupRef });

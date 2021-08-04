@@ -94,13 +94,13 @@ describe('secure db', () => {
 
           let usernames = await db.userNames()
 
-          assert.deepStrictEqual(usernames, [root.name, loginBob.name])
+          assert.deepStrictEqual(usernames, [root.name, 'nobody', loginBob.name])
 
           await db.removeUser('Bob')
 
           usernames = await db.userNames()
 
-          assert.deepStrictEqual(usernames, [root.name])
+          assert.deepStrictEqual(usernames, [root.name, 'nobody'])
         })
 
         it('fails perm', async () => {
@@ -216,7 +216,7 @@ describe('secure db', () => {
 
           const usernames = await db.userNames()
 
-          assert.deepStrictEqual(usernames, [root.name, loginBob.name])
+          assert.deepStrictEqual(usernames, [root.name, 'nobody', loginBob.name])
         })
 
         it('fails', async () => {
